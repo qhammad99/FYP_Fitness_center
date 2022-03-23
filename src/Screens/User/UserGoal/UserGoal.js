@@ -13,9 +13,27 @@ const UserGoal = props =>{
     console.log(authentication);
     const [selectedValue, setSelectedValue] = useState("1");
 
+    const updateGoal = async()=>{
+        let userObj;
+        try{
+          userObj= await AsyncStorage.getItem('USER');
+        }catch(e){
+          console.log("error in reading local storage: ", e);
+        }
+        userObj = JSON.parse(userObj)
+        userObj = {...userObj, isGoal: 1}
+        userObj = JSON.stringify(userObj);
+        try{
+            await AsyncStorage.setItem('USER', userObj);
+          }catch(e){
+            console.log("error in writing local storage: ", e);
+          }
+    
+        authentication.dispatch({type:'ADD_LOCAL_DATA', payload:userObj});
+    }
+
     const nextPressed = () =>{
-        // props.navigation.navigate('UserHome');
-        authentication.dispatch({type:'GOAL'});
+        updateGoal();
       }
 
     

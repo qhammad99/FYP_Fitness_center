@@ -36,8 +36,8 @@ const SignupAccountType = props =>{
                     style={{width: 130, color:Colors.selectedColor, backgroundColor:"#fff" }}
                     onValueChange={(itemValue) => AccountContext.setAccount({type:"USER_TYPE", payload:itemValue})}
                 >
-                    <Picker.Item label="User" value='2'/>  
-                    <Picker.Item label="Coach" value='3'/>
+                    <Picker.Item label="User" value='1'/>  
+                    <Picker.Item label="Coach" value='2'/>
                     {/* value is user type in database   */}
                 </Picker>
 
