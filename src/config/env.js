@@ -1,8 +1,8 @@
 import {URL} from '@env';
 
 const Urls = {
-    LoginURL: URL+'/users/login',
-    SignupURL: URL+'/users/signup'
+    LoginURL: URL+'/user-login',
+    SignupURL: URL+'/user-register'
 };
 
 export default Urls;

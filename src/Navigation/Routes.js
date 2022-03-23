@@ -16,16 +16,12 @@ const Stack = createNativeStackNavigator();
 const Routes = (props) => {
   const authentication = useContext(AuthContext);
   let user = authentication.state.user;
-  let parameter = authentication.state.isParameters;
-  let goal = authentication.state.isGoal;
-  
   user= JSON.parse(user);
-  console.log("from routes: ",authentication);
 
   return(
       <NavigationContainer>
       <Stack.Navigator>
-        {
+        { 
           // login and signup screens
           authentication.state.user==null ? (
             <>
@@ -42,17 +38,17 @@ const Routes = (props) => {
         </>
         ):(
           // user screens
-        (user.u_type ==2)
+        (user.u_type ==1)
           ?(
-            parameter
+            (parseInt(user.isParameters) != 0)
               ?
               (
-                goal
+                (parseInt(user.isGoal) != 0)
                 ?
-                  <Stack.Screen
-                    name="UserHome"
-                    component={UserHome}
-                    options={{ headerShown: false }}
+                 <Stack.Screen
+                  name="UserHome"
+                  component={UserHome}
+                  options={{ headerShown: false }}
                   />
                 :
                   <Stack.Screen
@@ -71,7 +67,7 @@ const Routes = (props) => {
           )
         :
         // coach screens
-        (user.u_type ==3 &&
+        (user.u_type ==2 &&
         <Stack.Screen 
           name="CoachHome" 
           component={CoachHome}

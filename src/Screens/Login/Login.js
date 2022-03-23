@@ -26,7 +26,7 @@ const Login = props => {
         } else if(!passwordValidation.test(passText)){
             alert("password must contain length of 6 to 20 and one number, one lower and one upper");
         }else {
-            loginUser(emailText,passText)(authentication);
+            loginUser(emailText, passText)(authentication);
         }
     }
 

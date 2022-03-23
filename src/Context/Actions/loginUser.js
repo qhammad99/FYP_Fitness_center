@@ -28,15 +28,16 @@ export default (emailText, passText)=>(authentication)=>{
             })
             .then((response)=>response.json())
             .then((response)=>{
-                if(!response.message){
+                if(response.success){
                     if (Platform.OS === 'android') {
                         ToastAndroid.show("User Authenticated", ToastAndroid.SHORT)
                       } else {
                         AlertIOS.alert("User Authenticated");
                       }
-
-                    addToLocatStorage(response);
-                    authentication.dispatch({type:'SIGN_IN', payload:JSON.stringify(response)});
+                      let userObj = response.user;
+                      userObj ={...userObj, token: response.token};
+                      addToLocatStorage(userObj);
+                    authentication.dispatch({type:'SIGN_IN', payload:JSON.stringify(userObj)});
                 }
                 else
                     alert(response.message);

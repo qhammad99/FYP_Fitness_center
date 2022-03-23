@@ -25,8 +25,7 @@ export default (account)=>(authentication)=>{
             name : account.firstName+" "+account.secondName,
             email : account.email,
             password: account.password,
-            u_type: account.userType,
-            coach_id: null
+            u_type: account.userType
         })
     })
     .then((response)=>response.json())
@@ -43,7 +42,7 @@ export default (account)=>(authentication)=>{
                     secondName: account.secondName,
                     password: account.password,
                     u_type: account.userType,
-                    coach_id: null
+                    token: response.token
                 }
                 addToLocatStorage(obj); 
                 authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)})

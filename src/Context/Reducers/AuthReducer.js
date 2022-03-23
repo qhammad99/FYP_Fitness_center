@@ -18,29 +18,14 @@ const AuthReducer = (state, action) =>{
             return {
                 ...state,
                 user: action.payload,
-                isSignout:false,
-                isParameters:false
+                isSignout:false
             };
 
         case "SIGN_OUT":
             return {
                 ...state,
                 user: null,
-                isSignout:true,
-                isParameters:false,
-                isGoal:false
-            };
-
-        case "PARAMETERS":
-            return {
-                ...state, 
-                isParameters:true
-            };
-
-        case "GOAL":
-            return {
-                ...state, 
-                isGoal:true
+                isSignout:true
             };
     }
 }
