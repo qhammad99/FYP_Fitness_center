@@ -3,6 +3,7 @@
 import Urls from '../../config/env';
 import {ToastAndroid, AlertIOS} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const addToLocatStorage = async(userObj) =>{
     try{
@@ -15,22 +16,14 @@ const addToLocatStorage = async(userObj) =>{
 export default (account)=>(authentication)=>{
     var API_URL= Urls.SignupURL;
     console.log('fetching started');
-    fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+    axios.post(API_URL, {
             name : account.firstName+" "+account.secondName,
             email : account.email,
             password: account.password,
             u_type: account.userType
-        })
     })
-    .then((response)=>response.json())
     .then((response)=>{
-        if(!response.message){
+        if(response.data.success){
             if (Platform.OS === 'android') {
                 ToastAndroid.show("Account Created", ToastAndroid.SHORT)
                 } else {
@@ -48,7 +41,7 @@ export default (account)=>(authentication)=>{
                 authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)})
         }
         else
-            alert(response.message);
+            alert(response.data.message);
     })
     .catch((error)=>{
         alert(" " + error);
