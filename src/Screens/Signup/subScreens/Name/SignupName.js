@@ -11,7 +11,8 @@ const SignupName = props =>{
     const AccountContext = useContext(SignupContext);
 
     const nextPressed = () =>{
-        if(AccountContext.account.firstName.length==0 || AccountContext.account.secondName.length==0){
+        if(!AccountContext.account.firstName || !AccountContext.account.secondName ||
+            AccountContext.account.firstName.length==0 || AccountContext.account.secondName.length==0){
             alert("Required Fields are missing");
         } else {
             props.navigation.navigate('Email');

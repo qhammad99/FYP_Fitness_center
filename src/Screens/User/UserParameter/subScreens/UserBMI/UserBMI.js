@@ -11,55 +11,45 @@ import styles from './styles';
 import Colors from '../../../../../colors/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../../../Context/Providers/AuthProvider';
+import {ParametersContext} from '../../../../../Context/Providers/ParametersProvider';
+import addParameters from '../../../../../Context/Actions/addParameters';
 
-function UserBMI(props) {
+const UserBMI = props => {
   const authentication = useContext(AuthContext);
+  const Parameters = useContext(ParametersContext);
 
-  const [isheight, setHeight] = useState(0);
-  const [isweight, setWeight] = useState(0);
-  const [BmiResult, setBmiResult] = useState('');
-  const [bmi, setbmi] = useState(0);
-
-  const updateParameters = async()=>{
-    let userObj;
-    try{
-      userObj= await AsyncStorage.getItem('USER');
-    }catch(e){
-      console.log("error in reading local storage: ", e);
-    }
-    userObj = JSON.parse(userObj)
-    userObj = {...userObj, isParameters: 1}
-    userObj = JSON.stringify(userObj);
-
-    try{
-      await AsyncStorage.setItem('USER', userObj);
-    }catch(e){
-      console.log("error in writing local storage: ", e);
-    }
-    authentication.dispatch({type:'ADD_LOCAL_DATA', payload:userObj});
-  }
+  // const [BmiResult, setBmiResult] = useState('');
+  // const [bmi, setbmi] = useState(0);
 
   const nextPressed = () =>{
-    updateParameters();
+    if(!Parameters.parameters.height || !Parameters.parameters.weight ||
+      Parameters.parameters.height.length == 0  || Parameters.parameters.weight.length == 0 )
+      alert("Empty fields not allowed");
+    else if(Parameters.parameters.height < 90 || Parameters.parameters.height > 240)
+      alert("Enter real height");
+    else if(Parameters.parameters.weight < 18 || Parameters.parameters.weight >200)
+      alert("Enter real weight");
+    else
+      addParameters(Parameters.parameters)(authentication);
   }
 
-  const BMI = (height, weight) => {
-    var result = (parseFloat(weight) * 10000) / (parseFloat(height) * parseFloat(height));
-    result.toFixed(2);
-    setbmi(result);
-    if (result < 18.5) {
-      setBmiResult('Underweight');
-    } else if (result >= 18.5 && result < 25) {
-      setBmiResult('Normal weight');
-    } else if (result >= 25 && result < 30) {
-      setBmiResult('Overweight');
-    } else if (result >= 30) {
-      setBmiResult('Obese');
-    } else {
-      // alert('Incorrect Input!');
-      setBmiResult('');
-    }
-  };
+  // const BMI = (height, weight) => {
+  //   var result = (parseFloat(weight) * 10000) / (parseFloat(height) * parseFloat(height));
+  //   result.toFixed(2);
+  //   setbmi(result);
+  //   if (result < 18.5) {
+  //     setBmiResult('Underweight');
+  //   } else if (result >= 18.5 && result < 25) {
+  //     setBmiResult('Normal weight');
+  //   } else if (result >= 25 && result < 30) {
+  //     setBmiResult('Overweight');
+  //   } else if (result >= 30) {
+  //     setBmiResult('Obese');
+  //   } else {
+  //     // alert('Incorrect Input!');
+  //     setBmiResult('');
+  //   }
+  // };
   return (
     <>
       <View style={styles.container}>
@@ -75,7 +65,8 @@ function UserBMI(props) {
             placeholder={Strings.cmLabel}
             placeholderTextColor={Colors.lightDark} 
             style={styles.inputField}
-            onChangeText={text => setHeight(text)}
+            defaultValue = {Parameters.parameters.height}
+            onChangeText={text => Parameters.setParameters({type:"HEIGHT", payload:text})}
           />
         </View>
 
@@ -86,26 +77,26 @@ function UserBMI(props) {
         />
 
         {/*weight input */}
-        <View style={styles.inputFieldsContainer2}>
+        <View style={styles.inputFieldsContainer}>
           <TextInput
             placeholder={Strings.kgLabel}
             placeholderTextColor={Colors.lightDark} 
             style={styles.inputField}
-            onChangeText={text => setWeight(text)}
-            onPress={() => BMI(isheight, isweight)}
+            defaultValue= {Parameters.parameters.weight}
+            onChangeText={text => Parameters.setParameters({type:"WEIGHT", payload:text})}
           />
         </View>
 
 
         {/* calculate button */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.nextButton}
           onPress={() => BMI(isheight, isweight)}>
           <Text style={styles.nextButtonText}>Calculate </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
           
-        <Text style={styles.label}>{bmi}</Text>
-        <Text style={styles.resultText}>{BmiResult}</Text>
+        {/* <Text style={styles.label}>{bmi}</Text>
+        <Text style={styles.resultText}>{BmiResult}</Text> */}
         
         {/* next button */}
         <TouchableOpacity

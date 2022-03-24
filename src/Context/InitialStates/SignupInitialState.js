@@ -5,5 +5,7 @@ export default{
     firstName : null,
     secondName: null,
     email : null,
-    password: null
+    password: null,
+    isParameters: 0,
+    isGoal: 0
   }

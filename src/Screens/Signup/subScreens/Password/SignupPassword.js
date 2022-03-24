@@ -22,7 +22,7 @@ const SignupPassword = props =>{
         // password between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter.
         let passwordValidation=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
         const pass=AccountContext.account.password;
-        if(pass.length==0 || cPass.length==0){
+        if(!pass || !cPass || pass.length==0 || cPass.length==0){
             alert("Required Fields are missing");
         } else if(!passwordValidation.test(pass)){
             alert("password must contain length of 6 to 20 and one number, one lower and one upper");

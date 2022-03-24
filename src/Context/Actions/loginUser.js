@@ -36,6 +36,6 @@ export default (emailText, passText)=>(authentication)=>{
                     alert(response.data.message);
             })
             .catch((error)=>{
-                alert(" " + error);
+                alert(" " + error.response.data.message);
             });
 }

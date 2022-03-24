@@ -10,7 +10,6 @@ import Colors from '../../../colors/Colors';
 
 const UserGoal = props =>{
     const authentication = useContext(AuthContext);
-    console.log(authentication);
     const [selectedValue, setSelectedValue] = useState("1");
 
     const updateGoal = async()=>{

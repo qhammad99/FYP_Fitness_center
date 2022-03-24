@@ -30,12 +30,15 @@ export default (account)=>(authentication)=>{
                 AlertIOS.alert("Account Created");
                 }
                 let obj={
+                    user_id: response.data.user_id,
                     u_type: account.userType,
                     firstName: account.firstName,
                     secondName: account.secondName,
                     password: account.password,
                     u_type: account.userType,
-                    token: response.token
+                    token: response.data.token,
+                    isParameters: 0,
+                    isGoal: 0
                 }
                 addToLocatStorage(obj); 
                 authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)})
@@ -44,6 +47,6 @@ export default (account)=>(authentication)=>{
             alert(response.data.message);
     })
     .catch((error)=>{
-        alert(" " + error);
+        alert(" " + error.response.data.message);
     });
 }
