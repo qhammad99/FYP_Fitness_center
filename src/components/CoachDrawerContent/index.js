@@ -1,6 +1,5 @@
 // Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
 import React,{useContext} from 'react';
-import { SignupContext } from '../../Context/Providers/SignupProvider';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
 import {
   SafeAreaView,
@@ -23,8 +22,6 @@ import styles from './styles';
 
 const CoachDrawerContent = (props) => {
   const authentication = useContext( AuthContext);
-  const signupContext = useContext( SignupContext);
-
 
   const clearLoactStorage = async() =>{
     try{
@@ -34,8 +31,6 @@ const CoachDrawerContent = (props) => {
     }
 
     authentication.dispatch({type:'SIGN_OUT'});
-    if(signupContext)
-      signupContext.setAccount({type:'CLEAR_CONTEXT'});
   }
 
   const logoutAlert = () => {

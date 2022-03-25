@@ -13,14 +13,14 @@ const addToLocatStorage = async(userObj) =>{
     }
 }
 
-export default (account)=>(authentication)=>{
+export default (Account)=>(authentication)=>{
     var API_URL= Urls.SignupURL;
     console.log('fetching started');
     axios.post(API_URL, {
-            name : account.firstName+" "+account.secondName,
-            email : account.email,
-            password: account.password,
-            u_type: account.userType
+            name : Account.account.firstName+" "+Account.account.secondName,
+            email : Account.account.email,
+            password: Account.account.password,
+            u_type: Account.account.userType
     })
     .then((response)=>{
         if(response.data.success){
@@ -31,17 +31,18 @@ export default (account)=>(authentication)=>{
                 }
                 let obj={
                     user_id: response.data.user_id,
-                    u_type: account.userType,
-                    firstName: account.firstName,
-                    secondName: account.secondName,
-                    password: account.password,
-                    u_type: account.userType,
+                    u_type: Account.account.userType,
+                    firstName: Account.account.firstName,
+                    secondName: Account.account.secondName,
+                    password: Account.account.password,
+                    u_type: Account.account.userType,
                     token: response.data.token,
                     isParameters: 0,
                     isGoal: 0
                 }
                 addToLocatStorage(obj); 
-                authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)})
+                authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)});
+                Account.setAccount({type:'CLEAR_CONTEXT'});
         }
         else
             alert(response.data.message);

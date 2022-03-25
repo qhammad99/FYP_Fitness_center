@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -9,7 +9,6 @@ import Strings from '../../../../../strings/Strings';
 import HeadingAndCaption from '../../../../../components/HeadingAndCaption';
 import styles from './styles';
 import Colors from '../../../../../colors/Colors';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../../../Context/Providers/AuthProvider';
 import {ParametersContext} from '../../../../../Context/Providers/ParametersProvider';
 import addParameters from '../../../../../Context/Actions/addParameters';
@@ -17,9 +16,6 @@ import addParameters from '../../../../../Context/Actions/addParameters';
 const UserBMI = props => {
   const authentication = useContext(AuthContext);
   const Parameters = useContext(ParametersContext);
-
-  // const [BmiResult, setBmiResult] = useState('');
-  // const [bmi, setbmi] = useState(0);
 
   const nextPressed = () =>{
     if(!Parameters.parameters.height || !Parameters.parameters.weight ||
@@ -30,26 +26,9 @@ const UserBMI = props => {
     else if(Parameters.parameters.weight < 18 || Parameters.parameters.weight >200)
       alert("Enter real weight");
     else
-      addParameters(Parameters.parameters)(authentication);
+      addParameters(Parameters)(authentication);
   }
 
-  // const BMI = (height, weight) => {
-  //   var result = (parseFloat(weight) * 10000) / (parseFloat(height) * parseFloat(height));
-  //   result.toFixed(2);
-  //   setbmi(result);
-  //   if (result < 18.5) {
-  //     setBmiResult('Underweight');
-  //   } else if (result >= 18.5 && result < 25) {
-  //     setBmiResult('Normal weight');
-  //   } else if (result >= 25 && result < 30) {
-  //     setBmiResult('Overweight');
-  //   } else if (result >= 30) {
-  //     setBmiResult('Obese');
-  //   } else {
-  //     // alert('Incorrect Input!');
-  //     setBmiResult('');
-  //   }
-  // };
   return (
     <>
       <View style={styles.container}>
@@ -86,21 +65,10 @@ const UserBMI = props => {
             onChangeText={text => Parameters.setParameters({type:"WEIGHT", payload:text})}
           />
         </View>
-
-
-        {/* calculate button */}
-        {/* <TouchableOpacity
-          style={styles.nextButton}
-          onPress={() => BMI(isheight, isweight)}>
-          <Text style={styles.nextButtonText}>Calculate </Text>
-        </TouchableOpacity> */}
-          
-        {/* <Text style={styles.label}>{bmi}</Text>
-        <Text style={styles.resultText}>{BmiResult}</Text> */}
         
         {/* next button */}
         <TouchableOpacity
-          style={styles.nextButton2}
+          style={styles.nextButton}
           onPress={nextPressed}>
           <Text style={styles.nextButtonText}>{Strings.nextText}</Text>
         </TouchableOpacity>

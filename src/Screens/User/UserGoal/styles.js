@@ -7,19 +7,59 @@ const styles= StyleSheet.create({
         padding: '10%',
         alignItems:'center'
     },
+    headingText:{
+        fontSize:18,
+        fontWeight:'bold',
+        marginTop: 50,
+        textAlign:'center',
+        color:Colors.darkColor
+    },
+    bmiResult:{
+        fontSize:18,
+        fontWeight: 'bold',
+        color: Colors.selectedColor
+    },
+    captionText:{
+        marginTop: 5, 
+        textAlign: 'center',
+        color:Colors.darkColor
+    },
+    containerHeading:{
+        color:Colors.darkColor, 
+        marginTop:30, 
+        width:'100%', 
+        textAlign:'center'
+    },
     inputFieldsContainer:{ 
-        marginTop: 20,
+        marginTop: 10,
         flexDirection:'row', 
         alignItems: 'center', 
         justifyContent:'space-between' 
     },
-    inputField: {
-        borderBottomColor: Colors.primary,
-        borderBottomWidth: 2,
-        fontSize: 18,
-        width: '50%',
-        maxWidth: '50%',
-        marginHorizontal:5
+    containerLabel:{
+        fontWeight:'bold', 
+        marginTop:10, 
+        color: Colors.darkColor,
+        width:60
+    },
+    inputValueField:{
+        marginLeft:10, 
+        flex:1,
+        borderBottomColor:Colors.primary, 
+        borderBottomWidth:1,
+        color: Colors.darkColor
+    },
+    unitContainer:{
+        backgroundColor: '#fff', 
+        width:135, 
+        height:'100%', 
+        marginLeft: 20,
+        alignItems: 'center'
+    },
+    unit:{
+        color: Colors.selectedColor,
+        marginTop:14,
+        fontSize:16
     },
     nextButton: {
         width: 300,

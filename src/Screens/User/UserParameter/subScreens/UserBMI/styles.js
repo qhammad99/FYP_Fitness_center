@@ -31,32 +31,18 @@ const styles = StyleSheet.create({
       padding: 6,
       borderRadius: 5,
     },
-    nextButton2: {
-      width: 300,
-      height: 38,
-      marginTop: 40,
-      backgroundColor: Colors.primary,
-      padding: 6,
-      borderRadius: 5,
-    },
     nextButtonText: {
       color: 'white',
       fontSize: 16,
       justifyContent: 'center',
       textAlign: 'center',
     },
-    resultText: {
-      marginTop: 10,
-      textAlign: 'center',
-      fontSize: 30,
-      color: Colors.darkColor,
-    },
     label: {
       marginTop: 15,
       textAlign: 'center',
       fontSize: 20,
       color:Colors.selectedColor
-    },
-  });
+    }
+});
 
-  export default styles;
+export default styles;

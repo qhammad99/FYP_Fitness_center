@@ -29,7 +29,7 @@ const SignupPassword = props =>{
         } else if(!(pass == cPass)){
             alert("Not matched");
         } else
-            addUser(AccountContext.account)(authentication);
+            addUser(AccountContext)(authentication);
     }
     return(
         <>

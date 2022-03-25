@@ -1,11 +1,11 @@
-// this action is called in signup password
+// this action is called in bmi parameters
 
 import Urls from '../../config/env';
 import {ToastAndroid, AlertIOS} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const updateParameters = async(authentication)=>{
+const updateParameters = async(Parameters, authentication)=>{
     let userObj;
     try{
       userObj= await AsyncStorage.getItem('USER');
@@ -22,19 +22,20 @@ const updateParameters = async(authentication)=>{
       console.log("error in writing local storage: ", e);
     }
     authentication.dispatch({type:'ADD_LOCAL_DATA', payload:userObj});
+    Parameters.setParameters({type: 'CLEAR_CONTEXT'});
   }
 
-export default (parameters)=>(authentication)=>{
+export default (Parameters)=>(authentication)=>{
     let user = JSON.parse(authentication.state.user);
     let token = user.token;
 
     var API_URL= Urls.ParametersAdd;
     console.log('fetching started');
     axios.post(API_URL, {
-            height : parameters.height,
-            weight : parameters.weight,
-            dob: parameters.dob,
-            gender: parameters.gender
+            height : Parameters.parameters.height,
+            weight : Parameters.parameters.weight,
+            dob: Parameters.parameters.dob,
+            gender: Parameters.parameters.gender
     },{
         headers:{
             'Content-Type' : 'application/json',
@@ -48,7 +49,7 @@ export default (parameters)=>(authentication)=>{
                 } else {
                 AlertIOS.alert("Parameters Added");
                 }
-                updateParameters(authentication);
+                updateParameters(Parameters, authentication);
         }
         else
             alert(response.data.message);
