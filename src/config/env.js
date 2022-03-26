@@ -6,7 +6,8 @@ const Urls = {
     ParametersAdd: URL+'/parameters-add',
     ParametersGet: URL+'/parameters-detail',
     GoalAdd: URL+'/goal-add',
-    GoalCompleted: URL+'/goal-total'
+    GoalCompleted: URL+'/goal-total',
+    GoalCurrent: URL+'/goal-current'
 };
 
 export default Urls;

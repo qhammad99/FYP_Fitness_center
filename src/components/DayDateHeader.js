@@ -8,30 +8,42 @@ const DayDateHeader = props =>{
         <View style={styles.container}>
             <View style={styles.firstRow}>
                 {/* left carrot */}
-                <TouchableOpacity>
-                    <AntDesign name={'caretleft'} size={20} color={Colors.selectedColor} />
-                </TouchableOpacity>
+                {
+                    props.firstDay == false 
+                    ? 
+                    <TouchableOpacity>
+                        <AntDesign name={'caretleft'} size={20} color={Colors.selectedColor} />
+                    </TouchableOpacity>
+                    :
+                    <View style={{width:20}}></View>
+                }
                 
                 {/* Day number */}
                 <TouchableOpacity onPress={props.to}>
-                    <Text style={styles.dayNumberText}>Day Number</Text>
+                    <Text style={styles.dayNumberText}>Day # {props.dayNumber}</Text>
                 </TouchableOpacity>
                 
                 {/* right carrot */}
-                <TouchableOpacity>
-                    <AntDesign name={'caretright'} size={20} color={Colors.selectedColor} />
-                </TouchableOpacity>
+                {
+                    props.lastDay == false 
+                    ? 
+                    <TouchableOpacity>
+                        <AntDesign name={'caretright'} size={20} color={Colors.selectedColor} />
+                    </TouchableOpacity>
+                    :
+                    <View style={{width:20}}></View>
+                }
             </View>
 
             {/* second row */}
             <View style={styles.secondRow}>
                 
                 <Text style={styles.label}>
-                    Date: <Text style={styles.text}>February 19, 2022</Text>
+                    Date: <Text style={styles.text}>{props.date}</Text>
                 </Text>
 
                 <Text style={styles.label}>
-                    Day: <Text style={styles.text}>Saturday</Text>
+                    Day: <Text style={styles.text}>{props.day}</Text>
                 </Text>
             </View>
         </View>
