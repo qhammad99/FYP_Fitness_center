@@ -5,7 +5,8 @@ const Urls = {
     SignupURL: URL+'/user-register',
     ParametersAdd: URL+'/parameters-add',
     ParametersGet: URL+'/parameters-detail',
-    GoalAdd: URL+'/goal-add'
+    GoalAdd: URL+'/goal-add',
+    GoalCompleted: URL+'/goal-total'
 };
 
 export default Urls;

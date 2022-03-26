@@ -29,7 +29,6 @@ export default (startDate, numberOfDays, targetType, targetValue) => (Parameters
     let token = user.token;
 
     var API_URL= Urls.GoalAdd;
-    console.log('fetching started');
     axios.post(API_URL, {
             start_date : startDate,
             number_of_days : numberOfDays,
@@ -54,6 +53,9 @@ export default (startDate, numberOfDays, targetType, targetValue) => (Parameters
             alert(response.data.message);
     })
     .catch((error)=>{
+      if(error.response)
         alert(" " + error.response.data.message);
+      else
+        alert(" "+ error);
     });
 }

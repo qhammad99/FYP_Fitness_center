@@ -15,7 +15,6 @@ const addToLocatStorage = async(userObj) =>{
 
 export default (Account)=>(authentication)=>{
     var API_URL= Urls.SignupURL;
-    console.log('fetching started');
     axios.post(API_URL, {
             name : Account.account.firstName+" "+Account.account.secondName,
             email : Account.account.email,
@@ -32,8 +31,7 @@ export default (Account)=>(authentication)=>{
                 let obj={
                     user_id: response.data.user_id,
                     u_type: Account.account.userType,
-                    firstName: Account.account.firstName,
-                    secondName: Account.account.secondName,
+                    name: Account.account.firstName +" "+Account.account.secondName,
                     password: Account.account.password,
                     u_type: Account.account.userType,
                     token: response.data.token,
@@ -48,6 +46,9 @@ export default (Account)=>(authentication)=>{
             alert(response.data.message);
     })
     .catch((error)=>{
-        alert(" " + error.response.data.message);
+        if(error.response)
+            alert(" " + error.response.data.message);
+        else
+            alert(" "+ error);
     });
 }

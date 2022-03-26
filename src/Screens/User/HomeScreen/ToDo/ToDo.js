@@ -1,5 +1,5 @@
 // This screen will show details of tasks to do on the day
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import DayDateHeader from '../../../../components/DayDateHeader';
 import TaskContainer from '../../../../components/TaskContainer';
@@ -8,6 +8,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ToDo = props =>{
+    useEffect(()=>{
+
+    },[]);
+    
     const shift = () =>{
         props.navigation.navigate('DayList');
     }

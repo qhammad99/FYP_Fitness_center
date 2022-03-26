@@ -1,10 +1,15 @@
 // Landing screen of User
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import styles from './styles';
+import React, {useEffect, useContext} from 'react';
 import DrawerNavigation from '../../../Navigation/DrawerNavigation';
+import { AuthContext } from '../../../Context/Providers/AuthProvider';
+import completedGoals from '../../../Context/Actions/completedGoals';
 
 const Home = () => {
+    const authentication = useContext(AuthContext);
+    
+    useEffect(()=>{
+        completedGoals(authentication);
+    },[]);
     return (
         <DrawerNavigation />
     );

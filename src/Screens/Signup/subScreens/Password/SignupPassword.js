@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { View, TouchableOpacity, Text, TextInput} from 'react-native';
 import Strings from '../../../../strings/Strings';
 import HeadingAndCaption from '../../../../components/HeadingAndCaption';
@@ -17,6 +17,12 @@ const SignupPassword = props =>{
 
     const [passwordVisible, setPasswordVisible]=useState(false);
     const [cPasswordVisible, setCPasswordVisible]=useState(false);
+
+    useEffect(()=>{
+        setCPass('');
+        setPasswordVisible(false);
+        setCPasswordVisible(false);
+    },[]);
 
     const nextPressed = () =>{
         // password between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter.

@@ -30,7 +30,6 @@ export default (Parameters)=>(authentication)=>{
     let token = user.token;
 
     var API_URL= Urls.ParametersAdd;
-    console.log('fetching started');
     axios.post(API_URL, {
             height : Parameters.parameters.height,
             weight : Parameters.parameters.weight,
@@ -55,6 +54,9 @@ export default (Parameters)=>(authentication)=>{
             alert(response.data.message);
     })
     .catch((error)=>{
+      if(error.response)
         alert(" " + error.response.data.message);
+      else
+        alert(" "+ error);
     });
 }

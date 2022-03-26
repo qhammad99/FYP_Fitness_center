@@ -1,5 +1,5 @@
 // Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
-import React,{useContext} from 'react';
+import React,{useContext, useState, useEffect} from 'react';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
 import {
   SafeAreaView,
@@ -22,7 +22,24 @@ import styles from './styles';
 
 const DrawerContent = (props) => {
   const authentication = useContext( AuthContext);
+  const [user, setUser] = useState(JSON.parse(authentication.state.user));
+  const [goal, setGoal] = useState({});
 
+  const checkGoal = async() =>{
+    let goalObj;
+    try{
+        goalObj= await AsyncStorage.getItem('GOAL');
+    }catch(e){
+      console.log("error in reading local storage: ", e);
+    }
+    goalObj = JSON.parse(goalObj)
+    setGoal(goalObj);
+  }
+
+  useEffect(()=>{
+    checkGoal();
+  },[]);
+ 
   const clearLoactStorage = async() =>{
     try{
       await AsyncStorage.removeItem('USER');
@@ -64,10 +81,10 @@ const DrawerContent = (props) => {
             />
         </View>
         <Text style={styles.nameText}>
-            Hammad Ahmad Qureshi
+            {user.name}
         </Text>
         <Text style={styles.numberOfGoals}>
-            Goals Completed: 0
+            Goals Completed: {goal==null ? 'error' : goal.completedGoals}
         </Text>
       </ImageBackground>
 
