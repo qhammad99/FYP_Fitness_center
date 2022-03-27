@@ -3,12 +3,16 @@
 import Urls from '../../config/env';
 import axios from 'axios';
 
-const doing = (Goal, authentication) =>{
+const doing = async(Goal, Task, authentication) => {
   let user = JSON.parse(authentication.state.user);
     let token = user.token;
 
-    var API_URL= Urls.GoalCurrent;
-    axios.get(API_URL,{
+    let goal_id = Goal.goal.data.id;
+
+    var API_URL= Urls.ScheduleToday;
+    axios.post(API_URL,{
+      goal_id: goal_id
+    },{
         headers:{
             'Content-Type' : 'application/json',
             'Authorization' : `Bearer ${token}`
@@ -16,10 +20,8 @@ const doing = (Goal, authentication) =>{
     })
     .then((response)=>{
         if(response.data.success){
-          Goal.setGoal({type:'ADD_GOAL', payload: response.data.goal});
+          Task.setTasks({type:'ADD_TASKS', payload:response.data.tasks});
         }
-        else
-          Goal.setGoal({type:'UPDATE_COMPLETED'});
     })
     .catch((error)=>{
       if(error.response)
@@ -29,6 +31,6 @@ const doing = (Goal, authentication) =>{
     });
 }
 
-export default (Goal)=>(authentication)=>{
-    doing(Goal, authentication);
+export default (Goal)=>(Task)=>(authentication)=>{
+    doing(Goal, Task, authentication);
 }

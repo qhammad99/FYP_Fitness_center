@@ -1,6 +1,5 @@
 // This screen will show details of tasks to do on the day
 import React, {useEffect, useState, useContext} from 'react';
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
 import Modal from 'react-native-modal';
 import DayDateHeader from '../../../../components/DayDateHeader';
@@ -10,12 +9,26 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../../../../Context/Providers/AuthProvider';
 import {GoalContext} from '../../../../Context/Providers/GoalProvider';
+import { TaskContext } from '../../../../Context/Providers/TaskProvider';
 import currentGoal from '../../../../Context/Actions/currentGoal';
+import scheduleToday from '../../../../Context/Actions/scheduleToday';
 import moment from 'moment';
+import {
+    Text, 
+    View, 
+    StyleSheet, 
+    ScrollView, 
+    TouchableOpacity, 
+    ActivityIndicator,
+    FlatList
+} from 'react-native';
+import { keyExtractor } from 'react-native/Libraries/Lists/VirtualizeUtils';
+
 
 const ToDo = props =>{
     const authentication = useContext(AuthContext);
     const Goal = useContext(GoalContext);
+    const Task = useContext(TaskContext);
 
     const[isLoading, setIsLoading] =useState(true);
     const [completed, setCompleted] = useState(false); // if goal completed
@@ -29,6 +42,9 @@ const ToDo = props =>{
     const [day, setDay] = useState(moment().format('dddd'));
     const [firstDay, setFirstDay] = useState(false);
     const [lastDay, setLastDay] =useState(false);
+
+    // tasks and progress
+    const [tasks, setTasks] = useState([]);
 
     const checkInternetConnection = () =>{
         NetInfo.fetch().then(state => {
@@ -69,6 +85,11 @@ const ToDo = props =>{
         setIsLoading(false);
     }
 
+    const settingTasks = async() =>{
+        scheduleToday(Goal)(Task)(authentication);
+        setTasks(Task.tasks.tasks);
+    }
+
     useEffect(()=>{
         checkInternetConnection();
         if(isConnected){
@@ -84,11 +105,16 @@ const ToDo = props =>{
                 if(currentDayNumber == 0 && !completed)
                     settingCurrentDayNumber(); //today day number
                 settingDayNumber(); // if user shift then display that number
+
+                if(dayNumber == currentDayNumber){
+                    // if daynumber = curent day number then today schedule
+                    settingTasks();
+                }
+
+                setIsLoading(false);
             }
         }
-        // today schedule if current goal
-        // otherwise just progress
-    },[Goal, goalData, dayNumber, currentDayNumber, date, day]);
+    },[Goal, goalData, day]);
     
     const shift = () =>{
         props.navigation.navigate('DayList');
@@ -129,7 +155,7 @@ const ToDo = props =>{
 
         }
     }
-
+    
     return (
         <>
         <View style={styles.container}>
@@ -185,54 +211,45 @@ const ToDo = props =>{
         
         {/* horizontal line */}
         <View style={styles.horizontalLine} />
-        <ScrollView style={{width:'100%'}}>
-        <TaskContainer 
-            taskNumber="Task # 1" 
-            taskImage={getImage("breakfast")} 
-            taskTitle="BreakFast" 
-            taskTime="9:00 - 10:00"
-            to={shiftDetail}
+        <View style={{width:'100%'}}>
+
+            <FlatList 
+                data={tasks}
+                renderItem={
+                    ({item, index})=>
+                        <TaskContainer 
+                            taskNumber= {`Task # ${index+1}`} 
+                            taskImage={
+                                item.category == 'Workout'?
+                                getImage("evening"):
+                                getImage("breakfast")
+                            } 
+                            taskTitle={
+                                item.category == 'Workout'?
+                                item.workoutName:
+                                item.category == 'Diet'?
+                                item.dietName:
+                                item.extraName
+                            } 
+                            taskTime={
+                                `${item.start_time} - ${item.finish_time}`
+                            }
+                            to={shiftDetail}
+                            />
+                }
+                keyExtractor={(item, index)=>`task-${index}`}
             />
 
-        <TaskContainer 
-            taskNumber="Task # 2" 
-            taskImage={getImage('morning')}
-            taskTitle="Morning Exercise" 
-            taskTime="11:00 - 12:00"
-            to={shiftDetail}
-            />
-
-        <TaskContainer 
-            taskNumber="Task # 3"
-            taskImage={getImage('lunch')} 
-            taskTitle="Lunch" 
-            taskTime="13:00 - 14:00"
-            to={shiftDetail}
-            />
-
-        <TaskContainer 
-            taskNumber="Task # 4"
-            taskImage={getImage('evening')} 
-            taskTitle="Evening Exercise" 
-            taskTime="15:00 - 16:00"
-            to={shiftDetail}
-            />
-
-        <TaskContainer 
-            taskNumber="Task # 5"
-            taskImage={getImage('dinner')} 
-            taskTitle="Dinner" 
-            taskTime="17:00 - 18:00"
-            to={shiftDetail}
-            />
-
-        {/* remove this button if present to do screen is not match with current date and day */}
-        <TouchableOpacity style={styles.extraAddButtonContainer}>
-            <Ionicons name={'add'} size={20} color={'#fff'} />
-            <Text style={styles.extraAddButton}>Extra item</Text>
-        </TouchableOpacity>
+            {/* remove this button if present to do screen is not match with current date and day */}
+            { dayNumber == currentDayNumber
+                &&
+                <TouchableOpacity style={styles.extraAddButtonContainer}>
+                    <Ionicons name={'add'} size={20} color={'#fff'} />
+                    <Text style={styles.extraAddButton}>Extra item</Text>
+                </TouchableOpacity>
+            }
         
-        </ScrollView>
+        </View>
     </View>
     <TouchableOpacity style={styles.editButton}>
         <MaterialCommunityIcons name={'calendar-edit'} color={'#fff'} size={30} />

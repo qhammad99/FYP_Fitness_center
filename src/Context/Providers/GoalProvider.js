@@ -5,7 +5,7 @@ import GoalReducer from '../Reducers/GoalReducer';
 
 export const GoalContext = createContext(null);
 
-const ParametersProvider =({children}) =>{
+const GoalProvider =({children}) =>{
     const [goal, setGoal] = useReducer(GoalReducer, GoalInitialState);
 
     return(
@@ -15,4 +15,4 @@ const ParametersProvider =({children}) =>{
     )
 }
 
-export default ParametersProvider;
+export default GoalProvider;

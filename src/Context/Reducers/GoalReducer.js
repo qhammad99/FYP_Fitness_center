@@ -1,5 +1,5 @@
 import GoalInitialState from "../InitialStates/GoalInitialState";
-const AuthReducer = (state, action) =>{
+const GoalReducer = (state, action) =>{
     switch(action.type){
         case "ADD_GOAL":
             return {
@@ -11,7 +11,7 @@ const AuthReducer = (state, action) =>{
             return {
                 ...state,
                 completedGoals: action.payload
-            }
+            };
 
         case "UPDATE_COMPLETED":
             return {
@@ -30,4 +30,4 @@ const AuthReducer = (state, action) =>{
     }
 }
 
-export default AuthReducer;
+export default GoalReducer;
