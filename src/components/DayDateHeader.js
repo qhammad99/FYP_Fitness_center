@@ -11,7 +11,7 @@ const DayDateHeader = props =>{
                 {
                     props.firstDay == false 
                     ? 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={props.back}>
                         <AntDesign name={'caretleft'} size={20} color={Colors.selectedColor} />
                     </TouchableOpacity>
                     :
@@ -27,7 +27,7 @@ const DayDateHeader = props =>{
                 {
                     props.lastDay == false 
                     ? 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={props.next}>
                         <AntDesign name={'caretright'} size={20} color={Colors.selectedColor} />
                     </TouchableOpacity>
                     :

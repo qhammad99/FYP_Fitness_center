@@ -10,7 +10,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../../../../Context/Providers/AuthProvider';
 import {GoalContext} from '../../../../Context/Providers/GoalProvider';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import currentGoal from '../../../../Context/Actions/currentGoal';
 import moment from 'moment';
 
@@ -18,7 +17,7 @@ const ToDo = props =>{
     const authentication = useContext(AuthContext);
     const Goal = useContext(GoalContext);
 
-    const[isLoading, setIsLoading] =useState(false);
+    const[isLoading, setIsLoading] =useState(true);
     const [completed, setCompleted] = useState(false); // if goal completed
     const [goalData, setGoalData] = useState({});
     const [isConnected, setIsConnected] = useState(true);
@@ -38,9 +37,8 @@ const ToDo = props =>{
     }
 
     const settingCurrentDayNumber = () =>{
-        let nowDate = moment();
+        let nowDate = moment().local();
         let goalStartDate = moment(goalData.start_date).local();
-
         let dayNumber = nowDate.diff(goalStartDate, 'days')+1;
         setCurrentDayNumber(dayNumber);
     }
@@ -53,7 +51,7 @@ const ToDo = props =>{
         const dayNumber = forDateLocal.diff(goalStartDateLocal, 'days')+1;
         setDayNumber(dayNumber);
 
-        const lastDayNumber = goalData.number_of_day;
+        const lastDayNumber = goalData.number_of_days;
 
         if(dayNumber == 1){
             setFirstDay(true);
@@ -63,25 +61,34 @@ const ToDo = props =>{
             setFirstDay(false);
             setLastDay(false);
         }
+
+        if(dayNumber>lastDayNumber){
+            setCompleted(true);
+        }
+
+        setIsLoading(false);
     }
 
     useEffect(()=>{
         checkInternetConnection();
         if(isConnected){
-            if(goalData == {})
-                setIsLoading(true);
-                    currentGoal(Goal)(authentication);
-                    setGoalData(Goal.goal.data);
-                    if(goalData != {}){
-                        if(currentDayNumber == 0 && !completed)
-                            settingCurrentDayNumber(); //today day number
-                        settingDayNumber(); // if user shift then display that number
-                    }
-                setIsLoading(false);
+            setIsLoading(true);
+
+            if(Object.keys(goalData) == 0){
+                currentGoal(Goal)(authentication);
+            }
+            if(Object.keys(Goal.goal.data) != 0)
+                setGoalData(Goal.goal.data);
+            
+            if(Object.keys(goalData) != 0){
+                if(currentDayNumber == 0 && !completed)
+                    settingCurrentDayNumber(); //today day number
+                settingDayNumber(); // if user shift then display that number
+            }
         }
         // today schedule if current goal
         // otherwise just progress
-    },[Goal]);
+    },[Goal, goalData, dayNumber, currentDayNumber, date, day]);
     
     const shift = () =>{
         props.navigation.navigate('DayList');
@@ -89,6 +96,18 @@ const ToDo = props =>{
 
     const shiftDetail=()=>{
         props.navigation.navigate('ItemDetailShow');
+    }
+
+    const nextPressed =()=>{
+        const nextDay = moment(date, 'MMMM DD, YYYY').local().add(1, 'day');
+        setDate(moment(nextDay).format('MMMM DD, YYYY'));
+        setDay(moment(nextDay).format('dddd'));
+    }
+
+    const backPressed =()=>{
+        const prevDay = moment(date, 'MMMM DD, YYYY').local().subtract(1, 'day');
+        setDate(moment(prevDay).format('MMMM DD, YYYY'));
+        setDay(moment(prevDay).format('dddd'));
     }
 
     const getImage = imageAddress =>{
@@ -154,12 +173,14 @@ const ToDo = props =>{
                 </Modal>
 
         <DayDateHeader  
-            to={shift}
-            dayNumber={dayNumber} 
-            date={date} 
-            day={day}
-            firstDay={firstDay}
-            lastDay={lastDay}
+            to= {shift}
+            dayNumber= {dayNumber} 
+            date= {date} 
+            day= {day}
+            firstDay= {firstDay}
+            lastDay= {lastDay}
+            next= {nextPressed}
+            back= {backPressed}
             />
         
         {/* horizontal line */}
