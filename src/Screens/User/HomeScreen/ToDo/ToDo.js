@@ -1,6 +1,7 @@
 // This screen will show details of tasks to do on the day
 import React, {useEffect, useState, useContext} from 'react';
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
+import NetInfo from "@react-native-community/netinfo";
 import Modal from 'react-native-modal';
 import DayDateHeader from '../../../../components/DayDateHeader';
 import TaskContainer from '../../../../components/TaskContainer';
@@ -8,15 +9,20 @@ import Colors from '../../../../colors/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../../../../Context/Providers/AuthProvider';
+import {GoalContext} from '../../../../Context/Providers/GoalProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import currentGoal from '../../../../Context/Actions/currentGoal';
 import moment from 'moment';
 
 const ToDo = props =>{
     const authentication = useContext(AuthContext);
-    const[isLoading, setIsLoading] =useState(true);
-    const [completed, setCompleted] = useState(false);
+    const Goal = useContext(GoalContext);
+
+    const[isLoading, setIsLoading] =useState(false);
+    const [completed, setCompleted] = useState(false); // if goal completed
     const [goalData, setGoalData] = useState({});
+    const [isConnected, setIsConnected] = useState(true);
+
     // header data
     const [dayNumber, setDayNumber] = useState(0);
     const [currentDayNumber, setCurrentDayNumber] = useState(0);
@@ -25,18 +31,13 @@ const ToDo = props =>{
     const [firstDay, setFirstDay] = useState(false);
     const [lastDay, setLastDay] =useState(false);
 
-    const localStorage = async() =>{
-        let goalObj;
-        try{
-            goalObj= await AsyncStorage.getItem('GOAL');
-        }catch(e){
-            console.log("error in reading local storage: ", e);
-        }
-        goalObj= JSON.parse(goalObj);
-        setGoalData(goalObj.data);
+    const checkInternetConnection = () =>{
+        NetInfo.fetch().then(state => {
+            setIsConnected(state.isConnected);
+          });
     }
 
-    const settingCurrentDayNumber = async() =>{
+    const settingCurrentDayNumber = () =>{
         let nowDate = moment();
         let goalStartDate = moment(goalData.start_date).local();
 
@@ -44,7 +45,7 @@ const ToDo = props =>{
         setCurrentDayNumber(dayNumber);
     }
 
-    const settingDayNumber = async() =>{
+    const settingDayNumber = () =>{
         let forDate = moment(date, 'MMMM DD, YYYY');
         const forDateLocal = moment(forDate).local();
         const goalStartDateLocal = moment(goalData.start_date).local();
@@ -52,23 +53,35 @@ const ToDo = props =>{
         const dayNumber = forDateLocal.diff(goalStartDateLocal, 'days')+1;
         setDayNumber(dayNumber);
 
+        const lastDayNumber = goalData.number_of_day;
+
         if(dayNumber == 1){
             setFirstDay(true);
+        }else if(dayNumber == lastDayNumber){
+            setLastDay(true);
         }else{
             setFirstDay(false);
+            setLastDay(false);
         }
     }
 
     useEffect(()=>{
-        setIsLoading(true);
-            currentGoal(authentication);
-            localStorage();
-            settingCurrentDayNumber(); //today day number
-            settingDayNumber(); // if user shift then display that number
-        setIsLoading(false);
+        checkInternetConnection();
+        if(isConnected){
+            if(goalData == {})
+                setIsLoading(true);
+                    currentGoal(Goal)(authentication);
+                    setGoalData(Goal.goal.data);
+                    if(goalData != {}){
+                        if(currentDayNumber == 0 && !completed)
+                            settingCurrentDayNumber(); //today day number
+                        settingDayNumber(); // if user shift then display that number
+                    }
+                setIsLoading(false);
+        }
         // today schedule if current goal
         // otherwise just progress
-    },[]);
+    },[Goal]);
     
     const shift = () =>{
         props.navigation.navigate('DayList');
@@ -101,6 +114,7 @@ const ToDo = props =>{
     return (
         <>
         <View style={styles.container}>
+            {/* loading modal */}
             <Modal
                 isVisible={isLoading}
                 style={{margin:0}}>
@@ -114,6 +128,28 @@ const ToDo = props =>{
                     >
                         <ActivityIndicator size={50} color={Colors.primary}/>
                         <Text style={{color:Colors.darkColor, marginTop:15}}>Loading ...</Text>
+                    </View>
+                </Modal>
+
+                {/* no internet modal */}
+            <Modal
+                isVisible={!isConnected}
+                style={{margin:0}}>
+                    <View style={{
+                        width:'100%', 
+                        height: '100%', 
+                        backgroundColor:Colors.lightColor,
+                        alignItems:'center',
+                        justifyContent:'center'
+                        }}
+                    >
+                        <MaterialCommunityIcons name={'close-network-outline'} size={70} color={Colors.selectedColor}/>
+
+                        <Text style={{color:Colors.darkColor, marginTop:20, fontSize:14}}>Ooops! failed to connect to internet</Text>
+                        
+                        <TouchableOpacity style={{backgroundColor:Colors.primary, borderRadius:3, padding:6, marginTop:10}} onPress={checkInternetConnection}>
+                            <Text style={{color: Colors.lightColor}}>Try Again</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
 

@@ -1,28 +1,9 @@
 // this action is called in User / Home
 
 import Urls from '../../config/env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const updateGoal = async(data)=>{
-    let goalObj;
-    try{
-        goalObj= await AsyncStorage.getItem('GOAL');
-    }catch(e){
-      console.log("error in reading local storage: ", e);
-    }
-    goalObj = JSON.parse(goalObj)
-    goalObj = {...goalObj, data}
-    goalObj = JSON.stringify(goalObj);
-
-    try{
-      await AsyncStorage.setItem('GOAL', goalObj);
-    }catch(e){
-      console.log("error in writing local storage: ", e);
-    }
-  }
-
-export default (authentication)=>{
+export default (Goal)=>(authentication)=>{
     let user = JSON.parse(authentication.state.user);
     let token = user.token;
 
@@ -35,10 +16,10 @@ export default (authentication)=>{
     })
     .then((response)=>{
         if(response.data.success){
-            updateGoal(response.data.goal);
+          Goal.setGoal({type:'ADD_GOAL', payload: response.data.goal});
         }
         else
-            alert(response.data.message);
+          Goal.setGoal({type:'UPDATE_COMPLETED'});
     })
     .catch((error)=>{
       if(error.response)

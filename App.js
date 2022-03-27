@@ -5,6 +5,7 @@ import Colors from './src/colors/Colors';
 import { LogBox } from 'react-native';
 import AuthProvider from './src/Context/Providers/AuthProvider';
 import ParametersProvider from './src/Context/Providers/ParametersProvider';
+import GoalProvider from './src/Context/Providers/GoalProvider';
 
 const App = () => {
   LogBox.ignoreLogs([
@@ -18,9 +19,11 @@ const App = () => {
       {/* link with context */}
       <AuthProvider>
         <ParametersProvider>
-          <View style={{flex:1, backgroundColor:Colors.light}}>
-            <Routes />
-          </View>
+          <GoalProvider>
+            <View style={{flex:1, backgroundColor:Colors.light}}>
+              <Routes />  
+            </View>
+          </GoalProvider>
         </ParametersProvider>
       </AuthProvider>
     </>

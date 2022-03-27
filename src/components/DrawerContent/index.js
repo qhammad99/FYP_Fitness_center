@@ -1,6 +1,7 @@
 // Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
 import React,{useContext, useState, useEffect} from 'react';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
+import {GoalContext} from '../../Context/Providers/GoalProvider';
 import {
   SafeAreaView,
   View,
@@ -16,29 +17,14 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Colors from '../../colors/Colors';
 import styles from './styles';
 
 const DrawerContent = (props) => {
   const authentication = useContext( AuthContext);
+  const Goal = useContext(GoalContext);
   const [user, setUser] = useState(JSON.parse(authentication.state.user));
-  const [goal, setGoal] = useState({});
-
-  const checkGoal = async() =>{
-    let goalObj;
-    try{
-        goalObj= await AsyncStorage.getItem('GOAL');
-    }catch(e){
-      console.log("error in reading local storage: ", e);
-    }
-    goalObj = JSON.parse(goalObj)
-    setGoal(goalObj);
-  }
-
-  useEffect(()=>{
-    checkGoal();
-  },[]);
  
   const clearLoactStorage = async() =>{
     try{
@@ -47,7 +33,8 @@ const DrawerContent = (props) => {
       console.log("error in clearing local storage, ", e);
     }
 
-    authentication.dispatch({type:'SIGN_OUT'})
+    authentication.dispatch({type:'SIGN_OUT'});
+    Goal.setGoal({type:'SIGN_OUT'});
   }
 
   const logoutAlert = () => {
@@ -84,7 +71,7 @@ const DrawerContent = (props) => {
             {user.name}
         </Text>
         <Text style={styles.numberOfGoals}>
-            Goals Completed: {goal==null ? 'error' : goal.completedGoals}
+            Goals Completed: {Goal.goal.completedGoals}
         </Text>
       </ImageBackground>
 
