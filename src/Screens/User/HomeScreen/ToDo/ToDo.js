@@ -218,21 +218,14 @@ const ToDo = props =>{
                 renderItem={
                     ({item, index})=>
                         <TaskContainer 
-                            taskNumber= {`Task # ${index+1}`} 
+                            item= {item}
+                            index= {index}
+                            // when we get image from database we get url, but for now
+                            // we using local image so will use this
                             taskImage={
                                 item.category == 'Workout'?
-                                getImage("evening"):
+                                getImage("morning"):
                                 getImage("breakfast")
-                            } 
-                            taskTitle={
-                                item.category == 'Workout'?
-                                item.workoutName:
-                                item.category == 'Diet'?
-                                item.dietName:
-                                item.extraName
-                            } 
-                            taskTime={
-                                `${item.start_time} - ${item.finish_time}`
                             }
                             to={shiftDetail}
                             />
