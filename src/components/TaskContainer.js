@@ -1,16 +1,12 @@
-import React,{useState} from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity, Animated} from 'react-native';
+import React,{useEffect} from 'react';
+import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import Colors from '../colors/Colors';
 
 const TaskContainer = props =>{
-    const [done, setDone] = useState(false)
-    const value = new Animated.Value(done ? -16 : 0);
-    Animated.timing(value, {
-        toValue:done ? 0 : -16,
-        duration:1200,
-        useNativeDriver: false
-    }).start(()=>setDone(!done));
-
+    useEffect(()=>{
+        console.log("hello world");
+    },[]);
     const item = props.item;
     const index = props.index;
     return(
@@ -43,29 +39,42 @@ const TaskContainer = props =>{
                     </View>
                 </View>
                 <View style={styles.cardRight}>
-                <Text style={{
-                    color:'#2b6323', 
-                    marginTop:-5,  
-                    fontSize:12, 
-                    textAlign:'right',
-                    }}
-                >
-                    Live
-                </Text>
-                <Animated.View 
-                    style={{
-                        height:1,
-                        width:5,
-                        marginBottom:5,
-                        backgroundColor:'#2b6323',
-                        alignSelf:'flex-end',
-                        transform:[
-                            {translateX:value}
-                        ]
-                    }}
+                {
+                    props.dayNumber == props.currentDayNumber
+                    && //also check time if fnish time is over then disable the ok button
+                    <>
+                    <Animatable.Text 
+                        animation="pulse" 
+                        easing="ease-out" 
+                        iterationCount="infinite"
+                        delay={300}
+                        style={{
+                            color:'#259b24', 
+                            marginTop:-5,  
+                            fontSize:12, 
+                            textAlign:'right',
+                            marginRight:10,
+                            marginBottom:6,
+                            fontWeight:'bold'
+                            }}
+                    >
+                        Live
+                    </Animatable.Text>
+                    
 
-                />
-                    <Text style={{color:Colors.darkColor}}>isDone ceckBox</Text>
+                    <TouchableOpacity 
+                        style={{
+                            borderRadius:5,
+                            paddingHorizontal:7,
+                            paddingVertical:3,
+                            backgroundColor:Colors.primary, 
+                            alignItems:'center',
+                            justifyContent:'center'
+                            }}>
+                            <Text style={{color:Colors.lightColor}}>Done</Text>
+                    </TouchableOpacity>
+                    </>
+                }
                 </View>
             </View>
             </TouchableOpacity>

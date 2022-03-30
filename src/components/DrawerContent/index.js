@@ -1,6 +1,7 @@
 // Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
 import React,{useContext, useState, useEffect} from 'react';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GoalContext} from '../../Context/Providers/GoalProvider';
 import {
   SafeAreaView,

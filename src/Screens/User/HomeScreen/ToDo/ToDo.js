@@ -22,7 +22,7 @@ import {
     ActivityIndicator,
     FlatList
 } from 'react-native';
-import { keyExtractor } from 'react-native/Libraries/Lists/VirtualizeUtils';
+import { concat } from 'react-native-reanimated';
 
 
 const ToDo = props =>{
@@ -32,7 +32,6 @@ const ToDo = props =>{
 
     const[isLoading, setIsLoading] =useState(true);
     const [completed, setCompleted] = useState(false); // if goal completed
-    const [goalData, setGoalData] = useState({});
     const [isConnected, setIsConnected] = useState(true);
 
     // header data
@@ -43,18 +42,37 @@ const ToDo = props =>{
     const [firstDay, setFirstDay] = useState(false);
     const [lastDay, setLastDay] =useState(false);
 
-    // tasks and progress
-    const [tasks, setTasks] = useState([]);
-
-    const checkInternetConnection = () =>{
+    useEffect(()=>{
+        console.log("hello");
         NetInfo.fetch().then(state => {
-            setIsConnected(state.isConnected);
-          });
-    }
+            if(state.isConnected){
+                if(isLoading == false)
+                    setIsLoading(true);
 
+                if(Object.keys(Goal.goal.data) == 0){
+                    currentGoal(Goal)(authentication);
+                }
+                
+                if(Object.keys(Goal.goal.data) != 0){
+                    if(currentDayNumber == 0 && !completed)
+                        settingCurrentDayNumber(); //today day number
+                    settingDayNumber(); // if user shift then display that number
+    
+                    if(dayNumber == currentDayNumber){
+                        // if daynumber = curent day number then today schedule
+                        scheduleToday(Goal)(Task)(authentication);
+                    }
+                    setIsLoading(false);
+                }
+            }else{
+                setIsConnected(false);
+            }
+          });
+    },[Goal, day]);
+    // Goal, goalData, day, tasks
     const settingCurrentDayNumber = () =>{
         let nowDate = moment().local();
-        let goalStartDate = moment(goalData.start_date).local();
+        let goalStartDate = moment(Goal.goal.data.start_date).local();
         let dayNumber = nowDate.diff(goalStartDate, 'days')+1;
         setCurrentDayNumber(dayNumber);
     }
@@ -62,12 +80,12 @@ const ToDo = props =>{
     const settingDayNumber = () =>{
         let forDate = moment(date, 'MMMM DD, YYYY');
         const forDateLocal = moment(forDate).local();
-        const goalStartDateLocal = moment(goalData.start_date).local();
+        const goalStartDateLocal = moment(Goal.goal.data.start_date).local();
 
         const dayNumber = forDateLocal.diff(goalStartDateLocal, 'days')+1;
         setDayNumber(dayNumber);
 
-        const lastDayNumber = goalData.number_of_days;
+        const lastDayNumber = Goal.goal.number_of_days;
 
         if(dayNumber == 1){
             setFirstDay(true);
@@ -81,41 +99,16 @@ const ToDo = props =>{
         if(dayNumber>lastDayNumber){
             setCompleted(true);
         }
-
-        setIsLoading(false);
     }
 
-    const settingTasks = async() =>{
-        scheduleToday(Goal)(Task)(authentication);
-        setTasks(Task.tasks.tasks);
+
+    const checkInternetConnection =()=>{
+        NetInfo.fetch().then(state => {
+            if(state.isConnected)
+                setIsConnected(true);
+        })
     }
 
-    useEffect(()=>{
-        checkInternetConnection();
-        if(isConnected){
-            setIsLoading(true);
-
-            if(Object.keys(goalData) == 0){
-                currentGoal(Goal)(authentication);
-            }
-            if(Object.keys(Goal.goal.data) != 0)
-                setGoalData(Goal.goal.data);
-            
-            if(Object.keys(goalData) != 0){
-                if(currentDayNumber == 0 && !completed)
-                    settingCurrentDayNumber(); //today day number
-                settingDayNumber(); // if user shift then display that number
-
-                if(dayNumber == currentDayNumber){
-                    // if daynumber = curent day number then today schedule
-                    settingTasks();
-                }
-
-                setIsLoading(false);
-            }
-        }
-    },[Goal, goalData, day]);
-    
     const shift = () =>{
         props.navigation.navigate('DayList');
     }
@@ -134,6 +127,10 @@ const ToDo = props =>{
         const prevDay = moment(date, 'MMMM DD, YYYY').local().subtract(1, 'day');
         setDate(moment(prevDay).format('MMMM DD, YYYY'));
         setDay(moment(prevDay).format('dddd'));
+    }
+
+    const taskDonePressed=()=>{
+        console.log("add this task to progress");
     }
 
     const getImage = imageAddress =>{
@@ -155,7 +152,6 @@ const ToDo = props =>{
 
         }
     }
-    
     return (
         <>
         <View style={styles.container}>
@@ -214,12 +210,14 @@ const ToDo = props =>{
         <View style={{width:'100%'}}>
 
             <FlatList 
-                data={tasks}
+                data={Task.tasks.tasks}
                 renderItem={
                     ({item, index})=>
                         <TaskContainer 
                             item= {item}
                             index= {index}
+                            dayNumber= {dayNumber}
+                            currentDayNumber= {currentDayNumber}
                             // when we get image from database we get url, but for now
                             // we using local image so will use this
                             taskImage={

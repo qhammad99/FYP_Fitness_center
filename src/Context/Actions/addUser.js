@@ -13,7 +13,7 @@ const addToLocatStorage = async(userObj) =>{
     }
 }
 
-export default (Account)=>(authentication)=>{
+const adding = async(Account, authentication)=>{
     var API_URL= Urls.SignupURL;
     axios.post(API_URL, {
             name : Account.account.firstName+" "+Account.account.secondName,
@@ -38,9 +38,8 @@ export default (Account)=>(authentication)=>{
                     isParameters: 0,
                     isGoal: 0
                 }
-                addToLocatStorage(obj); 
-                authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)});
-                Account.setAccount({type:'CLEAR_CONTEXT'});
+                addToLocatStorage(obj);
+                authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)});  
         }
         else
             alert(response.data.message);
@@ -51,4 +50,8 @@ export default (Account)=>(authentication)=>{
         else
             alert(" "+ error);
     });
+}
+
+export default (Account)=>(authentication)=>{
+    adding(Account, authentication);
 }
