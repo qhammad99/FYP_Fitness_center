@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {View, TouchableOpacity, Text, TextInput} from 'react-native';
+import {ParametersContext} from '../../../../../Context/Providers/ParametersProvider';
 import {Picker} from '@react-native-picker/picker';
 import Strings from '../../../../../strings/Strings';
 import HeadingAndCaption from '../../../../../components/HeadingAndCaption';
@@ -7,7 +8,8 @@ import styles from './styles';
 import Colors from '../../../../../colors/Colors';
 
 const UserGender = props =>{
-    const [selectedValue, setSelectedValue] = useState("1");
+    const Parameters = useContext(ParametersContext);
+
     return(
         <>
             <View style={styles.container}>
@@ -22,9 +24,9 @@ const UserGender = props =>{
                 <Text style={{fontWeight:'bold', marginTop:10, color: Colors.darkColor}}>Choose Gender:   </Text>
                 {/* picker for user gender */}
                 <Picker
-                    selectedValue={selectedValue}
+                    selectedValue={Parameters.parameters.gender}
                     style={{width: 130, backgroundColor:'#fff', color:Colors.selectedColor }}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                    onValueChange={(itemValue) => Parameters.setParameters({type:"GENDER", payload:itemValue})}
                     dropdownIconColor={Colors.selectedColor}
                 >
                     <Picker.Item label="Male" value='1'/>  

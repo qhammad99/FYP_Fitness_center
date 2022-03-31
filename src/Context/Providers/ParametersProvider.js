@@ -1,11 +1,12 @@
 import React, {createContext, useReducer} from 'react';
-import { useContext } from 'react/cjs/react.production.min';
-import ParametersInitialState from '../InitialStates/ParametersInitialState';
 
-export const ParametersContext = useContext(null);
+import ParametersInitialState from '../InitialStates/ParametersInitialState';
+import ParametersReducer from '../Reducers/ParametersReducer';
+
+export const ParametersContext = createContext(null);
 
 const ParametersProvider =({children}) =>{
-    const [parameters, setParameters] = useReducer(()=>{}, ParametersInitialState);
+    const [parameters, setParameters] = useReducer(ParametersReducer, ParametersInitialState);
 
     return(
         <ParametersContext.Provider value={{parameters, setParameters}}>

@@ -1,6 +1,5 @@
 // Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
-import React,{useContext} from 'react';
-import { SignupContext } from '../../Context/Providers/SignupProvider';
+import React,{useContext, useState} from 'react';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
 import {
   SafeAreaView,
@@ -23,8 +22,7 @@ import styles from './styles';
 
 const CoachDrawerContent = (props) => {
   const authentication = useContext( AuthContext);
-  const signupContext = useContext( SignupContext);
-
+  const [user, setUser] = useState(JSON.parse(authentication.state.user));
 
   const clearLoactStorage = async() =>{
     try{
@@ -34,8 +32,6 @@ const CoachDrawerContent = (props) => {
     }
 
     authentication.dispatch({type:'SIGN_OUT'});
-    if(signupContext)
-      signupContext.setAccount({type:'CLEAR_CONTEXT'});
   }
 
   const logoutAlert = () => {
@@ -69,7 +65,7 @@ const CoachDrawerContent = (props) => {
             />
         </View>
         <Text style={styles.nameText}>
-            Hammad Ahmad Qureshi
+            {user.name}
         </Text>
         <Text style={styles.numberOfGoals}>
             Clients: 0

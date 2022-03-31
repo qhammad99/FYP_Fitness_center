@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect, useAsync} from 'react';
 import { View, TouchableOpacity, Text, TextInput} from 'react-native';
 import Strings from '../../../../strings/Strings';
 import HeadingAndCaption from '../../../../components/HeadingAndCaption';
@@ -18,18 +18,37 @@ const SignupPassword = props =>{
     const [passwordVisible, setPasswordVisible]=useState(false);
     const [cPasswordVisible, setCPasswordVisible]=useState(false);
 
+
+    const [state, setState] = useState(false); // setting to wait to clear all through use effect
+
+    useEffect(() => {
+        let isMounted = true;
+        const fetchData = () =>{
+            setTimeout(() => {
+                if (isMounted){ 
+                    if(state)
+                        addUser(AccountContext)(authentication);
+                }
+            }, 4000);
+        }
+        fetchData();
+        return () => {
+            isMounted = false;
+        };
+      }, [state]); 
+
     const nextPressed = () =>{
         // password between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter.
         let passwordValidation=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
         const pass=AccountContext.account.password;
-        if(pass.length==0 || cPass.length==0){
+        if(!pass || !cPass || pass.length==0 || cPass.length==0){
             alert("Required Fields are missing");
         } else if(!passwordValidation.test(pass)){
             alert("password must contain length of 6 to 20 and one number, one lower and one upper");
         } else if(!(pass == cPass)){
             alert("Not matched");
         } else
-            addUser(AccountContext.account)(authentication);
+            setState(true)
     }
     return(
         <>

@@ -3,5 +3,5 @@
 export default{
     isLoading : true,
     user : null,
-    isSignout: false
+    goal_id: null
   }

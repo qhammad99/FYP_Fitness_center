@@ -1,13 +1,122 @@
 // This screen will show details of tasks to do on the day
-import React from 'react';
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState, useContext} from 'react';
+import NetInfo from "@react-native-community/netinfo";
+import Modal from 'react-native-modal';
 import DayDateHeader from '../../../../components/DayDateHeader';
 import TaskContainer from '../../../../components/TaskContainer';
 import Colors from '../../../../colors/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AuthContext} from '../../../../Context/Providers/AuthProvider';
+import {GoalContext} from '../../../../Context/Providers/GoalProvider';
+import { TaskContext } from '../../../../Context/Providers/TaskProvider';
+import currentGoal from '../../../../Context/Actions/currentGoal';
+import scheduleToday from '../../../../Context/Actions/scheduleToday';
+import scheduleByDay from '../../../../Context/Actions/scheduleByDay';
+import moment from 'moment';
+import {
+    Text, 
+    View, 
+    StyleSheet, 
+    TouchableOpacity, 
+    ActivityIndicator,
+    FlatList
+} from 'react-native';
 
 const ToDo = props =>{
+    const authentication = useContext(AuthContext);
+    const Goal = useContext(GoalContext);
+    const Task = useContext(TaskContext);
+
+    const[isLoading, setIsLoading] =useState(true);
+    const [completed, setCompleted] = useState(false); // if goal completed
+    const [isConnected, setIsConnected] = useState(true);
+
+    // header data
+    const [dayNumber, setDayNumber] = useState(0);
+    const [currentDayNumber, setCurrentDayNumber] = useState(0);
+    const [date, setDate] = useState(moment().format('MMMM DD, YYYY'));
+    const [day, setDay] = useState(moment().format('dddd'));
+    const [firstDay, setFirstDay] = useState(false);
+    const [lastDay, setLastDay] =useState(false);
+
+    useEffect(()=>{
+        NetInfo.fetch().then(state => {
+            if(state.isConnected){
+                if(isLoading == false)
+                    setIsLoading(true);
+
+                if(Object.keys(Goal.goal.data) == 0){
+                    currentGoal(Goal)(authentication);
+                }
+
+                let testing = true;
+
+                if(Object.keys(Goal.goal.data) != 0){
+                    if(currentDayNumber == 0 && !completed)
+                        settingCurrentDayNumber(); //today day number
+                    if(testing){
+                        settingDayNumber(); // if user shift then display that number
+
+                        if(dayNumber == currentDayNumber){
+                            // if daynumber = curent day number then today schedule
+                            scheduleToday(Goal)(Task)(authentication);
+                        }else if(dayNumber<currentDayNumber){
+                            // set task from progress
+                
+                        }else if(dayNumber>currentDayNumber){
+                            // set schedule by day in task
+                            let forDay = moment(day, 'dddd').local().day() +1;
+                            scheduleByDay(forDay)(Task)(authentication);
+                        }
+                        setIsLoading(false);
+                    } 
+                }
+                return () => { testing = false };
+                
+            }else{
+                setIsConnected(false);
+            }
+          });
+    },[Goal, day, dayNumber, currentDayNumber]);
+    // Goal, goalData, day, tasks
+    const settingCurrentDayNumber = () =>{
+        let nowDate = moment().local();
+        let goalStartDate = moment(Goal.goal.data.start_date).local();
+        let dayNumber = nowDate.diff(goalStartDate, 'days')+1;
+        setCurrentDayNumber(dayNumber);
+    }
+
+    const settingDayNumber = () =>{
+        let forDate = moment(date, 'MMMM DD, YYYY');
+        const forDateLocal = moment(forDate).local();
+        const goalStartDateLocal = moment(Goal.goal.data.start_date).local();
+
+        const dayNumber = forDateLocal.diff(goalStartDateLocal, 'days')+1;
+        setDayNumber(dayNumber);
+
+        const lastDayNumber = Goal.goal.data.number_of_days;
+        if(dayNumber == 1){
+            setFirstDay(true);
+        }else if(dayNumber == lastDayNumber){
+            setLastDay(true);
+        }else{
+            setFirstDay(false);
+            setLastDay(false);
+        }
+
+        if(dayNumber>lastDayNumber){
+            setCompleted(true);
+        }
+    }
+
+    const checkInternetConnection =()=>{
+        NetInfo.fetch().then(state => {
+            if(state.isConnected)
+                setIsConnected(true);
+        })
+    }
+
     const shift = () =>{
         props.navigation.navigate('DayList');
     }
@@ -16,81 +125,129 @@ const ToDo = props =>{
         props.navigation.navigate('ItemDetailShow');
     }
 
+    const nextPressed =()=>{
+        const nextDay = moment(date, 'MMMM DD, YYYY').local().add(1, 'day');
+        setDate(moment(nextDay).format('MMMM DD, YYYY'));
+        setDay(moment(nextDay).format('dddd'));
+    }
+
+    const backPressed =()=>{
+        const prevDay = moment(date, 'MMMM DD, YYYY').local().subtract(1, 'day');
+        setDate(moment(prevDay).format('MMMM DD, YYYY'));
+        setDay(moment(prevDay).format('dddd'));
+    }
+
+    const taskDonePressed=()=>{
+        console.log("add this task to progress");
+    }
+
     const getImage = imageAddress =>{
         switch(imageAddress){
             case "breakfast":
                 return require("../../../../images/breakfast.jpg");
-                break;
+
             case "morning":
                 return require("../../../../images/morningExercise.jpg");
-                break;
+
             case "lunch":
                 return require("../../../../images/lunch.jpg");
-                break;
+
             case "evening":
                 return require("../../../../images/eveningExercise.jpg");
-                break;
+
             case 'dinner':
                 return require("../../../../images/dinner.jpg");
-                break;
+
         }
     }
-
     return (
         <>
         <View style={styles.container}>
-        <DayDateHeader  to={shift}/>
+            {/* loading modal */}
+            <Modal
+                isVisible={isLoading}
+                animationIn={'bounceInUp'}
+                animationOut={'bounceOutDown'}
+                style={{margin:0}}>
+                    <View style={{
+                        width:'100%', 
+                        height: '100%', 
+                        alignItems:'center',
+                        justifyContent:'center'
+                        }}
+                    >
+                        <ActivityIndicator size={50} color={Colors.primary}/>
+                    </View>
+                </Modal>
+
+                {/* no internet modal */}
+            <Modal
+                isVisible={!isConnected}
+                style={{margin:0}}>
+                    <View style={{
+                        width:'100%', 
+                        height: '100%', 
+                        backgroundColor:Colors.lightColor,
+                        alignItems:'center',
+                        justifyContent:'center'
+                        }}
+                    >
+                        <MaterialCommunityIcons name={'close-network-outline'} size={70} color={Colors.selectedColor}/>
+
+                        <Text style={{color:Colors.darkColor, marginTop:20, fontSize:14}}>Ooops! failed to connect to internet</Text>
+                        
+                        <TouchableOpacity style={{backgroundColor:Colors.primary, borderRadius:3, padding:6, marginTop:10}} onPress={checkInternetConnection}>
+                            <Text style={{color: Colors.lightColor}}>Try Again</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+
+        <DayDateHeader  
+            to= {shift}
+            dayNumber= {dayNumber} 
+            date= {date} 
+            day= {day}
+            firstDay= {firstDay}
+            lastDay= {lastDay}
+            next= {nextPressed}
+            back= {backPressed}
+            />
         
         {/* horizontal line */}
         <View style={styles.horizontalLine} />
-        <ScrollView style={{width:'100%'}}>
-        <TaskContainer 
-            taskNumber="Task # 1" 
-            taskImage={getImage("breakfast")} 
-            taskTitle="BreakFast" 
-            taskTime="9:00 - 10:00"
-            to={shiftDetail}
+        <View style={{width:'100%'}}>
+            <FlatList 
+                data={Task.tasks.tasks}
+                renderItem={
+                    ({item, index})=>
+                        <TaskContainer 
+                            item= {item}
+                            index= {index}
+                            dayNumber= {dayNumber}
+                            currentDayNumber= {currentDayNumber}
+                            // when we get image from database we get url, but for now
+                            // we using local image so will use this
+                            taskImage={
+                                item.category == 'Workout'?
+                                getImage("morning"):
+                                getImage("breakfast")
+                            }
+                            to={shiftDetail}
+                            />
+                }
+                keyExtractor={(item, index)=>`task-${index}`}
             />
 
-        <TaskContainer 
-            taskNumber="Task # 2" 
-            taskImage={getImage('morning')}
-            taskTitle="Morning Exercise" 
-            taskTime="11:00 - 12:00"
-            to={shiftDetail}
-            />
-
-        <TaskContainer 
-            taskNumber="Task # 3"
-            taskImage={getImage('lunch')} 
-            taskTitle="Lunch" 
-            taskTime="13:00 - 14:00"
-            to={shiftDetail}
-            />
-
-        <TaskContainer 
-            taskNumber="Task # 4"
-            taskImage={getImage('evening')} 
-            taskTitle="Evening Exercise" 
-            taskTime="15:00 - 16:00"
-            to={shiftDetail}
-            />
-
-        <TaskContainer 
-            taskNumber="Task # 5"
-            taskImage={getImage('dinner')} 
-            taskTitle="Dinner" 
-            taskTime="17:00 - 18:00"
-            to={shiftDetail}
-            />
-
-        {/* remove this button if present to do screen is not match with current date and day */}
-        <TouchableOpacity style={styles.extraAddButtonContainer}>
-            <Ionicons name={'add'} size={20} color={'#fff'} />
-            <Text style={styles.extraAddButton}>Extra item</Text>
-        </TouchableOpacity>
+            {/* remove this button if present to do screen is not match with current date and day */}
+            { dayNumber == currentDayNumber
+                &&
+                <TouchableOpacity style={styles.extraAddButtonContainer}>
+                    <Ionicons name={'add'} size={20} color={'#fff'} />
+                    <Text style={styles.extraAddButton}>Extra item</Text>
+                </TouchableOpacity>
+            }
         
-        </ScrollView>
+        </View>
     </View>
     <TouchableOpacity style={styles.editButton}>
         <MaterialCommunityIcons name={'calendar-edit'} color={'#fff'} size={30} />

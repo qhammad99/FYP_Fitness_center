@@ -15,27 +15,29 @@ const addToLocatStorage = async(userObj) =>{
 
 export default (emailText, passText)=>(authentication)=>{
     var API_URL= Urls.LoginURL;
-            console.log('fetching started');
-            axios.post(API_URL, {
-                email: emailText,
-                password: passText
-            })
-            .then((response)=>{
-                if(response.data.success){
-                    if (Platform.OS === 'android') {
-                        ToastAndroid.show("User Authenticated", ToastAndroid.SHORT)
-                      } else {
-                        AlertIOS.alert("User Authenticated");
-                      }
-                      let userObj = response.data.user;
-                      userObj ={...userObj, token: response.data.token};
-                      addToLocatStorage(userObj);
-                    authentication.dispatch({type:'SIGN_IN', payload:JSON.stringify(userObj)});
+    axios.post(API_URL, {
+        email: emailText,
+        password: passText
+    })
+    .then((response)=>{
+        if(response.data.success){
+            if (Platform.OS === 'android') {
+                ToastAndroid.show("User Authenticated", ToastAndroid.SHORT)
+                } else {
+                AlertIOS.alert("User Authenticated");
                 }
-                else
-                    alert(response.data.message);
-            })
-            .catch((error)=>{
-                alert(" " + error);
-            });
+                let userObj = response.data.user;
+                userObj ={...userObj, token: response.data.token};
+                addToLocatStorage(userObj);
+            authentication.dispatch({type:'SIGN_IN', payload:JSON.stringify(userObj)});
+        }
+        else
+            alert(response.data.message);
+    })
+    .catch((error)=>{
+        if(error.response)
+            alert(" " + error.response.data.message);
+        else
+            alert(" "+ error);
+    });
 }

@@ -1,6 +1,8 @@
 // Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
-import React,{useContext} from 'react';
+import React,{useContext, useState, useEffect} from 'react';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GoalContext} from '../../Context/Providers/GoalProvider';
 import {
   SafeAreaView,
   View,
@@ -16,13 +18,15 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Colors from '../../colors/Colors';
 import styles from './styles';
 
 const DrawerContent = (props) => {
   const authentication = useContext( AuthContext);
-
+  const Goal = useContext(GoalContext);
+  const [user, setUser] = useState(JSON.parse(authentication.state.user));
+ 
   const clearLoactStorage = async() =>{
     try{
       await AsyncStorage.removeItem('USER');
@@ -30,7 +34,8 @@ const DrawerContent = (props) => {
       console.log("error in clearing local storage, ", e);
     }
 
-    authentication.dispatch({type:'SIGN_OUT'})
+    authentication.dispatch({type:'SIGN_OUT'});
+    Goal.setGoal({type:'SIGN_OUT'});
   }
 
   const logoutAlert = () => {
@@ -64,10 +69,10 @@ const DrawerContent = (props) => {
             />
         </View>
         <Text style={styles.nameText}>
-            Hammad Ahmad Qureshi
+            {user.name}
         </Text>
         <Text style={styles.numberOfGoals}>
-            Goals Completed: 0
+            Goals Completed: {Goal.goal.completedGoals}
         </Text>
       </ImageBackground>
 

@@ -12,8 +12,7 @@ const SignupEmail = props =>{
     const nextPressed =()=>{
         const email= AccountContext.account.email;
         var emailValidation=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-        if(email.length==0){
+        if(!email || email.length==0){
             alert("Required Fields are missing");
         }else if(!emailValidation.test(email)){
             alert("Email format is not good");

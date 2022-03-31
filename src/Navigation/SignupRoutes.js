@@ -9,8 +9,6 @@ import {
     SignupEmail,
     SignupPassword
 } from '../Screens/Signup';
-import CoachHome from '../Screens/Coach/Home/home';
-import UserParameter from '../Screens/User/UserParameter/UserParameter/UserParameter';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();

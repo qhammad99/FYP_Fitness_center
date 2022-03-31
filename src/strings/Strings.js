@@ -66,7 +66,9 @@ export default {
   GoalHeading: "Select the Goal",
   GoalCaptionIncrease: "You have to gain the weight",
   GoalCaptionDecrease: "You have to loose the weight",
-  GoalTargetCaption: "Choose the target weight, from the given list.",
-  GoalDurationCaption: "Select in how much time you want to finish the following target.",
+  GoalCaptionMaintain: "You just have to follow some workouts and diets to maintain it",
+  GoalCaptionObese: "Don't worry we will try to make you smarter",
+  GoalTargetCaption: "Choose the target weight",
+  GoalDurationCaption: "Choose the duration",
   
 };
