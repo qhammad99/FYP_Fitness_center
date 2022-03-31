@@ -1,16 +1,17 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Colors from '../colors/Colors';
 
 const TaskContainer = props =>{
-    useEffect(()=>{
-        console.log("hello world");
-    },[]);
     const item = props.item;
     const index = props.index;
+
     return(
         <View style={styles.container}>
+            {
+                (!item.empty) ?
+                <>
             <TouchableOpacity onPress={props.to}>
             <Text style={styles.taskNumber}>
                 Task # {index+1} 
@@ -78,6 +79,21 @@ const TaskContainer = props =>{
                 </View>
             </View>
             </TouchableOpacity>
+            </>:
+            <View style={{
+                height:'100%', 
+                width:'100%',
+                paddingVertical:20,
+                paddingHorizontal:5, 
+                alignItems:'center',
+                justifyContent:'center'
+                }}>
+                <Image style={{width: 150, height: 150}} source={require('../images/restDay.png')} />
+                <Text style={{color:Colors.selectedColor, fontSize:20, fontWeight:'bold'}}>
+                    Rest Day
+                </Text>
+            </View>
+            }
         </View>
     );
 };

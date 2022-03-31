@@ -1,4 +1,3 @@
 export default{
-    tasks:[],
-    progress:[]
+    tasks:[]
 }

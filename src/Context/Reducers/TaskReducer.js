@@ -6,15 +6,6 @@ const TaskReducer = (state, action) =>{
                 ...state, 
                 tasks: action.payload,
             };
-
-        case "ADD_PROGRESS":
-            return {
-                ...state, 
-                progress: action.payload,
-            };
-
-        case "SIGN_OUT":
-            return TasksInitialState;
     }
 }
 

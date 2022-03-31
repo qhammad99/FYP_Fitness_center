@@ -12,18 +12,16 @@ import {GoalContext} from '../../../../Context/Providers/GoalProvider';
 import { TaskContext } from '../../../../Context/Providers/TaskProvider';
 import currentGoal from '../../../../Context/Actions/currentGoal';
 import scheduleToday from '../../../../Context/Actions/scheduleToday';
+import scheduleByDay from '../../../../Context/Actions/scheduleByDay';
 import moment from 'moment';
 import {
     Text, 
     View, 
     StyleSheet, 
-    ScrollView, 
     TouchableOpacity, 
     ActivityIndicator,
     FlatList
 } from 'react-native';
-import { concat } from 'react-native-reanimated';
-
 
 const ToDo = props =>{
     const authentication = useContext(AuthContext);
@@ -43,7 +41,6 @@ const ToDo = props =>{
     const [lastDay, setLastDay] =useState(false);
 
     useEffect(()=>{
-        console.log("hello");
         NetInfo.fetch().then(state => {
             if(state.isConnected){
                 if(isLoading == false)
@@ -52,23 +49,36 @@ const ToDo = props =>{
                 if(Object.keys(Goal.goal.data) == 0){
                     currentGoal(Goal)(authentication);
                 }
-                
+
+                let testing = true;
+
                 if(Object.keys(Goal.goal.data) != 0){
                     if(currentDayNumber == 0 && !completed)
                         settingCurrentDayNumber(); //today day number
-                    settingDayNumber(); // if user shift then display that number
-    
-                    if(dayNumber == currentDayNumber){
-                        // if daynumber = curent day number then today schedule
-                        scheduleToday(Goal)(Task)(authentication);
-                    }
-                    setIsLoading(false);
+                    if(testing){
+                        settingDayNumber(); // if user shift then display that number
+
+                        if(dayNumber == currentDayNumber){
+                            // if daynumber = curent day number then today schedule
+                            scheduleToday(Goal)(Task)(authentication);
+                        }else if(dayNumber<currentDayNumber){
+                            // set task from progress
+                
+                        }else if(dayNumber>currentDayNumber){
+                            // set schedule by day in task
+                            let forDay = moment(day, 'dddd').local().day() +1;
+                            scheduleByDay(forDay)(Task)(authentication);
+                        }
+                        setIsLoading(false);
+                    } 
                 }
+                return () => { testing = false };
+                
             }else{
                 setIsConnected(false);
             }
           });
-    },[Goal, day]);
+    },[Goal, day, dayNumber, currentDayNumber]);
     // Goal, goalData, day, tasks
     const settingCurrentDayNumber = () =>{
         let nowDate = moment().local();
@@ -85,8 +95,7 @@ const ToDo = props =>{
         const dayNumber = forDateLocal.diff(goalStartDateLocal, 'days')+1;
         setDayNumber(dayNumber);
 
-        const lastDayNumber = Goal.goal.number_of_days;
-
+        const lastDayNumber = Goal.goal.data.number_of_days;
         if(dayNumber == 1){
             setFirstDay(true);
         }else if(dayNumber == lastDayNumber){
@@ -100,7 +109,6 @@ const ToDo = props =>{
             setCompleted(true);
         }
     }
-
 
     const checkInternetConnection =()=>{
         NetInfo.fetch().then(state => {
@@ -158,17 +166,17 @@ const ToDo = props =>{
             {/* loading modal */}
             <Modal
                 isVisible={isLoading}
+                animationIn={'bounceInUp'}
+                animationOut={'bounceOutDown'}
                 style={{margin:0}}>
                     <View style={{
                         width:'100%', 
                         height: '100%', 
-                        backgroundColor:Colors.lightColor,
                         alignItems:'center',
                         justifyContent:'center'
                         }}
                     >
                         <ActivityIndicator size={50} color={Colors.primary}/>
-                        <Text style={{color:Colors.darkColor, marginTop:15}}>Loading ...</Text>
                     </View>
                 </Modal>
 
@@ -208,7 +216,6 @@ const ToDo = props =>{
         {/* horizontal line */}
         <View style={styles.horizontalLine} />
         <View style={{width:'100%'}}>
-
             <FlatList 
                 data={Task.tasks.tasks}
                 renderItem={

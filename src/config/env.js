@@ -8,7 +8,8 @@ const Urls = {
     GoalAdd: URL+'/goal-add',
     GoalCompleted: URL+'/goal-total',
     GoalCurrent: URL+'/goal-current',
-    ScheduleToday: URL+'/schedule-today'
+    ScheduleToday: URL+'/schedule-today',
+    ScheduleByDay: URL+'/schedule/day/'
 };
 
 export default Urls;

@@ -1,18 +1,14 @@
-// this action is called in User / Home / todo
+// // this action is called in User / Home / Today
 
 import Urls from '../../config/env';
 import axios from 'axios';
 
-const doing = async(Goal, Task, authentication) => {
+const doing = async(day, Task, authentication) => {
   let user = JSON.parse(authentication.state.user);
     let token = user.token;
 
-    let goal_id = Goal.goal.data.id;
-
-    var API_URL= Urls.ScheduleToday;
-    axios.post(API_URL,{
-      goal_id: goal_id
-    },{
+    var API_URL= Urls.ScheduleByDay+day;
+    axios.get(API_URL,{
         headers:{
             'Content-Type' : 'application/json',
             'Authorization' : `Bearer ${token}`
@@ -22,7 +18,7 @@ const doing = async(Goal, Task, authentication) => {
         if(response.data.success){
           Task.setTasks({type:'ADD_TASKS', payload:response.data.tasks});
         }else{
-          Task.setTasks({type:'ADD_TASKS', payload:[{empty:true}]});
+            Task.setTasks({type:'ADD_TASKS', payload:[{empty:true}]});
         }
     })
     .catch((error)=>{
@@ -33,6 +29,6 @@ const doing = async(Goal, Task, authentication) => {
     });
 }
 
-export default (Goal)=>(Task)=>(authentication)=>{
-    doing(Goal, Task, authentication);
+export default (day)=>(Task)=>(authentication)=>{
+    doing(day, Task, authentication);
 }
