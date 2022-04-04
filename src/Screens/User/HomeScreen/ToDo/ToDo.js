@@ -13,6 +13,8 @@ import { TaskContext } from '../../../../Context/Providers/TaskProvider';
 import currentGoal from '../../../../Context/Actions/currentGoal';
 import scheduleToday from '../../../../Context/Actions/scheduleToday';
 import scheduleByDay from '../../../../Context/Actions/scheduleByDay';
+import progressTasks from '../../../../Context/Actions/progressTasks';
+
 import moment from 'moment';
 import {
     Text, 
@@ -41,8 +43,16 @@ const ToDo = props =>{
     const [lastDay, setLastDay] =useState(false);
 
     useEffect(()=>{
-        NetInfo.fetch().then(state => {
-            if(state.isConnected){
+        if(props.route.params){
+            const newDate = moment(props.route.params.dayDate, 'YYYY-MM-DD').local();
+            setDate(moment(newDate).format('MMMM DD, YYYY'));
+            setDay(moment(newDate).format('dddd'));
+        }
+    }, [props.route.params])
+
+    useEffect(()=>{
+        // NetInfo.fetch().then(state => {
+        //     if(state.isConnected){
                 if(isLoading == false)
                     setIsLoading(true);
 
@@ -55,31 +65,32 @@ const ToDo = props =>{
                 if(Object.keys(Goal.goal.data) != 0){
                     if(currentDayNumber == 0 && !completed)
                         settingCurrentDayNumber(); //today day number
+                    settingDayNumber(); // if user shift then display that number
                     if(testing){
-                        settingDayNumber(); // if user shift then display that number
-
+                        if(dayNumber != 0 && currentDayNumber != 0){
                         if(dayNumber == currentDayNumber){
                             // if daynumber = curent day number then today schedule
                             scheduleToday(Goal)(Task)(authentication);
-                        }else if(dayNumber<currentDayNumber){
+                        }else if(dayNumber < currentDayNumber){
                             // set task from progress
-                
-                        }else if(dayNumber>currentDayNumber){
+                            let forDay = moment(day, 'dddd').local().day() +1;
+                            progressTasks(Goal)(forDay)(Task)(authentication);
+                        }else if(dayNumber > currentDayNumber){
                             // set schedule by day in task
                             let forDay = moment(day, 'dddd').local().day() +1;
                             scheduleByDay(forDay)(Task)(authentication);
                         }
                         setIsLoading(false);
+                    }
                     } 
                 }
-                return () => { testing = false };
-                
-            }else{
-                setIsConnected(false);
-            }
-          });
+                return () => { testing = false };                
+        //     }else{
+        //         setIsConnected(false);
+        //     }
+        //   });
     },[Goal, day, dayNumber, currentDayNumber]);
-    // Goal, goalData, day, tasks
+    
     const settingCurrentDayNumber = () =>{
         let nowDate = moment().local();
         let goalStartDate = moment(Goal.goal.data.start_date).local();
@@ -181,7 +192,7 @@ const ToDo = props =>{
                 </Modal>
 
                 {/* no internet modal */}
-            <Modal
+            {/* <Modal
                 isVisible={!isConnected}
                 style={{margin:0}}>
                     <View style={{
@@ -200,7 +211,7 @@ const ToDo = props =>{
                             <Text style={{color: Colors.lightColor}}>Try Again</Text>
                         </TouchableOpacity>
                     </View>
-                </Modal>
+                </Modal> */}
 
         <DayDateHeader  
             to= {shift}

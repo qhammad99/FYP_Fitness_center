@@ -6,7 +6,7 @@ import Calendar from '../../../../components/Calendar';
 const DayList = props =>{
     return(
         <View style={styles.container}>
-            <Calendar shiftDayScreen={()=>props.navigation.navigate('ToDo')}/>
+            <Calendar shiftDayScreen={dayNumber => props.navigation.navigate('ToDo', {dayDate: dayNumber})}/>
         </View>
     );
 };

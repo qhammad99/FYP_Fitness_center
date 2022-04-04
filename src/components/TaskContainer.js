@@ -79,21 +79,37 @@ const TaskContainer = props =>{
                 </View>
             </View>
             </TouchableOpacity>
-            </>:
-            <View style={{
-                height:'100%', 
-                width:'100%',
-                paddingVertical:20,
-                paddingHorizontal:5, 
-                alignItems:'center',
-                justifyContent:'center'
-                }}>
-                <Image style={{width: 150, height: 150}} source={require('../images/restDay.png')} />
-                <Text style={{color:Colors.selectedColor, fontSize:20, fontWeight:'bold'}}>
-                    Rest Day
-                </Text>
-            </View>
-            }
+            </>:(
+                props.dayNumber >= props.currentDayNumber
+                ?
+                <View style={{
+                    height:'100%', 
+                    width:'100%',
+                    paddingVertical:20,
+                    paddingHorizontal:5, 
+                    alignItems:'center',
+                    justifyContent:'center'
+                    }}>
+                    <Image style={{width: 150, height: 150}} source={require('../images/restDay.png')} />
+                    <Text style={{color:Colors.selectedColor, fontSize:20, fontWeight:'bold'}}>
+                        Rest Day
+                    </Text>
+                </View>
+                :
+                <View style={{
+                    height:'100%', 
+                    width:'100%',
+                    paddingVertical:20,
+                    paddingHorizontal:5, 
+                    alignItems:'center',
+                    justifyContent:'center'
+                    }}>
+                    <Image style={{width: 180, height: 150}} source={require('../images/noProgress.png')} />
+                    <Text style={{color:Colors.selectedColor, fontSize:20, fontWeight:'bold'}}>
+                        No Progress
+                    </Text>
+                </View>
+            )}
         </View>
     );
 };
