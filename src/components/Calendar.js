@@ -51,9 +51,6 @@ const Calendar = props => {
       }
     }
     return () => {
-      // clear the progress so calendar component loads latest code
-      if(Task.tasks.progress != null)
-        Task.setTasks({type:"RESET_PROGRESS"})
       testing = false 
     }; 
   },[Task.tasks.progress]);
