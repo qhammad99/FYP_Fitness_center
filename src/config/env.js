@@ -11,7 +11,9 @@ const Urls = {
     ScheduleToday: URL+'/schedule-today',
     ScheduleByDay: URL+'/schedule/day/',
     ProgressByGoal: URL+'/progress-goal/',
-    ProgressTasks: URL+'/progress-tasks/'
+    ProgressTasks: URL+'/progress-tasks/',
+    WorkoutProgress: URL+'/progress-attachWorkout',
+    DietProgress: URL+'/progress-attachDiet'
 };
 
 export default Urls;

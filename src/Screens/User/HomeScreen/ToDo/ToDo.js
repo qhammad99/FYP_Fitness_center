@@ -73,8 +73,7 @@ const ToDo = props =>{
                             scheduleToday(Goal)(Task)(authentication);
                         }else if(dayNumber < currentDayNumber){
                             // set task from progress
-                            let forDay = moment(day, 'dddd').local().day() +1;
-                            progressTasks(Goal)(forDay)(Task)(authentication);
+                            progressTasks(Goal)(dayNumber)(Task)(authentication);
                         }else if(dayNumber > currentDayNumber){
                             // set schedule by day in task
                             let forDay = moment(day, 'dddd').local().day() +1;
@@ -89,7 +88,7 @@ const ToDo = props =>{
         //         setIsConnected(false);
         //     }
         //   });
-    },[Goal, day, dayNumber, currentDayNumber]);
+    },[Goal, date, day, dayNumber, currentDayNumber]);
     
     const settingCurrentDayNumber = () =>{
         let nowDate = moment().local();
@@ -129,11 +128,14 @@ const ToDo = props =>{
     }
 
     const shift = () =>{
+        // clear the progress so calendar component loads latest code
+        if(Task.tasks.progress != null)
+            Task.setTasks({type:"RESET_PROGRESS"})
         props.navigation.navigate('DayList');
     }
 
-    const shiftDetail=()=>{
-        props.navigation.navigate('ItemDetailShow');
+    const shiftDetail=(image, item)=>{
+        props.navigation.navigate('ItemDetailShow', {image: image, item: item});
     }
 
     const nextPressed =()=>{
@@ -146,10 +148,6 @@ const ToDo = props =>{
         const prevDay = moment(date, 'MMMM DD, YYYY').local().subtract(1, 'day');
         setDate(moment(prevDay).format('MMMM DD, YYYY'));
         setDay(moment(prevDay).format('dddd'));
-    }
-
-    const taskDonePressed=()=>{
-        console.log("add this task to progress");
     }
 
     const getImage = imageAddress =>{
