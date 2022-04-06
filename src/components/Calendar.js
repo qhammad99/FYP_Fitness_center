@@ -16,19 +16,20 @@ const Calendar = props => {
   const[items, setItems] = useState({});
 
   useEffect(()=>{
+
     if(allDates.length ==0 )
       for(i=0; i<Goal.goal.data.number_of_days; i++){
         let date = moment(Goal.goal.data.start_date).local().add(i, 'day').format('YYYY-MM-DD');
         setAllDates(recDates => [...recDates, date]);
       }
+
     let testing = true;
     if(testing){
       if(Task.tasks.progress == null)
         progressByGoal(Goal)(Task)(authentication);
       else{
-        let collection;
         let checkedIndex = 0;
-        collection = allDates.reduce((acc, currentItem, index)=>{
+        let collection = allDates.reduce((acc, currentItem, index)=>{
          const date = currentItem;
          if(Task.tasks.progress.length > 0 && Task.tasks.progress[checkedIndex]){
           //  compare date

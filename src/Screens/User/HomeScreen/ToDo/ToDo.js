@@ -1,6 +1,6 @@
 // This screen will show details of tasks to do on the day
 import React, {useEffect, useState, useContext} from 'react';
-import NetInfo from "@react-native-community/netinfo";
+// import NetInfo from "@react-native-community/netinfo";
 import Modal from 'react-native-modal';
 import DayDateHeader from '../../../../components/DayDateHeader';
 import TaskContainer from '../../../../components/TaskContainer';
@@ -32,7 +32,7 @@ const ToDo = props =>{
 
     const[isLoading, setIsLoading] =useState(true);
     const [completed, setCompleted] = useState(false); // if goal completed
-    const [isConnected, setIsConnected] = useState(true);
+    // const [isConnected, setIsConnected] = useState(true);
 
     // header data
     const [dayNumber, setDayNumber] = useState(0);
@@ -48,7 +48,26 @@ const ToDo = props =>{
             setDate(moment(newDate).format('MMMM DD, YYYY'));
             setDay(moment(newDate).format('dddd'));
         }
-    }, [props.route.params])
+    }, [props.route.params]);
+
+    useEffect(()=>{
+        if(isLoading){
+        if(dayNumber != 0 && currentDayNumber != 0){
+            if(dayNumber == currentDayNumber){
+                // if daynumber = curent day number then today schedule
+                scheduleToday(Goal)(Task)(authentication);
+            }else if(dayNumber < currentDayNumber){
+                // set task from progress
+                progressTasks(Goal)(dayNumber)(Task)(authentication);
+            }else if(dayNumber > currentDayNumber){
+                // set schedule by day in task
+                let forDay = moment(day, 'dddd').local().day() +1;
+                scheduleByDay(forDay)(Task)(authentication);
+            }
+            setIsLoading(false);
+            }
+        }
+    },[Task, dayNumber]);
 
     useEffect(()=>{
         // NetInfo.fetch().then(state => {
@@ -60,30 +79,11 @@ const ToDo = props =>{
                     currentGoal(Goal)(authentication);
                 }
 
-                let testing = true;
-
                 if(Object.keys(Goal.goal.data) != 0){
                     if(currentDayNumber == 0 && !completed)
                         settingCurrentDayNumber(); //today day number
                     settingDayNumber(); // if user shift then display that number
-                    if(testing){
-                        if(dayNumber != 0 && currentDayNumber != 0){
-                        if(dayNumber == currentDayNumber){
-                            // if daynumber = curent day number then today schedule
-                            scheduleToday(Goal)(Task)(authentication);
-                        }else if(dayNumber < currentDayNumber){
-                            // set task from progress
-                            progressTasks(Goal)(dayNumber)(Task)(authentication);
-                        }else if(dayNumber > currentDayNumber){
-                            // set schedule by day in task
-                            let forDay = moment(day, 'dddd').local().day() +1;
-                            scheduleByDay(forDay)(Task)(authentication);
-                        }
-                        setIsLoading(false);
-                    }
-                    } 
                 }
-                return () => { testing = false };                
         //     }else{
         //         setIsConnected(false);
         //     }
@@ -120,12 +120,12 @@ const ToDo = props =>{
         }
     }
 
-    const checkInternetConnection =()=>{
-        NetInfo.fetch().then(state => {
-            if(state.isConnected)
-                setIsConnected(true);
-        })
-    }
+    // const checkInternetConnection =()=>{
+    //     NetInfo.fetch().then(state => {
+    //         if(state.isConnected)
+    //             setIsConnected(true);
+    //     })
+    // }
 
     const shift = () =>{
         // clear the progress so calendar component loads latest code
@@ -224,6 +224,7 @@ const ToDo = props =>{
         
         {/* horizontal line */}
         <View style={styles.horizontalLine} />
+
         <View style={{width:'100%'}}>
             <FlatList 
                 data={Task.tasks.tasks}
