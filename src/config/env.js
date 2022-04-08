@@ -13,7 +13,8 @@ const Urls = {
     ProgressByGoal: URL+'/progress-goal/',
     ProgressTasks: URL+'/progress-tasks/',
     WorkoutProgress: URL+'/progress-attachWorkout',
-    DietProgress: URL+'/progress-attachDiet'
+    DietProgress: URL+'/progress-attachDiet',
+    ExtraProgress: URL+'/progress-attachExtra'
 };
 
 export default Urls;

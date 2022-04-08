@@ -80,7 +80,7 @@ const ToDo = props =>{
                 }
 
                 if(Object.keys(Goal.goal.data) != 0){
-                    if(currentDayNumber == 0 && !completed)
+                    if(!completed)
                         settingCurrentDayNumber(); //today day number
                     settingDayNumber(); // if user shift then display that number
                 }
@@ -225,7 +225,7 @@ const ToDo = props =>{
         {/* horizontal line */}
         <View style={styles.horizontalLine} />
 
-        <View style={{width:'100%'}}>
+        <View style={{width:'100%', flex:1}}>
             <FlatList 
                 data={Task.tasks.tasks}
                 renderItem={
@@ -245,17 +245,20 @@ const ToDo = props =>{
                             to={shiftDetail}
                             />
                 }
+                ListFooterComponent={ 
+                    // remove this button if present to do screen is not match with current date and day
+                    dayNumber == currentDayNumber
+                    ?
+                    <TouchableOpacity style={styles.extraAddButtonContainer} onPress={()=>props.navigation.navigate('ExtraItem', {dayNumber: dayNumber, goal_id: Goal.goal.data.id})}>
+                        <Ionicons name={'add'} size={20} color={'#fff'} />
+                        <Text style={styles.extraAddButton}>Extra item</Text>
+                    </TouchableOpacity>
+                    :
+                    <View style={[styles.extraAddButtonContainer, {backgroundColor:'rgba(0,0,0,0)'}]}>
+                    </View>
+                }
                 keyExtractor={(item, index)=>`task-${index}`}
             />
-
-            {/* remove this button if present to do screen is not match with current date and day */}
-            { dayNumber == currentDayNumber
-                &&
-                <TouchableOpacity style={styles.extraAddButtonContainer}>
-                    <Ionicons name={'add'} size={20} color={'#fff'} />
-                    <Text style={styles.extraAddButton}>Extra item</Text>
-                </TouchableOpacity>
-            }
         
         </View>
     </View>
@@ -286,7 +289,7 @@ const styles = StyleSheet.create({
         margin:20,
         borderRadius:5,
         flexDirection:'row',
-        alignItems:'center'
+        alignItems:'center',
     },
     extraAddButton:{
         color:'white',
