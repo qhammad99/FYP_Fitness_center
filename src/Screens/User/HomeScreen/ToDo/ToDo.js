@@ -14,6 +14,7 @@ import currentGoal from '../../../../Context/Actions/currentGoal';
 import scheduleToday from '../../../../Context/Actions/scheduleToday';
 import scheduleByDay from '../../../../Context/Actions/scheduleByDay';
 import progressTasks from '../../../../Context/Actions/progressTasks';
+import { useIsFocused } from '@react-navigation/native';
 
 import moment from 'moment';
 import {
@@ -42,36 +43,27 @@ const ToDo = props =>{
     const [firstDay, setFirstDay] = useState(false);
     const [lastDay, setLastDay] =useState(false);
 
+    const focused = useIsFocused();
+
     useEffect(()=>{
         if(props.route.params){
-            const newDate = moment(props.route.params.dayDate, 'YYYY-MM-DD').local();
-            setDate(moment(newDate).format('MMMM DD, YYYY'));
-            setDay(moment(newDate).format('dddd'));
+            if(props.route.params.dayDate){
+                const newDate = moment(props.route.params.dayDate, 'YYYY-MM-DD').local();
+                setDate(moment(newDate).format('MMMM DD, YYYY'));
+                setDay(moment(newDate).format('dddd'));
+            }
         }
     }, [props.route.params]);
 
     useEffect(()=>{
-        if(isLoading){
-        if(dayNumber != 0 && currentDayNumber != 0){
-            if(dayNumber == currentDayNumber){
-                // if daynumber = curent day number then today schedule
-                scheduleToday(Goal)(Task)(authentication);
-            }else if(dayNumber < currentDayNumber){
-                // set task from progress
-                progressTasks(Goal)(dayNumber)(Task)(authentication);
-            }else if(dayNumber > currentDayNumber){
-                // set schedule by day in task
-                let forDay = moment(day, 'dddd').local().day() +1;
-                scheduleByDay(forDay)(Task)(authentication);
-            }
+        if(isLoading)
             setIsLoading(false);
-            }
-        }
-    },[Task, dayNumber]);
+    },[Task]);
 
     useEffect(()=>{
         // NetInfo.fetch().then(state => {
         //     if(state.isConnected){
+            if(focused){ //because focuse set to false when hide
                 if(isLoading == false)
                     setIsLoading(true);
 
@@ -83,12 +75,28 @@ const ToDo = props =>{
                     if(!completed)
                         settingCurrentDayNumber(); //today day number
                     settingDayNumber(); // if user shift then display that number
+                
+                    if(dayNumber != 0 && currentDayNumber != 0){
+                        if(dayNumber == currentDayNumber){
+                            // if daynumber = curent day number then today schedule
+                            scheduleToday(Goal)(Task)(authentication);
+                        }else if(dayNumber < currentDayNumber){
+                            // set task from progress
+                            progressTasks(Goal)(dayNumber)(Task)(authentication);
+                        }else if(dayNumber > currentDayNumber){
+                            // set schedule by day in task
+                            let forDay = moment(day, 'dddd').local().day() +1;
+                            scheduleByDay(forDay)(Task)(authentication);
+                        }
+                    }
+                    
                 }
+            }
         //     }else{
         //         setIsConnected(false);
         //     }
         //   });
-    },[Goal, date, day, dayNumber, currentDayNumber]);
+    },[Goal, date, day, dayNumber, currentDayNumber, focused]);
     
     const settingCurrentDayNumber = () =>{
         let nowDate = moment().local();
@@ -238,7 +246,7 @@ const ToDo = props =>{
                             // when we get image from database we get url, but for now
                             // we using local image so will use this
                             taskImage={
-                                item.category == 'Workout'?
+                                item.category == 'Workout' || item.category == 'extra_workout'?
                                 getImage("morning"):
                                 getImage("breakfast")
                             }

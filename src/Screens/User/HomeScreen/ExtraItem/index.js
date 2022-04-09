@@ -14,6 +14,13 @@ const ExtraItem = props =>{
     const [selectedPicker, setSelectedPicker] = useState(1);
     const [calories, setCalories] = useState("");
 
+    const adding = async(obj) =>{
+        const result = await extraProgress(obj)(authentication);
+        if(result){
+            props.navigation.navigate("ToDo");
+        }
+    }
+
     const nextPressed = () =>{
         if(name.length == 0 || calories.length== 0){
             alert("empty fields not allowed")
@@ -31,8 +38,7 @@ const ExtraItem = props =>{
                 goal_id: props.route.params.goal_id,
                 dayNumber: props.route.params.dayNumber
             }
-            const result = extraProgress(obj)(authentication);
-            console.log("result: ", result);
+            adding(obj);
         }
     }
     

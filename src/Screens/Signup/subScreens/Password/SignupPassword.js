@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect, useAsync} from 'react';
+import React, {useState, useContext} from 'react';
 import { View, TouchableOpacity, Text, TextInput} from 'react-native';
 import Strings from '../../../../strings/Strings';
 import HeadingAndCaption from '../../../../components/HeadingAndCaption';
@@ -16,26 +16,7 @@ const SignupPassword = props =>{
     const [cPass, setCPass]=useState('');
 
     const [passwordVisible, setPasswordVisible]=useState(false);
-    const [cPasswordVisible, setCPasswordVisible]=useState(false);
-
-
-    const [state, setState] = useState(false); // setting to wait to clear all through use effect
-
-    useEffect(() => {
-        let isMounted = true;
-        const fetchData = () =>{
-            setTimeout(() => {
-                if (isMounted){ 
-                    if(state)
-                        addUser(AccountContext)(authentication);
-                }
-            }, 4000);
-        }
-        fetchData();
-        return () => {
-            isMounted = false;
-        };
-      }, [state]); 
+    const [cPasswordVisible, setCPasswordVisible]=useState(false); 
 
     const nextPressed = () =>{
         // password between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter.
@@ -48,7 +29,7 @@ const SignupPassword = props =>{
         } else if(!(pass == cPass)){
             alert("Not matched");
         } else
-            setState(true)
+            addUser(AccountContext)(authentication);
     }
     return(
         <>
