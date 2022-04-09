@@ -213,6 +213,7 @@ const TaskContainer = props =>{
 const styles = StyleSheet.create({
     container:{
         width:'100%',
+        flex:1,
         paddingHorizontal:10,
         paddingVertical:5
     },

@@ -71,4 +71,7 @@ export default {
   GoalTargetCaption: "Choose the target weight",
   GoalDurationCaption: "Choose the duration",
   
+  ExtraTaskName: "Task Name",
+  AddExtra: "Add",
+  ExtraCalories: "calories"
 };

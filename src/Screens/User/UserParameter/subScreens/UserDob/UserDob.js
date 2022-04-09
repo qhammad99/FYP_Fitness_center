@@ -28,7 +28,7 @@ const UserDob = props =>{
     }
 
     const onChangeDateSelection = (event, selectedDate) => {
-        const newSelectedDate= selectedDate || date;
+        const newSelectedDate= selectedDate || new Date();
         let month = ('0'+(newSelectedDate.getMonth()+1)).slice(-2);
         let date = ('0'+newSelectedDate.getDate()).slice(-2);
         const formattedDate = `${newSelectedDate.getFullYear()}-${month}-${date}`;

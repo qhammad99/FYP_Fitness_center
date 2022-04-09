@@ -39,21 +39,21 @@ const Login = props => {
         </View>
 
         {/* language selector */}
-        <View style={styles.languageSelector}>
-            {/* english */}
+        {/* <View style={styles.languageSelector}>
+            //english
             <TouchableOpacity style={styles.languageButton} >
                 <Text style={styles.btnLnText}> 
                     {Strings.englishLanguage} 
                 </Text>
             </TouchableOpacity>
 
-            {/* urdu */}
+            //urdu
             <TouchableOpacity style={styles.languageButton} >
                 <Text style={styles.btnLnText}> 
                     {Strings.urduLanguage} 
                 </Text>
             </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* input fields container */}
         <View style={styles.fieldsContainer}>

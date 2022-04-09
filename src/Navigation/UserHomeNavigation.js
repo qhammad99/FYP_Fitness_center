@@ -3,7 +3,8 @@ import React from 'react';
 import {
   ToDo,
   DayList,
-  ItemDetailShow
+  ItemDetailShow,
+  ExtraItem
 } from '../Screens/User/HomeScreen';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -38,6 +39,16 @@ const UserHomeNavigation = props =>{
             component={ItemDetailShow} 
             options={{
               headerTitle: () => <CustomHeader title="Task Details" drawer={props.navigation}/>,
+              headerStyle:{backgroundColor:Colors.primary},
+              headerBackVisible:false,
+            }}>
+          </Stack.Screen>
+
+          <Stack.Screen 
+            name='ExtraItem' 
+            component={ExtraItem} 
+            options={{
+              headerTitle: () => <CustomHeader title="Extra Task" drawer={props.navigation}/>,
               headerStyle:{backgroundColor:Colors.primary},
               headerBackVisible:false,
             }}>

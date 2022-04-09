@@ -72,6 +72,7 @@ const UserBottomNavigation = props => {
             },
             tabBarActiveTintColor: Colors.selectedColor,
             tabBarInactiveTintColor: Colors.lightDark,
+            tabBarHideOnKeyboard: true
           })}>
             <Tab.Screen name="Workout" component={WorkoutScreen} />
             <Tab.Screen name="Diet" component={DietScreen} />

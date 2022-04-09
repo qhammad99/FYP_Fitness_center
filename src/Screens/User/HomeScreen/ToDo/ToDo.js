@@ -14,6 +14,7 @@ import currentGoal from '../../../../Context/Actions/currentGoal';
 import scheduleToday from '../../../../Context/Actions/scheduleToday';
 import scheduleByDay from '../../../../Context/Actions/scheduleByDay';
 import progressTasks from '../../../../Context/Actions/progressTasks';
+import { useIsFocused } from '@react-navigation/native';
 
 import moment from 'moment';
 import {
@@ -42,36 +43,27 @@ const ToDo = props =>{
     const [firstDay, setFirstDay] = useState(false);
     const [lastDay, setLastDay] =useState(false);
 
+    const focused = useIsFocused();
+
     useEffect(()=>{
         if(props.route.params){
-            const newDate = moment(props.route.params.dayDate, 'YYYY-MM-DD').local();
-            setDate(moment(newDate).format('MMMM DD, YYYY'));
-            setDay(moment(newDate).format('dddd'));
+            if(props.route.params.dayDate){
+                const newDate = moment(props.route.params.dayDate, 'YYYY-MM-DD').local();
+                setDate(moment(newDate).format('MMMM DD, YYYY'));
+                setDay(moment(newDate).format('dddd'));
+            }
         }
     }, [props.route.params]);
 
     useEffect(()=>{
-        if(isLoading){
-        if(dayNumber != 0 && currentDayNumber != 0){
-            if(dayNumber == currentDayNumber){
-                // if daynumber = curent day number then today schedule
-                scheduleToday(Goal)(Task)(authentication);
-            }else if(dayNumber < currentDayNumber){
-                // set task from progress
-                progressTasks(Goal)(dayNumber)(Task)(authentication);
-            }else if(dayNumber > currentDayNumber){
-                // set schedule by day in task
-                let forDay = moment(day, 'dddd').local().day() +1;
-                scheduleByDay(forDay)(Task)(authentication);
-            }
+        if(isLoading)
             setIsLoading(false);
-            }
-        }
-    },[Task, dayNumber]);
+    },[Task]);
 
     useEffect(()=>{
         // NetInfo.fetch().then(state => {
         //     if(state.isConnected){
+            if(focused){ //because focuse set to false when hide
                 if(isLoading == false)
                     setIsLoading(true);
 
@@ -80,15 +72,31 @@ const ToDo = props =>{
                 }
 
                 if(Object.keys(Goal.goal.data) != 0){
-                    if(currentDayNumber == 0 && !completed)
+                    if(!completed)
                         settingCurrentDayNumber(); //today day number
                     settingDayNumber(); // if user shift then display that number
+                
+                    if(dayNumber != 0 && currentDayNumber != 0){
+                        if(dayNumber == currentDayNumber){
+                            // if daynumber = curent day number then today schedule
+                            scheduleToday(Goal)(Task)(authentication);
+                        }else if(dayNumber < currentDayNumber){
+                            // set task from progress
+                            progressTasks(Goal)(dayNumber)(Task)(authentication);
+                        }else if(dayNumber > currentDayNumber){
+                            // set schedule by day in task
+                            let forDay = moment(day, 'dddd').local().day() +1;
+                            scheduleByDay(forDay)(Task)(authentication);
+                        }
+                    }
+                    
                 }
+            }
         //     }else{
         //         setIsConnected(false);
         //     }
         //   });
-    },[Goal, date, day, dayNumber, currentDayNumber]);
+    },[Goal, date, day, dayNumber, currentDayNumber, focused]);
     
     const settingCurrentDayNumber = () =>{
         let nowDate = moment().local();
@@ -225,7 +233,7 @@ const ToDo = props =>{
         {/* horizontal line */}
         <View style={styles.horizontalLine} />
 
-        <View style={{width:'100%'}}>
+        <View style={{width:'100%', flex:1}}>
             <FlatList 
                 data={Task.tasks.tasks}
                 renderItem={
@@ -238,24 +246,27 @@ const ToDo = props =>{
                             // when we get image from database we get url, but for now
                             // we using local image so will use this
                             taskImage={
-                                item.category == 'Workout'?
+                                item.category == 'Workout' || item.category == 'extra_workout'?
                                 getImage("morning"):
                                 getImage("breakfast")
                             }
                             to={shiftDetail}
                             />
                 }
+                ListFooterComponent={ 
+                    // remove this button if present to do screen is not match with current date and day
+                    dayNumber == currentDayNumber
+                    ?
+                    <TouchableOpacity style={styles.extraAddButtonContainer} onPress={()=>props.navigation.navigate('ExtraItem', {dayNumber: dayNumber, goal_id: Goal.goal.data.id})}>
+                        <Ionicons name={'add'} size={20} color={'#fff'} />
+                        <Text style={styles.extraAddButton}>Extra item</Text>
+                    </TouchableOpacity>
+                    :
+                    <View style={[styles.extraAddButtonContainer, {backgroundColor:'rgba(0,0,0,0)'}]}>
+                    </View>
+                }
                 keyExtractor={(item, index)=>`task-${index}`}
             />
-
-            {/* remove this button if present to do screen is not match with current date and day */}
-            { dayNumber == currentDayNumber
-                &&
-                <TouchableOpacity style={styles.extraAddButtonContainer}>
-                    <Ionicons name={'add'} size={20} color={'#fff'} />
-                    <Text style={styles.extraAddButton}>Extra item</Text>
-                </TouchableOpacity>
-            }
         
         </View>
     </View>
@@ -286,7 +297,7 @@ const styles = StyleSheet.create({
         margin:20,
         borderRadius:5,
         flexDirection:'row',
-        alignItems:'center'
+        alignItems:'center',
     },
     extraAddButton:{
         color:'white',

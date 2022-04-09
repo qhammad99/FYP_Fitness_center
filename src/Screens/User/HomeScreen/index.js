@@ -4,3 +4,4 @@ export {default as ToDo} from './ToDo/ToDo';
 export {default as ItemDetailShow} from './ItemDetailShow/ItemDetailShow';
 export {default as Home} from './Home/HomeScreen';
 export {default as DayList} from './DayList/DayList';
+export {default as ExtraItem} from './ExtraItem';
