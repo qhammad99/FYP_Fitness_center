@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {View, TouchableOpacity, Text, TextInput} from 'react-native';
+import {View, TouchableOpacity, Text, TextInput, ActivityIndicator} from 'react-native';
 import { AuthContext } from '../../../Context/Providers/AuthProvider';
 import {ParametersContext} from '../../../Context/Providers/ParametersProvider';
 import addGoal from '../../../Context/Actions/addGoal';
@@ -8,6 +8,7 @@ import {Picker} from '@react-native-picker/picker';
 import Strings from '../../../strings/Strings';
 import styles from './styles';
 import Colors from '../../../colors/Colors';
+import Modal from 'react-native-modal';
 
 const UserGoal = props =>{
     const authentication = useContext(AuthContext);
@@ -15,7 +16,8 @@ const UserGoal = props =>{
     const [selectedValue, setSelectedValue] = useState("1");
     const [weight, setWeight] = useState(null);
     const [time, setTime] = useState(null);
-    
+    const [isLoading, setIsLoading] = useState(true);
+
     const [bmiResult, setBmiResult] = useState('');
     const BMI = (height, weight) => {
         var result = (parseFloat(weight) * 10000) / (parseFloat(height) * parseFloat(height));
@@ -37,9 +39,12 @@ const UserGoal = props =>{
 
     useEffect(
         ()=>{
-            getParameters(Parameters)(authentication);
+            if(Parameters.parameters.height == null)
+                getParameters(Parameters)(authentication);
+            else
+                setIsLoading(false);
             BMI(Parameters.parameters.height, Parameters.parameters.weight);
-        },[]
+        },[Parameters]
     );
 
     const nextPressed = () =>{
@@ -88,6 +93,21 @@ const UserGoal = props =>{
     return(
         <>
             <View style={styles.container}>
+            <Modal
+                isVisible={isLoading}
+                animationIn={'bounceInUp'}
+                animationOut={'bounceOutDown'}
+                style={{margin:0}}>
+                    <View style={{
+                        width:'100%', 
+                        height: '100%', 
+                        alignItems:'center',
+                        justifyContent:'center'
+                        }}
+                    >
+                        <ActivityIndicator size={50} color={Colors.primary}/>
+                    </View>
+                </Modal>
                 {/*Heading*/}
                 <Text style={styles.headingText}>
                     {Strings.GoalHeading}

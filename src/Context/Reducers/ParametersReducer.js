@@ -13,6 +13,9 @@ const parameterReducer = (state, action) => {
 
         case "GENDER":
             return {...state, gender: action.payload};
+
+        case "PARAMETERS_ADD":
+            return action.payload;
             
         case "CLEAR_CONTEXT":
             return ParametersInitialState;

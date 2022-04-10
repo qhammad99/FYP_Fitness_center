@@ -1,4 +1,5 @@
 // this action is called in goal screen
+// also called in profile screen
 
 import Urls from '../../config/env';
 import axios from 'axios';
@@ -17,8 +18,13 @@ export default (Parameters) => (authentication)=>{
     .then((response)=>{
         if(response.data.success){
             let parameters = response.data.parameters;
-            Parameters.setParameters({type: 'HEIGHT', payload: parameters.height});
-            Parameters.setParameters({type: 'WEIGHT', payload: parameters.weight});
+            parameters={
+                height: parameters.height,
+                weight: parameters.weight,
+                dob: parameters.dob,
+                gender: parameters.gender
+            }
+            Parameters.setParameters({type: 'PARAMETERS_ADD', payload: parameters});
         }
         else
             alert(response.data.message);

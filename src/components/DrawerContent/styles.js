@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
       width:101, 
       height:101, 
       borderWidth:1, 
-      borderRadius:51
+      borderRadius:51,
+      borderColor:Colors.lightDark
     },
     sideMenuProfileIcon: {
       width: 100,
