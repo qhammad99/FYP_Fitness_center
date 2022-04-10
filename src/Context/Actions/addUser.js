@@ -33,6 +33,7 @@ const adding = async(Account, authentication)=>{
                     u_type: Account.account.userType,
                     name: Account.account.firstName +" "+Account.account.secondName,
                     password: Account.account.password,
+                    email: Account.account.email,
                     u_type: Account.account.userType,
                     token: response.data.token,
                     isParameters: 0,
