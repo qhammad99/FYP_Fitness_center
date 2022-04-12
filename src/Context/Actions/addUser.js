@@ -37,7 +37,8 @@ const adding = async(Account, authentication)=>{
                     u_type: Account.account.userType,
                     token: response.data.token,
                     isParameters: 0,
-                    isGoal: 0
+                    isGoal: 0,
+                    img_file: response.data.user.img_file
                 }
                 addToLocatStorage(obj);
                 authentication.dispatch({type:'SIGN_UP', payload:JSON.stringify(obj)});  
