@@ -12,20 +12,22 @@ import {
   Alert
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import {URL} from '@env';
 import {
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-
 import Colors from '../../colors/Colors';
 import styles from './styles';
 
 const DrawerContent = (props) => {
   const authentication = useContext( AuthContext);
   const Goal = useContext(GoalContext);
-  const [user, setUser] = useState(JSON.parse(authentication.state.user));
+  const user = JSON.parse(authentication.state.user);
+
+  useEffect(()=>{
+  },[authentication])
  
   const clearLoactStorage = async() =>{
     try{
@@ -64,7 +66,7 @@ const DrawerContent = (props) => {
         >
         <View style={styles.sideMenuProfileIconContainer}>
             <Image
-                source={require('../../images/userAvatar.png')}
+                source={{uri:URL+'/public/userImages/'+user.img_file}}
                 style={styles.sideMenuProfileIcon}
             />
         </View>

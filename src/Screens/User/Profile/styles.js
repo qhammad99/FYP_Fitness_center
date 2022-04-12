@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     },
     itemContent:{
         color: Colors.darkColor,
-        fontSize:18
+        fontSize:18,
+        flex:1
     }
 });
 
