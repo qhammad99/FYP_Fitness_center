@@ -9,6 +9,8 @@ import { Login, Signup, UserHome, CoachHome }from '../Screens';
 import { AuthContext } from '../Context/Providers/AuthProvider';
 import UserParameter from '../Screens/User/UserParameter/UserParameter/UserParameter';
 import UserGoal from '../Screens/User/UserGoal/UserGoal';
+import AdminHome from '../Screens/Admin/Home/Home';
+import {ADMIN_MAIL} from '@env';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
@@ -40,6 +42,12 @@ const Routes = (props) => {
           // user screens
         (user.u_type ==1)
           ?(
+            (user.email== ADMIN_MAIL)?
+            <Stack.Screen 
+              name='AdminHome'
+              component={AdminHome}
+            />
+            :
             (parseInt(user.isParameters) != 0)
               ?
               (

@@ -4,6 +4,8 @@ import Urls from '../../config/env';
 import axios from 'axios';
 
 const doing = async(Goal, day, Task, authentication) => {
+  Task.setTasks({type:'LOADING_START'});
+  
   let user = JSON.parse(authentication.state.user);
     let token = user.token;
     let goal_id = Goal.goal.data.id;

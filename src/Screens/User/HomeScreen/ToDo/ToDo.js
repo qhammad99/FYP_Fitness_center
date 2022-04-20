@@ -55,23 +55,21 @@ const ToDo = props =>{
         }
     }, [props.route.params]);
 
-    useEffect(()=>{
-        if(isLoading)
-            setIsLoading(false);
-    },[Task]);
+    useEffect(()=>{ 
+    },[Task.tasks.isLoading]);
 
     useEffect(()=>{
         // NetInfo.fetch().then(state => {
         //     if(state.isConnected){
             if(focused){ //because focuse set to false when hide
-                if(isLoading == false)
-                    setIsLoading(true);
-
                 if(Object.keys(Goal.goal.data) == 0){
                     currentGoal(Goal)(authentication);
                 }
 
                 if(Object.keys(Goal.goal.data) != 0){
+                    if(isLoading)
+                        setIsLoading(false);
+                        
                     if(!completed)
                         settingCurrentDayNumber(); //today day number
                     settingDayNumber(); // if user shift then display that number
@@ -89,20 +87,19 @@ const ToDo = props =>{
                             scheduleByDay(forDay)(Task)(authentication);
                         }
                     }
-                    
                 }
             }
         //     }else{
         //         setIsConnected(false);
         //     }
         //   });
-    },[Goal, date, day, dayNumber, currentDayNumber, focused]);
+    },[Goal, day, dayNumber, currentDayNumber, focused]);
     
     const settingCurrentDayNumber = () =>{
         let nowDate = moment().local();
         let goalStartDate = moment(Goal.goal.data.start_date).local();
         let dayNumber = nowDate.diff(goalStartDate, 'days')+1;
-        setCurrentDayNumber(dayNumber);
+        setCurrentDayNumber(dayNumber); 
     }
 
     const settingDayNumber = () =>{
@@ -177,6 +174,7 @@ const ToDo = props =>{
 
         }
     }
+    
     return (
         <>
         <View style={styles.container}>
@@ -232,7 +230,22 @@ const ToDo = props =>{
         
         {/* horizontal line */}
         <View style={styles.horizontalLine} />
+        {Task.tasks.isLoading &&
+            <View 
+                style={{
+                    width:'100%', 
+                    height: '100%', 
+                    alignItems:'center',
+                    marginTop: 20
+                    }}
+            >
+                <ActivityIndicator size={30} color={Colors.primary}/>
+            </View>
+        }
 
+        {!Task.tasks.isLoading &&
+        <>
+        <View style={styles.container}>
         <View style={{width:'100%', flex:1}}>
             <FlatList 
                 data={Task.tasks.tasks}
@@ -273,6 +286,9 @@ const ToDo = props =>{
     <TouchableOpacity style={styles.editButton}>
         <MaterialCommunityIcons name={'calendar-edit'} color={'#fff'} size={30} />
     </TouchableOpacity>
+    </>
+    }
+    </View>
     </>
     );
 };
