@@ -5,6 +5,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Colors from '../colors/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../Screens/User/HomeScreen/Home/HomeScreen';
+import ProgressScreen from '../Screens/User/Progress';
+import CustomHeader from '../components/CustomHeader';
 
 /* some screens later i separate*/
 function WorkoutScreen() {
@@ -28,13 +30,7 @@ function CoachScreen() {
         </View>
     );
 }
-function ProgressScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: Colors.darkColor }}>How much calories burn or gain!</Text>
-        </View>
-    );
-}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const Tab = createBottomTabNavigator();
@@ -78,7 +74,13 @@ const UserBottomNavigation = props => {
             <Tab.Screen name="Diet" component={DietScreen} />
             <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
             <Tab.Screen name="Coach" component={CoachScreen} />
-            <Tab.Screen name="Progress" component={ProgressScreen} />
+            <Tab.Screen 
+                name="Progress" 
+                component={ProgressScreen} 
+                options={{
+                    headerTitle: () => <CustomHeader title="Progress" drawer={props.navigation}/>, 
+                    headerStyle:{backgroundColor:Colors.primary}, 
+                    }}/>
         </Tab.Navigator>
     );
 };
