@@ -15,7 +15,7 @@ import scheduleToday from '../../../../Context/Actions/scheduleToday';
 import scheduleByDay from '../../../../Context/Actions/scheduleByDay';
 import progressTasks from '../../../../Context/Actions/progressTasks';
 import { useIsFocused } from '@react-navigation/native';
-
+import PushNotification from "react-native-push-notification";
 import moment from 'moment';
 import {
     Text, 
@@ -140,6 +140,8 @@ const ToDo = props =>{
     }
 
     const shiftDetail=(image, item)=>{
+        // testing notification
+        handleNotification(item);
         props.navigation.navigate('ItemDetailShow', {image: image, item: item});
     }
 
@@ -173,6 +175,21 @@ const ToDo = props =>{
                 return require("../../../../images/dinner.jpg");
 
         }
+    }
+
+    const handleNotification = item =>{
+        PushNotification.localNotification({
+            channelId: 'test-channel',
+            title:     
+                item.category == 'Workout'?
+                item.workoutName:
+                item.category == 'Diet'?
+                item.dietName:
+                item.extraName,
+            message: `task category: ${item.category}`,
+            bigText: `Notification services channeled by to do screen, when you click on
+            it, it will call onNotificationin index file`
+        })
     }
     
     return (
