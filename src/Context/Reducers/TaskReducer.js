@@ -17,7 +17,8 @@ const TaskReducer = (state, action) =>{
         case "ADD_PROGRESS":
             return{
                 ...state,
-                progress: action.payload
+                progress: action.payload,
+                isLoading: false
             }
 
         case "RESET_PROGRESS":

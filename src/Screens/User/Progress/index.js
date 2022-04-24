@@ -3,6 +3,7 @@ import {Text, View, Dimensions} from 'react-native';
 import Colors from '../../../colors/Colors';
 import moment from 'moment';
 import styles from './styles';
+import { useIsFocused } from '@react-navigation/native';
 import {TaskContext} from '../../../Context/Providers/TaskProvider';
 import {AuthContext} from '../../../Context/Providers/AuthProvider';
 import { GoalContext } from '../../../Context/Providers/GoalProvider';
@@ -15,31 +16,37 @@ const Progress = () => {
     const Task = useContext(TaskContext);
     const [allDates, setAllDates] = useState([]);
     const [items, setItems] = useState([]);
+    const focused = useIsFocused();
       
     useEffect(()=>{
-        if(allDates.length ==0 ){
-            let nowDate = moment().local();
-            let goalStartDate = moment(Goal.goal.data.start_date).local();
-            let dayNumber = nowDate.diff(goalStartDate, 'days')+1;
-            const lastDayNumber = Goal.goal.data.number_of_days;
+      if(focused){
+        progressByGoal(Goal)(Task)(authentication);
 
-            if(dayNumber>=lastDayNumber)
-                for(i=0; i<Goal.goal.data.number_of_days; i++){
-                    let date = moment(Goal.goal.data.start_date).local().add(i, 'day').format('YYYY-MM-DD');
-                    setAllDates(recDates => [...recDates, date]);
-                }
-            else
-                for(i=0; i<dayNumber; i++){
-                    let date = moment(Goal.goal.data.start_date).local().add(i, 'day').format('YYYY-MM-DD');
-                    setAllDates(recDates => [...recDates, date]);
-                }
+        let nowDate = moment().local();
+        let goalStartDate = moment(Goal.goal.data.start_date).local();
+        let dayNumber = nowDate.diff(goalStartDate, 'days')+1;
+        const lastDayNumber = Goal.goal.data.number_of_days;
+
+        let dates = [];
+
+        if(dayNumber>=lastDayNumber)
+            for(i=0; i<Goal.goal.data.number_of_days; i++){
+                let date = moment(Goal.goal.data.start_date).local().add(i, 'day').format('YYYY-MM-DD');
+                dates.push(date);
+            }
+        else
+            for(i=0; i<dayNumber; i++){
+                let date = moment(Goal.goal.data.start_date).local().add(i, 'day').format('YYYY-MM-DD');
+                dates.push(date);
+            }
+        setAllDates(dates);
         }
-
+      },[focused]);
+    
+    useEffect(()=>{
         let testing = true;
         if(testing){
-          if(Task.tasks.progress == null)
-            progressByGoal(Goal)(Task)(authentication);
-          else{
+          if(Task.tasks.progress != null){
             let checkedIndex = 0;
             let collection = allDates.reduce((acc, currentItem, index)=>{
              const date = currentItem;
@@ -65,8 +72,8 @@ const Progress = () => {
         }
         return () => {
           testing = false  
-        }; 
-      },[Task.tasks.progress]);
+        };
+    },[Task.tasks.progress, allDates])
 
     const findMaxY = ()=>{
       const looseMax = items.reduce((acc, obj)=>
@@ -86,13 +93,15 @@ const Progress = () => {
     }
 
     return (
+      <>
+      {!Task.tasks.isLoading &&
         <View style={styles.container}>
           <View style={styles.caloriesContainer}>
             <View>
               <Text style={styles.label}>
                 Calories Burn
               </Text>
-              <Text style={styles.value}>{items.length!=0 && items.reduce((acc, obj)=>acc+parseInt(obj.loose), 0)}</Text>
+              <Text style={styles.value}>{items.length!=0 ? items.reduce((acc, obj)=>acc+parseInt(obj.loose), 0):0}</Text>
             </View>
 
             <View style={styles.verticalLine}/>
@@ -101,13 +110,10 @@ const Progress = () => {
               <Text style={styles.label}>
                 Calories Gain
               </Text>
-              <Text style={styles.value}>{items.length!=0 && items.reduce((acc, obj)=>acc+parseInt(obj.gain), 0)}</Text>
+              <Text style={styles.value}>{items.length!=0 ? items.reduce((acc, obj)=>acc+parseInt(obj.gain), 0): 0}</Text>
             </View>
           </View>
-          {
-            items.length>0 && 
-             
-            /*<LineChart 
+          {/*<LineChart 
                 data={{
                     labels: items.map(obj=>obj.number),
                     datasets: [
@@ -149,12 +155,12 @@ const Progress = () => {
                     justifyContent:'center',
                     alignItems: 'center'
                   }}
-              /> */
+                /> */}
                 <Chart
                     style={{ height: 300, width: '100%', backgroundColor: '#eee', marginTop:20 }}
                     xDomain={{ min: 0, max: 10 }}
                     yDomain={{ min: 0, max: findMaxY()}}
-                    padding={{ left: 35, top: 15, bottom: 15, right: 15 }}
+                    padding={{ left: 38, top: 15, bottom: 15, right: 15 }}
                 >
                     <VerticalAxis tickCount={6} theme={{ 
                       axis: { stroke: { color: '#aaa', width: 2 } },
@@ -163,37 +169,38 @@ const Progress = () => {
                       />
 
                     <Line 
-                      data={items.map(obj=>{return {x: obj.number, y: obj.loose}})} 
+                      data={[{x:0, y:0}, ...items.map(obj=>{return {x: obj.number, y: obj.loose}})]} 
                       smoothing="bezier" 
                       tension={0.3} 
                       theme={{ stroke: { color: 'red', width: 2 } }} 
                     />
                     <Line 
-                      data={items.map(obj=>{return {x: obj.number, y: obj.gain}})} 
+                      data={[{x:0, y:0}, ...items.map(obj=>{return {x: obj.number, y: obj.gain}})]} 
                       smoothing="bezier " 
                       tension={0.3}
                       theme={{ stroke: { color: 'blue', width: 2 } }} 
                     />
                 </Chart>
-              }
 
               <View style={styles.chartLabelContainer}>
                 <View>
-                  <Text>x-axis: no of days</Text>
-                  <Text>y-axis: no of calories</Text>
+                  <Text style={{color: Colors.lightDark}}>x-axis: no of days</Text>
+                  <Text style={{color: Colors.lightDark}}>y-axis: no of calories</Text>
                 </View>
                 <View>
                   <View style={styles.colorLabel}>
                       <View style={{width:8, height: 8, marginRight:5, backgroundColor:'red'}} />
-                      <Text>Calories Loose</Text>
+                      <Text style={{color: Colors.lightDark}}>Calories Loose</Text>
                   </View>
                   <View style={styles.colorLabel}>
                       <View style={{width:8, height: 8, marginRight:5, backgroundColor:'blue'}} />
-                      <Text>Calories Gain</Text>
+                      <Text style={{color: Colors.lightDark}}>Calories Gain</Text>
                   </View>
                 </View>
               </View>
         </View>
+        }
+        </>
     );
     
 }
