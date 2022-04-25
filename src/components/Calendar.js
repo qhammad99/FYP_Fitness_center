@@ -1,60 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { GoalContext } from '../Context/Providers/GoalProvider';
 import moment from 'moment';
 import Colors from '../colors/Colors';
 import {Agenda} from 'react-native-calendars';
-import {AuthContext} from '../Context/Providers/AuthProvider';
-import { GoalContext } from '../Context/Providers/GoalProvider';
-import { TaskContext } from '../Context/Providers/TaskProvider';
-import progressByGoal from '../Context/Actions/progressByGoal';
 
 const Calendar = props => {
-  const authentication = useContext(AuthContext);
   const Goal = useContext(GoalContext);
-  const Task = useContext(TaskContext);
-  const [allDates, setAllDates] = useState([]);
-  const[items, setItems] = useState({});
-
-  useEffect(()=>{
-
-    if(allDates.length ==0 )
-      for(i=0; i<Goal.goal.data.number_of_days; i++){
-        let date = moment(Goal.goal.data.start_date).local().add(i, 'day').format('YYYY-MM-DD');
-        setAllDates(recDates => [...recDates, date]);
-      }
-
-    let testing = true;
-    if(testing){
-      if(Task.tasks.progress == null)
-        progressByGoal(Goal)(Task)(authentication);
-      else{
-        let checkedIndex = 0;
-        let collection = allDates.reduce((acc, currentItem, index)=>{
-         const date = currentItem;
-         if(Task.tasks.progress.length > 0 && Task.tasks.progress[checkedIndex]){
-          //  compare date
-          if(moment(date, "YYYY-MM-DD").local().isSame(moment(Task.tasks.progress[checkedIndex].day_date).local())){
-            acc[date] = [{
-              name: `Day # ${index+1}`, 
-              date: `${date}`,
-              gain: Task.tasks.progress[checkedIndex].calories_gain,
-              loose: Task.tasks.progress[checkedIndex].calories_burn
-            }];
-            checkedIndex++;
-          }else
-            acc[date] = [{name: `Day # ${index+1}`,date: `${date}`, gain: 0, loose: 0}];
-         }else
-          acc[date] = [{name: `Day # ${index+1}`,date: `${date}`, gain: 0, loose: 0}];
-  
-        return acc;
-        },{});
-        setItems(collection);
-      }
-    }
-    return () => {
-      testing = false 
-    }; 
-  },[Task.tasks.progress]);
 
   const renderItem =(item) =>{
     return(
@@ -71,7 +23,7 @@ const Calendar = props => {
   return(
       <View style={styles.container}>
         <Agenda
-            items={items}
+            items={props.items}
             minDate={moment(Goal.goal.data.start_date).local().format('YYYY-MM-DD')}
             maxDate={moment(Goal.goal.data.start_date).local().add(Goal.goal.data.number_of_days-1, 'day').format('YYYY-MM-DD')}
             selected={moment(Goal.goal.data.start_date).local().format('YYYY-MM-DD')}

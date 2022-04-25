@@ -15,7 +15,8 @@ const doint = async(Item, authentication) =>{
         calories: Item.calories,
         category: Item.category,
         goal_id: Item.goal_id,
-        day_no: Item.dayNumber
+        day_no: Item.dayNumber,
+        start_time: Item.start_time
       },{
           headers:{
               'Content-Type' : 'application/json',

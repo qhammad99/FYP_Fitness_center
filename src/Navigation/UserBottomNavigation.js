@@ -6,6 +6,7 @@ import Colors from '../colors/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../Screens/User/HomeScreen/Home/HomeScreen';
 import ProgressScreen from '../Screens/User/Progress';
+import CoachScreen from '../Screens/User/MyCoach';
 import CustomHeader from '../components/CustomHeader';
 
 /* some screens later i separate*/
@@ -20,13 +21,6 @@ function DietScreen() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ color: Colors.darkColor }}>Edit Recipies and Diets Here!</Text>
-        </View>
-    );
-}
-function CoachScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: Colors.darkColor }}>Show coachs here!</Text>
         </View>
     );
 }
@@ -73,7 +67,14 @@ const UserBottomNavigation = props => {
             <Tab.Screen name="Workout" component={WorkoutScreen} />
             <Tab.Screen name="Diet" component={DietScreen} />
             <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
-            <Tab.Screen name="Coach" component={CoachScreen} />
+            <Tab.Screen 
+                name="Coach" 
+                component={CoachScreen} 
+                options={{
+                    headerTitle: () => <CustomHeader title="Coach" drawer={props.navigation}/>, 
+                    headerStyle:{backgroundColor:Colors.primary, shadowColor:'transparent'}, 
+                    }}/>
+
             <Tab.Screen 
                 name="Progress" 
                 component={ProgressScreen} 
