@@ -3,6 +3,7 @@ import React,{useContext, useState, useEffect} from 'react';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {GoalContext} from '../../Context/Providers/GoalProvider';
+import { CoachContext } from '../../Context/Providers/CoachProvider';
 import {
   SafeAreaView,
   View,
@@ -24,6 +25,7 @@ import styles from './styles';
 const DrawerContent = (props) => {
   const authentication = useContext( AuthContext);
   const Goal = useContext(GoalContext);
+  const Coach = useContext(CoachContext);
   const user = JSON.parse(authentication.state.user);
 
   useEffect(()=>{
@@ -38,6 +40,7 @@ const DrawerContent = (props) => {
 
     authentication.dispatch({type:'SIGN_OUT'});
     Goal.setGoal({type:'SIGN_OUT'});
+    Coach.dispatch({type:"COACH_RESET"});
   }
 
   const logoutAlert = () => {

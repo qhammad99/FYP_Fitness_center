@@ -104,9 +104,9 @@ const TaskContainer = props =>{
                         </Text>
                         </View>
                         <Text style={{color:Colors.darkColor}}>
-                            { item.schedule_id != 'Extra'?
+                            { (item.category == 'Workout' || item.category == 'Diet')?
                                 `${item.start_time} - ${item.finish_time}`:
-                                ""
+                                `${item.start_time}`
                             }
                         </Text>
                     </View>

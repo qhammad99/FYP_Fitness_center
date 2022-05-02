@@ -29,10 +29,9 @@ const adding = async(Account, authentication)=>{
                 AlertIOS.alert("Account Created");
                 }
                 let obj={
-                    user_id: response.data.user_id,
+                    user_id: response.data.user.user_id,
                     u_type: Account.account.userType,
                     name: Account.account.firstName +" "+Account.account.secondName,
-                    password: Account.account.password,
                     email: Account.account.email,
                     u_type: Account.account.userType,
                     token: response.data.token,

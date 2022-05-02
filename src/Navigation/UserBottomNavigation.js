@@ -1,13 +1,14 @@
 // Landing screen of User
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, {useContext} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Colors from '../colors/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../Screens/User/HomeScreen/Home/HomeScreen';
 import ProgressScreen from '../Screens/User/Progress';
+import MyCoach from './MyCoach';
 import CustomHeader from '../components/CustomHeader';
-
+import {CoachContext} from '../Context/Providers/CoachProvider';
 /* some screens later i separate*/
 function WorkoutScreen() {
     return (
@@ -23,18 +24,13 @@ function DietScreen() {
         </View>
     );
 }
-function CoachScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: Colors.darkColor }}>Show coachs here!</Text>
-        </View>
-    );
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const Tab = createBottomTabNavigator();
 const UserBottomNavigation = props => {
+  const Coach = useContext(CoachContext);
+
     return (
         <Tab.Navigator initialRouteName='Home'
         screenOptions={({ route }) => ({
@@ -64,7 +60,18 @@ const UserBottomNavigation = props => {
               } 
   
               // You can return any component that you like here!
-              return <Ionicons name={iconName} size={size} color={color} />;
+              return( 
+                <View style={styles.tabContainer}>
+                  {(route.name === 'Coach' && Coach.state.coahOnline) &&
+                    <View style={styles.tabBadge}>
+                      <Text style={styles.tabBadgeText}>
+                        {1}
+                      </Text>
+                    </View>
+                  }
+                  <Ionicons name={iconName} size={size} color={color} />
+                </View>
+              );
             },
             tabBarActiveTintColor: Colors.selectedColor,
             tabBarInactiveTintColor: Colors.lightDark,
@@ -73,7 +80,14 @@ const UserBottomNavigation = props => {
             <Tab.Screen name="Workout" component={WorkoutScreen} />
             <Tab.Screen name="Diet" component={DietScreen} />
             <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
-            <Tab.Screen name="Coach" component={CoachScreen} />
+            <Tab.Screen 
+                name="Coach" 
+                component={MyCoach} 
+                options={{
+                    headerTitle: () => <CustomHeader title="Coach" drawer={props.navigation}/>, 
+                    headerStyle:{backgroundColor:Colors.primary, shadowColor:'transparent'}
+                    }}/>
+
             <Tab.Screen 
                 name="Progress" 
                 component={ProgressScreen} 
@@ -84,5 +98,26 @@ const UserBottomNavigation = props => {
         </Tab.Navigator>
     );
 };
+
+const styles = StyleSheet.create({
+  tabContainer: {
+    width: 24,
+    height: 24,
+    position: 'relative',
+  },
+  tabBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    backgroundColor: '#31a24c',
+    borderRadius: 16,
+    width:8,
+    height:8,
+    zIndex: 2,
+  },
+  tabBadgeText: {
+    color: '#31a24c'
+  },
+});
 
 export default UserBottomNavigation;

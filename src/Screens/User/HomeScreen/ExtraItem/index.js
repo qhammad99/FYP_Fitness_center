@@ -6,6 +6,7 @@ import Strings from '../../../../strings/Strings';
 import styles from './styles';
 import extraProgress from '../../../../Context/Actions/extraProgress';
 import {AuthContext} from '../../../../Context/Providers/AuthProvider';
+import moment from 'moment';
 
 const ExtraItem = props =>{
     const authentication = useContext(AuthContext);
@@ -36,7 +37,8 @@ const ExtraItem = props =>{
                 calories,
                 category,
                 goal_id: props.route.params.goal_id,
-                dayNumber: props.route.params.dayNumber
+                dayNumber: props.route.params.dayNumber,
+                start_time: moment().local().format('HH:mm:ss')
             }
             adding(obj);
         }

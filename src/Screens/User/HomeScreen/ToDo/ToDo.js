@@ -42,8 +42,17 @@ const ToDo = props =>{
     const [day, setDay] = useState(moment().format('dddd'));
     const [firstDay, setFirstDay] = useState(false);
     const [lastDay, setLastDay] =useState(false);
-
     const focused = useIsFocused();
+
+    useEffect(()=>{
+        /* in first time load get Goal*/
+        // NetInfo.fetch().then(state => {
+        //     if(state.isConnected)
+                currentGoal(Goal)(authentication);
+        //     else
+        //         setIsConnected(false);
+        //   });
+    },[]);
 
     useEffect(()=>{
         if(props.route.params){
@@ -59,40 +68,29 @@ const ToDo = props =>{
     },[Task.tasks.isLoading]);
 
     useEffect(()=>{
-        // NetInfo.fetch().then(state => {
-        //     if(state.isConnected){
-            if(focused){ //because focuse set to false when hide
-                if(Object.keys(Goal.goal.data) == 0){
-                    currentGoal(Goal)(authentication);
-                }
+        if(focused){ //because focuse set to false when hide
+            if(Object.keys(Goal.goal.data) != 0){
+                if(isLoading)
+                    setIsLoading(false);
 
-                if(Object.keys(Goal.goal.data) != 0){
-                    if(isLoading)
-                        setIsLoading(false);
-                        
-                    if(!completed)
-                        settingCurrentDayNumber(); //today day number
-                    settingDayNumber(); // if user shift then display that number
-                
-                    if(dayNumber != 0 && currentDayNumber != 0){
-                        if(dayNumber == currentDayNumber){
-                            // if daynumber = curent day number then today schedule
-                            scheduleToday(Goal)(Task)(authentication);
-                        }else if(dayNumber < currentDayNumber){
-                            // set task from progress
-                            progressTasks(Goal)(dayNumber)(Task)(authentication);
-                        }else if(dayNumber > currentDayNumber){
-                            // set schedule by day in task
-                            let forDay = moment(day, 'dddd').local().day() +1;
-                            scheduleByDay(forDay)(Task)(authentication);
-                        }
+                settingCurrentDayNumber(); //today day number
+                settingDayNumber();
+
+                if(dayNumber != 0){
+                    if(dayNumber == currentDayNumber){
+                        // if daynumber = curent day number then today schedule
+                        scheduleToday(Goal)(Task)(authentication);
+                    }else if(dayNumber < currentDayNumber){
+                        // set task from progress
+                        progressTasks(Goal)(dayNumber)(Task)(authentication);
+                    }else if(dayNumber > currentDayNumber){
+                        // set schedule by day in task
+                        let forDay = moment(day, 'dddd').local().day() +1;
+                        scheduleByDay(forDay)(Task)(authentication);
                     }
                 }
             }
-        //     }else{
-        //         setIsConnected(false);
-        //     }
-        //   });
+        }
     },[Goal, day, dayNumber, currentDayNumber, focused]);
     
     const settingCurrentDayNumber = () =>{
@@ -108,9 +106,8 @@ const ToDo = props =>{
         const goalStartDateLocal = moment(Goal.goal.data.start_date).local();
 
         const dayNumber = forDateLocal.diff(goalStartDateLocal, 'days')+1;
-        setDayNumber(dayNumber);
-
         const lastDayNumber = Goal.goal.data.number_of_days;
+
         if(dayNumber == 1){
             setFirstDay(true);
         }else if(dayNumber == lastDayNumber){
@@ -123,6 +120,7 @@ const ToDo = props =>{
         if(dayNumber>lastDayNumber){
             setCompleted(true);
         }
+        setDayNumber(dayNumber);
     }
 
     // const checkInternetConnection =()=>{
