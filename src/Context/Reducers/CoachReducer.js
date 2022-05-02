@@ -5,8 +5,21 @@ const CoachReducer = (state, action) =>{
             return{
                 ...state,
                 isLoading: true
+            };
+
+        case "AVAILABLE_LOADING":
+            return{
+                ...state,
+                availableCoachsLoading: true
             }
-            
+        
+        case "ADD_AVAILABLE":
+            return{
+                ...state,
+                availableCoachs: action.payload,
+                availableCoachsLoading: false
+            }
+
         case "COACH_ONLINE":
             return {
                 ...state, 
