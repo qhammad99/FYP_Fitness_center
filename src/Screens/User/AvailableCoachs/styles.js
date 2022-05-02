@@ -20,7 +20,42 @@ const styles = StyleSheet.create({
     },
     searchBarInput:{
         width:'100%'
-    }
+    },
+    modalContainer:{
+        width:'100%',
+        height:'30%',
+        backgroundColor: Colors.lightColor,
+        borderTopLeftRadius:10,
+        borderTopRightRadius:10
+    },
+    modalTitle:{
+        fontSize:22,
+        fontWeight:'bold',
+        textAlign:'center',
+        marginTop:20,
+        color: Colors.darkColor
+    },
+    modalInput:{
+        borderRadius:2,
+        width:'40%',
+        alignSelf:'center',
+        marginTop:20,
+        borderColor:Colors.primary,
+        borderWidth:1,
+        backgroundColor:'#fff'
+    },
+    buttonContainer:{
+        backgroundColor:Colors.primary,
+        alignSelf:'center',
+        paddingHorizontal:10,
+        paddingVertical:5,
+        borderRadius:4,
+        marginTop:10
+    },
+    buttonText:{
+        color:Colors.lightColor,
+        fontWeight: '700'
+    },
 });
 
 export default styles;

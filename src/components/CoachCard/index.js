@@ -5,7 +5,7 @@ import styles from './styles';
 import Rating from '../Rating';
 import moment from 'moment';
 
-const CoachCard = ({coach}) =>{
+const CoachCard = ({coach, onPress}) =>{
     return(
         <View style={styles.root}>
             <Image
@@ -20,7 +20,7 @@ const CoachCard = ({coach}) =>{
                 <Text style={styles.charges}>Charges: {coach.charges}$</Text>
                 <View style={styles.bottomRowContainer}>
                     <Text style={styles.joiningDate}>joined on: {moment(coach.joining_date).format('DD MMMM, YYYY      ')}</Text>
-                    <TouchableOpacity style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={()=>onPress(coach)}>
                         <Text style={styles.buttonText}>
                             Hire
                         </Text>

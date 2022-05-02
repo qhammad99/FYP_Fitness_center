@@ -17,7 +17,8 @@ const Urls = {
     DietProgress: URL+'/progress-attachDiet',
     ExtraProgress: URL+'/progress-attachExtra',
     ClientsCoach: URL+'/client-coach',
-    AvailableCoachs: URL+ '/coach-all'
+    AvailableCoachs: URL+ '/coach-all',
+    AddMyCoach: URL+'/client-coach'
 };
 
 export default Urls;
