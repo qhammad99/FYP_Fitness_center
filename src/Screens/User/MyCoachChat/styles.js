@@ -2,25 +2,25 @@ import {StyleSheet} from 'react-native';
 import Colors from '../../../colors/Colors';
 
 const styles = StyleSheet.create({
-    searchBarContainer:{
-        marginTop:-8,
-        zIndex:1,
-        height:50,
-        backgroundColor: Colors.primary,
-        alignItems:'center',
-        justifyContent:'center',
-        paddingVertical:5
-    },
-    searchBar:{
+    container:{
+        flex:1,
         backgroundColor:'#fff',
-        width:'90%',
-        borderRadius:10,
-        paddingHorizontal:5,
-        flexDirection:'row',
-        alignItems:'center'
     },
-    searchBarInput:{
-        width:'100%'
+    inputContainer:{
+        flexDirection:'row',
+        alignItems:'center',
+        marginHorizontal:10,
+        marginVertical:5
+    },
+    messageInput:{
+        flex:1,
+        marginRight:8,
+        backgroundColor:'#f2f2f2',
+        borderWidth:0.5,
+        borderColor:'#dedede',
+        borderRadius:20,
+        paddingHorizontal:10,
+        paddingVertical:5
     }
 });
 

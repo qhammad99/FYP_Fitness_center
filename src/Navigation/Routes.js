@@ -38,11 +38,23 @@ const Routes = (props) => {
     if(!Coach.state.isLoading){
       if(!Coach.state.coach.empty){
         socket.current = io(SIMPLE_URL);
-        socket.current.emit("addUser");
+        socket.current.emit("addUser", user.user_id);
         Coach.dispatch({type: "ADD_SOCKET", payload: socket.current});
       }
     }
-  },[Coach.state.isLoading])
+  },[Coach.state.isLoading]);
+
+  useEffect(()=>{
+    if(Coach.state.socket != null){
+      Coach.state.socket.on("getUsers",(users)=>{
+        let onlineCoach = users.find(user=>user.userId == Coach.state.coach.coach_id);
+        if(onlineCoach)
+          Coach.dispatch({type:"COACH_ONLINE"})
+        else
+          Coach.dispatch({type:"COACH_OFFLINE"})
+      })
+    }
+  },[Coach.state.socket]);
 
   return(
       <NavigationContainer>
