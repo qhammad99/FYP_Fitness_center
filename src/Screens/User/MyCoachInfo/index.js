@@ -4,7 +4,7 @@ import Colors from '../../../colors/Colors';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-const MyCoach = () =>{
+const MyCoachInfo = () =>{
     return (
         <>
         {/* search bar */}
@@ -24,10 +24,10 @@ const MyCoach = () =>{
             </View>
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: Colors.darkColor }}>Show coachs here!</Text>
+            <Text style={{ color: Colors.darkColor }}>Coach Info!</Text>
         </View>
         </>
     );
 }
 
-export default MyCoach;
+export default MyCoachInfo;

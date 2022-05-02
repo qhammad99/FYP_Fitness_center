@@ -4,21 +4,45 @@
   go to home of user or coach or signup page
 */
 
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 import { Login, Signup, UserHome, CoachHome }from '../Screens';
 import { AuthContext } from '../Context/Providers/AuthProvider';
+import { CoachContext } from '../Context/Providers/CoachProvider';
 import UserParameter from '../Screens/User/UserParameter/UserParameter/UserParameter';
 import UserGoal from '../Screens/User/UserGoal/UserGoal';
 import AdminHome from '../Screens/Admin/Home/Home';
-import {ADMIN_MAIL} from '@env';
+import clientCoach from '../Context/Actions/clientCoach';
+import {ADMIN_MAIL, SIMPLE_URL} from '@env';
+import {io} from 'socket.io-client';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 
 const Routes = (props) => {
+  const socket = useRef(null);
   const authentication = useContext(AuthContext);
+  const Coach = useContext(CoachContext);
   let user = authentication.state.user;
   user= JSON.parse(user);
+
+  useEffect(()=>{
+    const checking = async() =>{
+      if(authentication.state.user != null && Coach.state.isLoading && user.u_type ==1){
+        await clientCoach(Coach)(authentication);
+      }
+    }
+    checking();
+  },[authentication.state.user]);
+
+  useEffect(()=>{
+    if(!Coach.state.isLoading){
+      if(!Coach.state.coach.empty){
+        socket.current = io(SIMPLE_URL);
+        socket.current.emit("addUser");
+        Coach.dispatch({type: "ADD_SOCKET", payload: socket.current});
+      }
+    }
+  },[Coach.state.isLoading])
 
   return(
       <NavigationContainer>

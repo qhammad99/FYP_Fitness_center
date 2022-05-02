@@ -38,7 +38,7 @@ const ExtraItem = props =>{
                 category,
                 goal_id: props.route.params.goal_id,
                 dayNumber: props.route.params.dayNumber,
-                start_time: moment().local().format('HH:MM:SS')
+                start_time: moment().local().format('HH:mm:ss')
             }
             adding(obj);
         }
