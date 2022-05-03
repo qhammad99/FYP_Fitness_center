@@ -47,7 +47,11 @@ const Routes = (props) => {
   useEffect(()=>{
     if(Coach.state.socket != null){
       Coach.state.socket.on("getUsers",(users)=>{
-        let onlineCoach = users.find(user=>user.userId == Coach.state.coach.coach_id);
+        let onlineCoach
+        if(!Coach.state.coach.coach_id) 
+          onlineCoach= users.find(user=>user.userId == Coach.state.coach);
+        else
+        onlineCoach= users.find(user=>user.userId == Coach.state.coach.coach_id);
         if(onlineCoach)
           Coach.dispatch({type:"COACH_ONLINE"})
         else
