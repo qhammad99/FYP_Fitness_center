@@ -18,7 +18,8 @@ const Urls = {
     ExtraProgress: URL+'/progress-attachExtra',
     ClientsCoach: URL+'/client-coach',
     AvailableCoachs: URL+ '/coach-all',
-    AddMyCoach: URL+'/client-coach'
+    AddMyCoach: URL+'/client-coach',
+    GetMessages: URL+'/get-messages/', // this is not used in context directly called at MyCoachChat screen   
 };
 
 export default Urls;
