@@ -21,7 +21,7 @@ const doing = (Obj, Coach, authentication) =>{
     })
     .then((response)=>{
         if(response.data.success){
-          Coach.dispatch({type:'ADD_COACH', payload: response.data.coach.coach_id});
+          Coach.dispatch({type:'ADD_COACH', payload: response.data.coach});
         }
         else
           Coach.dispatch({type:'ADD_COACH', payload: {empty: true}});

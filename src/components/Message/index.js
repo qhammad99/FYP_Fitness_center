@@ -12,7 +12,7 @@ const Message = ({message, userID}) =>{
                 {message.message}
             </Text>
             <Text style={isMe? styles.myMessageTime: styles.messageTime}>
-                {moment(message.msg_time, "YYYY-MM-DD HH:mm:ss").local().format('HH:mm')}
+                {moment(message.msg_time, "YYYY-MM-DD HH:mm:ss").format('HH:mm')}
             </Text>
         </View>
     );

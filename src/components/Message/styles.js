@@ -3,35 +3,41 @@ import Colors from '../../colors/Colors';
 
 const styles = StyleSheet.create({
     reciverTextContainer:{
-        backgroundColor: Colors.primary,
-        padding:10,
+        backgroundColor: Colors.lightColor,
+        padding:7,
         margin:10,
         borderRadius:10,
         maxWidth:'75%',
-        marginRight: 'auto'
+        marginRight:'auto',
     },
     reciverText:{
-        color: '#fff'
+        color: Colors.darkColor
     },
     myTextContainer:{
-        backgroundColor: Colors.lightColor,
-        padding:10,
+        backgroundColor: Colors.primary,
+        padding:7,
         margin:10,
         borderRadius:10,
         maxWidth:'75%',
-        marginLeft:'auto'
+        marginLeft: 'auto'
     },
     myText:{
-        color: Colors.darkColor
+        color: '#fff'
     },
     myMessageTime:{
-        fontSize:11,
-        alignSelf:'flex-end'
+        marginLeft:20,
+        marginTop:0,
+        fontSize:9,
+        color:Colors.lightColor,
+        alignSelf:'flex-end',
+        fontWeight:'600'
     },
     messageTime:{
-        fontSize:11,
-        color:Colors.lightColor,
-        alignSelf:'flex-end'
+        marginLeft:20,
+        marginTop:0,
+        fontSize:9,
+        alignSelf:'flex-end',
+        fontWeight:'600'
     }
 });
 
