@@ -13,12 +13,37 @@ const CoachReducer = (state, action) =>{
                 availableCoachsLoading: true
             }
         
-        case "ADD_AVAILABLE":
-            return{
-                ...state,
-                availableCoachs: action.payload,
-                availableCoachsLoading: false
-            }
+        case "INITIALIZE_AVAILABLE":{
+            if(action.payload)
+                return{
+                    ...state,
+                    availableCoachs: action.payload,
+                    resultAvailableCoachs: action.payload,
+                    availableCoachsLoading: false
+                }
+            else
+                return{
+                    ...state,
+                    availableCoachs: CoachInitialState.availableCoachs,
+                    resultAvailableCoachs: CoachInitialState.resultAvailableCoachs,
+                    availableCoachsLoading: false
+                }
+        }
+
+        case "ADD_AVAILABLE":{
+            if(action.payload)
+                return{
+                    ...state,
+                    resultAvailableCoachs: action.payload,
+                    availableCoachsLoading: false
+                }
+            else
+                return{
+                    ...state,
+                    resultAvailableCoachs: CoachInitialState.resultAvailableCoachs,
+                    availableCoachsLoading: false
+                }
+        }
 
         case "COACH_ONLINE":
             return {

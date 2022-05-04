@@ -84,8 +84,7 @@ const UserBottomNavigation = props => {
                 name="Coach" 
                 component={MyCoach} 
                 options={{
-                    headerTitle: () => <CustomHeader title="Coach" drawer={props.navigation}/>, 
-                    headerStyle:{backgroundColor:Colors.primary, shadowColor:'transparent'}
+                    headerShown:false
                     }}/>
 
             <Tab.Screen 
