@@ -20,6 +20,7 @@ const AvailableCoachs = () =>{
     const [showModal, setShowModal] = useState(false);
     const [months, setMonths] = useState(0);
     const [selectedCoach, setSelectedCoach] = useState(null);
+    const [search, setSearch] = useState("");
 
     useEffect(()=>{
         if(focused)
@@ -46,6 +47,22 @@ const AvailableCoachs = () =>{
             addMyCoach(obj)(Coach)(authentication);
         }
             
+    }
+
+    const searchName =() =>{
+        if(search.length!=0){
+            Coach.dispatch({type:"AVAILABLE_LOADING"});
+
+            let availableCoachs = Coach.state.availableCoachs.filter((item)=>{
+                if(item.name.toLowerCase().includes(search.toLowerCase()))
+                    return item;
+            })
+
+            if(availableCoachs.length == 0)
+                Coach.dispatch({type:'ADD_AVAILABLE'});
+            else
+                Coach.dispatch({type:'ADD_AVAILABLE', payload:availableCoachs});
+        }    
     }
 
     return (
@@ -82,6 +99,9 @@ const AvailableCoachs = () =>{
                 <TextInput 
                     placeholder='Search'
                     style={styles.searchBarInput}
+                    defaultValue={search}
+                    onEndEditing={searchName}
+                    onChangeText={(text)=>setSearch(text)}
                     />
             </View>
         </View>
@@ -101,10 +121,10 @@ const AvailableCoachs = () =>{
         {!Coach.state.availableCoachsLoading &&
         <View style={{ width: '100%', height: '100%'}}>
             {
-                !Coach.state.availableCoachs.empty
+                Coach.state.resultAvailableCoachs
                 ?
                 <FlatList 
-                    data={Coach.state.availableCoachs}
+                    data={Coach.state.resultAvailableCoachs}
                     renderItem={
                         ({item, index})=>
                             <CoachCard coach={item} onPress={hiringPressed}/>

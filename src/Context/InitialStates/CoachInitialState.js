@@ -4,5 +4,6 @@ export default{
     coahOnline: false,
     coach: null,
     availableCoachsLoading: true,
-    availableCoachs: null
+    availableCoachs: null,
+    resultAvailableCoachs: null
 }

@@ -3,13 +3,12 @@ import Colors from '../../../colors/Colors';
 
 const styles = StyleSheet.create({
     header:{
-        zIndex:1,
-        height:50,
+        height:65,
         backgroundColor: Colors.primary,
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'center',
-        padding:5,
+        paddingHorizontal:5,
     },
     statusContainer:{
         flexDirection:'row',
@@ -40,10 +39,11 @@ const styles = StyleSheet.create({
         fontWeight:'800'  
     },
     profileImage:{
-        width:40,
-        height:40,
-        borderRadius:20,
-        resizeMode:'contain'
+        width:50,
+        height:50,
+        borderRadius:25,
+        resizeMode:'contain',
+        marginRight:5
     },
     container:{
         flex:1,

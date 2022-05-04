@@ -17,10 +17,10 @@ const doing = (Coach, authentication) =>{
     })
     .then((response)=>{
         if(response.data.success){
-          Coach.dispatch({type:'ADD_AVAILABLE', payload: response.data.coachs});
+          Coach.dispatch({type:'INITIALIZE_AVAILABLE', payload: response.data.coachs});
         }
         else
-          Coach.dispatch({type:'ADD_AVAILABLE', payload: {empty: true}});
+          Coach.dispatch({type:'INITIALIZE_AVAILABLE'});
     })
     .catch((error)=>{
       if(error.response)
