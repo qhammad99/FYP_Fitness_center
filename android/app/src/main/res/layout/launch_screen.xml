@@ -12,6 +12,7 @@
         android:layout_marginTop="200dp"
         android:src="@mipmap/logo"
         />
+
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
@@ -19,7 +20,19 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="20dp"
     >
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_above="@id/label1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:visibility="visible"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="#262D37"
+            />
         <TextView
             android:id="@+id/label1"
             android:layout_above="@id/label2"
