@@ -80,6 +80,7 @@ const AvailableCoachs = () =>{
                         style={styles.modalInput}
                         onChangeText={(text)=>setMonths(text)}
                         keyboardType={'numeric'}
+                        placeholderTextColor={Colors.lightDark}
                         />
                     <TouchableOpacity style={styles.buttonContainer} onPress={proceedPayment}>
                         <Text style={styles.buttonText}>Proceed</Text>

@@ -157,7 +157,7 @@ const Profile = props =>{
             <View style={styles.itemContainer}>
                 <Text style={styles.itemLabel}>DOB: </Text>
                 <Text style={styles.itemContent}>
-                    {`${moment(Parameters.parameters.dob).local().format('DD-MM-YYYY')}`}
+                    {`${moment(Parameters.parameters.dob).local().format('DD MMM, YYYY')}`}
                 </Text>
             </View>
 

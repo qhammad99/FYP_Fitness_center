@@ -19,7 +19,7 @@ const CoachCard = ({coach, onPress}) =>{
                 <Text style={styles.experience} numberOfLines={2}>experience: {coach.coaching_experience}</Text>
                 <Text style={styles.charges}>Charges: {coach.charges}$</Text>
                 <View style={styles.bottomRowContainer}>
-                    <Text style={styles.joiningDate}>joined on: {moment(coach.joining_date).format('DD MMMM, YYYY      ')}</Text>
+                    <Text style={styles.joiningDate}>joined on: {moment(coach.joining_date).format('DD MMMM, YYYY')}</Text>
                     <TouchableOpacity style={styles.buttonContainer} onPress={()=>onPress(coach)}>
                         <Text style={styles.buttonText}>
                             Hire

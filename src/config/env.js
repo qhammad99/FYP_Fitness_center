@@ -20,6 +20,7 @@ const Urls = {
     AvailableCoachs: URL+ '/coach-all',
     AddMyCoach: URL+'/client-coach',
     GetMessages: URL+'/get-messages/', // this is not used in context directly called at MyCoachChat screen   
+    GiveRating: URL+'/client-rating', // called at my coach info to rate coach
 };
 
 export default Urls;

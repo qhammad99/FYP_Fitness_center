@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
         borderWidth:0.5,
         borderColor:'#dedede',
         borderRadius:20,
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        color:Colors.darkColor
     }
 });
 

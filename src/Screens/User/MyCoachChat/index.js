@@ -23,6 +23,7 @@ const MyCoachChat = props =>{
     const [messages, setMessages] = useState(null);
     const [newMessage, setNewMessage] = useState(null);
     const [arrivalMsg, setArrivalMsg] = useState(null);
+    const [sendedMsg, setSendedMsg] = useState(null);
 
     //to hide bottom ta bar
     useEffect(() => {
@@ -54,14 +55,21 @@ const MyCoachChat = props =>{
     },[]);
 
     useEffect(()=>{
-        if(Coach.state.socket != null)
+        if(Coach.state.socket != null){
             Coach.state.socket.on("get_message",data=>setArrivalMsg(data));
+            Coach.state.socket.on("message_sended", data=>setSendedMsg(data))
+        }
     },[Coach.state.socket])
 
     useEffect(()=>{
         arrivalMsg && focused &&
         setMessages(prev=>[arrivalMsg, ...prev]);
     },[arrivalMsg, focused])
+
+    useEffect(()=>{
+        sendedMsg && focused &&
+            setMessages(prev=>[sendedMsg, ...prev]);
+    },[sendedMsg, focused])
 
     const sendMessage = ()=>{
         if(newMessage!=null){
@@ -72,10 +80,6 @@ const MyCoachChat = props =>{
                 msg_time: moment().local().format("YYYY-MM-DD HH:mm:ss")
             };
             Coach.state.socket.emit("send_message", messageObj)
-            if(messages == null)
-                setMessages([messageObj]);
-            else
-                setMessages([messageObj, ...messages]);
             setNewMessage(null);
         }
     }
@@ -122,7 +126,8 @@ const MyCoachChat = props =>{
                     placeholder='Type message...' 
                     style={styles.messageInput}
                     onChangeText={(text)=>setNewMessage(text)}
-                    defaultValue={newMessage}/>
+                    defaultValue={newMessage}
+                    placeholderTextColor={Colors.lightDark}/>
                 <TouchableOpacity onPress={sendMessage}>
                     <Icon name="send-circle" size = {45} color={Colors.selectedColor}/>
                 </TouchableOpacity>
