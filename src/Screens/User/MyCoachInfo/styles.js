@@ -78,7 +78,8 @@ const styles = StyleSheet.create({
         borderColor:Colors.primary,
         borderWidth:1,
         backgroundColor:'#fff',
-        paddingLeft:10
+        paddingLeft:10,
+        color:Colors.darkColor
     },
     buttonContainer:{
         backgroundColor:Colors.primary,

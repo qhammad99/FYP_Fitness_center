@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
         marginTop:20,
         borderColor:Colors.primary,
         borderWidth:1,
-        backgroundColor:'#fff'
+        backgroundColor:'#fff',
+        color:Colors.darkColor
     },
     buttonContainer:{
         backgroundColor:Colors.primary,
