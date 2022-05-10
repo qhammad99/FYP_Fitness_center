@@ -3,10 +3,11 @@
     <item android:drawable="@color/primaryContrast"/>
 
     <item
-        android:width="170dp"
-        android:height="151dp"
+        android:width="143dp"
+        android:height="124dp"
         android:drawable="@mipmap/logo"
-        android:gravity="center" />
+        android:gravity="center_horizontal"
+        android:top="200dp" />
 
 </layer-list>
 

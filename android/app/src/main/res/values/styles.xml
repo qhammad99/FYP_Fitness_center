@@ -3,7 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">@color/primaryContrast</item>
+<!--        <item name="android:colorPrimaryDark">@color/primaryContrast</item>-->
+<!--        upper line work same as status bar color-->
     </style>
     
     <style name="SplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -11,4 +12,10 @@
         <item name="android:statusBarColor">@color/primaryContrast</item>
         <item name="android:navigationBarColor">@color/primaryContrast</item>
     </style>
+
+    <style name="SecondSplash" parent="SplashScreen_SplashTheme">
+        <item name="android:statusBarColor">@color/primaryContrast</item>
+        <item name="android:navigationBarColor">@color/primaryContrast</item>
+    </style>
+
 </resources>
