@@ -12,8 +12,14 @@ import UserParameter from '../Screens/User/UserParameter/UserParameter/UserParam
 import UserGoal from '../Screens/User/UserGoal/UserGoal';
 import AdminHome from '../Screens/Admin/Home/Home';
 import clientCoach from '../Context/Actions/clientCoach';
+import CustomHeader from '../components/CustomHeader';
 import {ADMIN_MAIL, SIMPLE_URL} from '@env';
 import {io} from 'socket.io-client';
+import AbsWorkout from '../Screens/User/workoutScreens/absWorkout/absWorkout';
+import ArmsWorkout from '../Screens/User/workoutScreens/armsWorkout/armsWorkout';
+import ChestWorkout from '../Screens/User/workoutScreens/chestWorkout/chestWorkout';
+import LegsWorkout from '../Screens/User/workoutScreens/legsWorkout/legsWorkout';
+import Schedule from '../Screens/User/scheduleScreen/scheduleScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
@@ -116,10 +122,39 @@ const Routes = (props) => {
           name="CoachHome" 
           component={CoachHome}
           options={{ headerShown:false }} 
-        />)
+        />
+        )
         )
         }
-        
+        <Stack.Screen 
+            name="Abs" 
+            component={AbsWorkout} 
+            options={{
+              headerStyle:{backgroundColor: "#E26F1E"},
+              title: 'Abs Workout',
+              headerTintColor: '#fff'}}
+            />
+      <Stack.Screen name="Arms" component={ArmsWorkout} 
+          options={{
+                 headerStyle:{backgroundColor: "#E26F1E"},
+                 title: 'Arms Workout',
+                 headerTintColor: '#fff'}}/>
+      <Stack.Screen name="Chest" component={ChestWorkout} 
+           options={{
+                headerStyle:{backgroundColor: "#E26F1E"},
+                title: 'Chest Workout',
+                headerTintColor: '#fff'}}/>
+      <Stack.Screen name="Legs" component={LegsWorkout} 
+          options={{
+            headerStyle:{backgroundColor: "#E26F1E"},
+            title: 'Legs Workout',
+            headerTintColor: '#fff'}}/>
+            <Stack.Screen name="Schedule" component={Schedule} 
+          options={{
+            headerStyle:{backgroundColor: "#E26F1E"},
+            title: 'Create Schedule',
+            headerTintColor: '#fff'}}/>
+           
       </Stack.Navigator>
     </NavigationContainer>
   )

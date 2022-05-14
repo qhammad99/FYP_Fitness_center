@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import styles from './styles';
 import DatePicker from 'react-native-date-picker';
-import {Text, Picker, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 export default function scheduleScreen() {
   const [selectedValue, setSelectedValue] = useState('sun');
 
@@ -20,7 +21,7 @@ export default function scheduleScreen() {
         <Text style={styles.viewText}>Select Day</Text>
         <Picker
           selectedValue={selectedValue}
-          style={{height: 50, width: 150}}
+          style={{height: 50, width: 150, color: 'black'}}
           onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
           <Picker.Item label="Sunday" value="sun" />
           <Picker.Item label="Monday" value="mon" />
@@ -59,7 +60,7 @@ export default function scheduleScreen() {
         <Text style={styles.viewText}>Select Category</Text>
         <Picker
           selectedValue={selectedCategory}
-          style={{height: 50, width: 150}}
+          style={{height: 50, width: 150, color: 'black'}}
           onValueChange={(itemValue, itemIndex) =>
             setSelectedCategory(itemValue)
           }>
@@ -72,7 +73,7 @@ export default function scheduleScreen() {
         <Text style={styles.viewText}>Select Level</Text>
         <Picker
           selectedValue={selectedLevel}
-          style={{height: 50, width: 150}}
+          style={{height: 50, width: 150, color: 'black'}}
           onValueChange={(itemValue, itemIndex) => setSelectedLevel(itemValue)}>
           <Picker.Item label="1" value="1" />
           <Picker.Item label="2" value="2" />
@@ -80,7 +81,7 @@ export default function scheduleScreen() {
         </Picker>
       </View>
       <TouchableOpacity style={styles.schedulButton}>
-        <Text style={styles.viewText}>Create Schedule</Text>
+        <Text style={{color: '#fff'}}>Create Schedule</Text>
       </TouchableOpacity>
     </View>
   );

@@ -9,11 +9,13 @@ import ProgressScreen from '../Screens/User/Progress';
 import MyCoach from './MyCoach';
 import CustomHeader from '../components/CustomHeader';
 import {CoachContext} from '../Context/Providers/CoachProvider';
+import WorkoutCategories from '../Screens/User/workoutScreens/workoutCategories/workoutCategories';
+import ArmsWorkout from '../Screens/User/workoutScreens/armsWorkout/armsWorkout';
 /* some screens later i separate*/
-function WorkoutScreen() {
+const WorkoutScreen = props => {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: Colors.darkColor }}>Edit Exercices and Workouts Here!</Text>
+            <WorkoutCategories navigation={props.navigation}  />
         </View>
     );
 }
@@ -77,7 +79,9 @@ const UserBottomNavigation = props => {
             tabBarInactiveTintColor: Colors.lightDark,
             tabBarHideOnKeyboard: true
           })}>
-            <Tab.Screen name="Workout" component={WorkoutScreen} />
+            <Tab.Screen name="Workout" component={WorkoutScreen} options={{
+                 headerStyle:{backgroundColor: "#E26F1E"},
+                 headerTitle: () => <CustomHeader title="Workout Categories" drawer={props.navigation}/>,}}/>
             <Tab.Screen name="Diet" component={DietScreen} />
             <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
             <Tab.Screen 
