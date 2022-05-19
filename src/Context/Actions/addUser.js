@@ -15,7 +15,6 @@ const addToLocatStorage = async(userObj) =>{
 
 const adding = async(Account, authentication)=>{
     var API_URL= Urls.SignupURL;
-    console.log(Account)
     axios.post(API_URL, {
             name : Account.account.firstName+" "+Account.account.secondName,
             email : Account.account.email,
