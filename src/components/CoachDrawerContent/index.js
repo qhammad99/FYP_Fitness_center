@@ -67,9 +67,9 @@ const CoachDrawerContent = (props) => {
         <Text style={styles.nameText}>
             {user.name}
         </Text>
-        <Text style={styles.numberOfGoals}>
+        {/* <Text style={styles.numberOfGoals}>
             Clients: 0
-        </Text>
+        </Text> */}
       </ImageBackground>
 
       {/* drawer screens */}

@@ -1,8 +1,10 @@
-import {URL} from '@env';
-
+// import {URL} from '@env';
+const URL="https://4d81-119-153-176-246.in.ngrok.io/api/v1"
 const Urls = {
     LoginURL: URL+'/user-login',
     SignupURL: URL+'/user-register',
+    coach_all_users:URL+"/coach-all-users",
+    user_change_password:URL+"/user-change-password",
     UserPhoto: URL+'/user-photo',
     ParametersAdd: URL+'/parameters-add',
     ParametersGet: URL+'/parameters-detail',

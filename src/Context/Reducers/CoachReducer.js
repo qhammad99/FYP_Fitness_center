@@ -1,28 +1,28 @@
 import CoachInitialState from "../InitialStates/CoachInitialState";
-const CoachReducer = (state, action) =>{
-    switch(action.type){
+const CoachReducer = (state, action) => {
+    switch (action.type) {
         case "LOADING_START":
-            return{
+            return {
                 ...state,
                 isLoading: true
             };
 
         case "AVAILABLE_LOADING":
-            return{
+            return {
                 ...state,
                 availableCoachsLoading: true
             }
-        
-        case "INITIALIZE_AVAILABLE":{
-            if(action.payload)
-                return{
+
+        case "INITIALIZE_AVAILABLE": {
+            if (action.payload)
+                return {
                     ...state,
                     availableCoachs: action.payload,
                     resultAvailableCoachs: action.payload,
                     availableCoachsLoading: false
                 }
             else
-                return{
+                return {
                     ...state,
                     availableCoachs: CoachInitialState.availableCoachs,
                     resultAvailableCoachs: CoachInitialState.resultAvailableCoachs,
@@ -30,15 +30,15 @@ const CoachReducer = (state, action) =>{
                 }
         }
 
-        case "ADD_AVAILABLE":{
-            if(action.payload)
-                return{
+        case "ADD_AVAILABLE": {
+            if (action.payload)
+                return {
                     ...state,
                     resultAvailableCoachs: action.payload,
                     availableCoachsLoading: false
                 }
             else
-                return{
+                return {
                     ...state,
                     resultAvailableCoachs: CoachInitialState.resultAvailableCoachs,
                     availableCoachsLoading: false
@@ -47,29 +47,34 @@ const CoachReducer = (state, action) =>{
 
         case "COACH_ONLINE":
             return {
-                ...state, 
+                ...state,
                 coahOnline: true
             };
-            
+
         case "COACH_OFFLINE":
             return {
-                ...state, 
+                ...state,
                 coahOnline: false
+            };
+        case "SUBSCRIBED_USERS":
+            return {
+                ...state,
+                subscribedUsers: action.payload
             };
 
         case "ADD_COACH":
             return {
-                ...state, 
+                ...state,
                 coach: action.payload,
                 isLoading: false
             };
 
         case "ADD_SOCKET":
-            return{
+            return {
                 ...state,
                 socket: action.payload
             };
-        
+
         case "COACH_RESET":
             return CoachInitialState;
     }

@@ -1,14 +1,19 @@
-// this action is called in navigation / routes
+// this action is called in Component / Task Container
 
 import Urls from '../../config/env';
+
 import axios from 'axios';
 
-const doing = (Coach, authentication) =>{
+const doing = async(Coach,authentication) => {
   let user = JSON.parse(authentication.state.user);
     let token = user.token;
-    Coach.dispatch({type:'AVAILABLE_LOADING'});
-    var API_URL= Urls.AvailableCoachs;
-    axios.get(API_URL,{
+
+    let coachId = user.user_id;
+
+    var API_URL=Urls.coach_all_users;
+    axios.post(API_URL,{
+      coachId
+    },{
         headers:{
             'Content-Type' : 'application/json',
             'Authorization' : `Bearer ${token}`
@@ -16,10 +21,10 @@ const doing = (Coach, authentication) =>{
     })
     .then((response)=>{
         if(response.data.success){
-          Coach.dispatch({type:'INITIALIZE_AVAILABLE', payload: response.data.coachs});
+      console.log(response.data)
+      Coach.dispatch({type:'SUBSCRIBED_USERS', payload: response.data.coachs})
+            // just to re render the to do component
         }
-        else
-          Coach.dispatch({type:'INITIALIZE_AVAILABLE'});
     })
     .catch((error)=>{
       if(error.response)
@@ -30,5 +35,5 @@ const doing = (Coach, authentication) =>{
 }
 
 export default (Coach)=>(authentication)=>{
-    doing(Coach, authentication);
+    doing(Coach,authentication);
 }
