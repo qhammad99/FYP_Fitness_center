@@ -1,137 +1,14 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput, SafeAreaView, ScrollView } from 'react-native';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feather from 'react-native-vector-icons/Feather';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Cross from 'react-native-vector-icons/Entypo';
-
+import HomeScreen from '../Screens/Coach/SubscribedUsersHome/CoachHomeScreen';
 const Tab = createBottomTabNavigator();
 
-function HomeScreen({navigation}) {
-    return (
-      <SafeAreaView style={{height:'100%'}}>
-          
-      <SafeAreaView style={{ backgroundColor:'#E26F1E'}} >
-        <ScrollView style={{padding:20}}>
-        <View>
-        <View style={{flexDirection:'row'}}>
-             
-        </View>
-        <View style={{paddingTop:20, flexDirection:'row', marginHorizontal:50}}>
-        <View >
-        <Image
-          source={require('../Assets/userAvatar.png')}
-          style={{height:60, width:60,
-            opacity:100,
-            borderRadius:40, marginBottom:10,
-          }}
-        />
-        <Text style={{paddingLeft:10,color:"#ffffff",fontSize:18}}>Users</Text>
-        </View>
-        <View  style={{paddingLeft:40}} >
-        <Image
-          source={require('../Assets/tasks.jpg')}
-          style={{height:60, width:60,
-            opacity:100,
-            borderRadius:40, marginBottom:10,
-          }}
-        />
-        <Text style={{paddingLeft:0,color:"#ffffff",fontSize:18}}>Tasks</Text>
-        </View>
-        <View  style={{paddingLeft:30}} >
-        <Image
-          source={require('../Assets/diet.jpg')}
-          style={{height:60, width:60,
-            opacity:100,
-            borderRadius:40, marginBottom:10,
-          }}
-        />
-        <Text style={{paddingLeft:10,color:"#ffffff",fontSize:18}}>Plans</Text>
-        </View>
-        
-        </View>
-        </View>
-      
-            
-        </ScrollView>
-      </SafeAreaView>
-        <ScrollView>
-        <View style={{flexDirection:'row', marginTop:20, marginHorizontal:20}}>
-            <View>
-              <Image
-              source={require('../Assets/1.jpg')}
-              style={{height:80, width:80, alignContent:'center',
-                opacity:100,
-                borderRadius:40, marginBottom:10,
-              }}
-              />
-            </View>
-            <View style={{paddingLeft:20, paddingTop:15}}>
-              <Text>Ayesha</Text>
-              <Text> aish12@hotmail.com</Text>
-              <Text> 1 Month Subscription </Text>
-            
-            </View>
-            </View>
-            <View style={{flexDirection:'row', marginTop:40, marginHorizontal:20}}>
-            <View>
-              <Image
-              source={require('../Assets/3.jpg')}
-              style={{height:80, width:80, alignContent:'center',
-                opacity:100,
-                borderRadius:40, marginBottom:10,
-              }}
-              />
-            </View>
-            <View style={{paddingLeft:20, paddingTop:15}}>
-              <Text>Taha</Text>
-              <Text> tahaa12@hotmail.com</Text>
-              <Text> 3 Month Subscription </Text>
-            
-            </View>
-            </View>
-            <View style={{flexDirection:'row', marginTop:40, marginHorizontal:20}}>
-            <View>
-              <Image
-              source={require('../Assets/2.jpg')}
-              style={{height:80, width:80, alignContent:'center',
-                opacity:100,
-                borderRadius:40, marginBottom:10,
-              }}
-              />
-            </View>
-            <View style={{paddingLeft:20, paddingTop:15}}>
-              <Text>Hannah</Text>
-              <Text> hannah12@hotmail.com</Text>
-              <Text> 2 Month Subscription </Text>
-            
-            </View>
-            </View>
-            <View style={{flexDirection:'row', marginTop:40, marginHorizontal:20}}>
-            <View>
-              <Image
-              source={require('../Assets/4.jpg')}
-              style={{height:80, width:80, alignContent:'center',
-                opacity:100,
-                borderRadius:40, marginBottom:10,
-              }}
-              />
-            </View>
-            <View style={{paddingLeft:20, paddingTop:15}}>
-              <Text>hala</Text>
-              <Text> h12@hotmail.com</Text>
-              <Text> 1 Month Subscription </Text>
-            
-            </View>
-            </View>
-            
-
-            </ScrollView>
-      </SafeAreaView>
-        
-    );
-  }
 
 function UserRequest() {
     return (
@@ -381,14 +258,14 @@ const CoachBottomNavigation = () =>{
       tabBarInactiveTintColor: '#ffffff',
       tabBarActiveTintColor: '#D03715',
     }}>
-      <Tab.Screen name="UserRequest" component={UserRequest}  
+      {/* <Tab.Screen name="UserRequest" component={UserRequest}  
       options={{
         tabBarBadge: 6,
         tabBarBadgeStyle: {backgroundColor:'red'},
         tabBarIcon: ({color, size}) => (
           <Feather name="user-plus" color={color} size={size} />
         )
-      }}/>
+      }}/> */}
       <Tab.Screen name="HomeScreen" component={HomeScreen} options={{
         tabBarIcon: ({color, size}) => (
           <Ionicons name="home-outline" color={color} size={size} />
