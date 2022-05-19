@@ -21,12 +21,13 @@ const doing = async(Coach,authentication) => {
     })
     .then((response)=>{
         if(response.data.success){
-      console.log(response.data)
+      console.log("response=====>",response.data)
       Coach.dispatch({type:'SUBSCRIBED_USERS', payload: response.data.coachs})
             // just to re render the to do component
         }
     })
     .catch((error)=>{
+      console.log("response Error=====>",error)
       if(error.response)
         alert(" " + error.response.data.message);
       else

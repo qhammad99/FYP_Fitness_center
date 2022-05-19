@@ -1,5 +1,5 @@
-// import {URL} from '@env';
-const URL="https://4d81-119-153-176-246.in.ngrok.io/api/v1"
+ import {URL} from '@env';
+//const URL="https://4d81-119-153-176-246.in.ngrok.io/api/v1"
 const Urls = {
     LoginURL: URL+'/user-login',
     SignupURL: URL+'/user-register',
