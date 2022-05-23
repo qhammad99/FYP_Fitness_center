@@ -1,7 +1,7 @@
 // Landing screen of User
 import React, {useContext} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Colors from '../colors/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../Screens/User/HomeScreen/Home/HomeScreen';
@@ -9,20 +9,22 @@ import ProgressScreen from '../Screens/User/Progress';
 import MyCoach from './MyCoach';
 import CustomHeader from '../components/CustomHeader';
 import {CoachContext} from '../Context/Providers/CoachProvider';
+import WorkoutCategories from '../Screens/User/workoutScreens/workoutCategories/workoutCategories';
+import DietPlans from '../Screens/User/DietModule/DietPlans';
 /* some screens later i separate*/
-function WorkoutScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: Colors.darkColor }}>Edit Exercices and Workouts Here!</Text>
-        </View>
-    );
-}
+const WorkoutScreen = props => {
+  return (
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <WorkoutCategories navigation={props.navigation} />
+    </View>
+  );
+};
 function DietScreen() {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: Colors.darkColor }}>Edit Recipies and Diets Here!</Text>
-        </View>
-    );
+  return (
+    <View>
+      <DietPlans />
+    </View>
+  );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,71 +33,89 @@ const Tab = createBottomTabNavigator();
 const UserBottomNavigation = props => {
   const Coach = useContext(CoachContext);
 
-    return (
-        <Tab.Navigator initialRouteName='Home'
-        screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-  
-              if (route.name === 'Home') {
-                iconName = focused
-                  ? 'home'
-                  : 'home-outline';
-              } else if (route.name === 'Coach') {
-                iconName = focused
-                  ? 'person'
-                  : 'person-outline';
-              } else if (route.name === 'Diet') {
-                iconName = focused
-                  ? 'restaurant'
-                  : 'restaurant-outline';
-              } else if (route.name === 'Workout') {
-                iconName = focused
-                  ? 'walk'
-                  : 'walk-outline';
-              } else if (route.name === 'Progress') {
-                iconName = focused
-                  ? 'trending-up'
-                  : 'trending-up-outline';
-              } 
-  
-              // You can return any component that you like here!
-              return( 
-                <View style={styles.tabContainer}>
-                  {(route.name === 'Coach' && Coach.state.coahOnline) &&
-                    <View style={styles.tabBadge}>
-                      <Text style={styles.tabBadgeText}>
-                        {1}
-                      </Text>
-                    </View>
-                  }
-                  <Ionicons name={iconName} size={size} color={color} />
-                </View>
-              );
-            },
-            tabBarActiveTintColor: Colors.selectedColor,
-            tabBarInactiveTintColor: Colors.lightDark,
-            tabBarHideOnKeyboard: true
-          })}>
-            <Tab.Screen name="Workout" component={WorkoutScreen} />
-            <Tab.Screen name="Diet" component={DietScreen} />
-            <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
-            <Tab.Screen 
-                name="Coach" 
-                component={MyCoach} 
-                options={{
-                    headerShown:false
-                    }}/>
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
 
-            <Tab.Screen 
-                name="Progress" 
-                component={ProgressScreen} 
-                options={{
-                    headerTitle: () => <CustomHeader title="Progress" drawer={props.navigation}/>, 
-                    headerStyle:{backgroundColor:Colors.primary}, 
-                    }}/>
-        </Tab.Navigator>
-    );
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Coach') {
+            iconName = focused ? 'person' : 'person-outline';
+          } else if (route.name === 'Diet') {
+            iconName = focused ? 'restaurant' : 'restaurant-outline';
+          } else if (route.name === 'Workout') {
+            iconName = focused ? 'walk' : 'walk-outline';
+          } else if (route.name === 'Progress') {
+            iconName = focused ? 'trending-up' : 'trending-up-outline';
+          }
+
+          // You can return any component that you like here!
+          return (
+            <View style={styles.tabContainer}>
+              {route.name === 'Coach' && Coach.state.coahOnline && (
+                <View style={styles.tabBadge}>
+                  <Text style={styles.tabBadgeText}>{1}</Text>
+                </View>
+              )}
+              <Ionicons name={iconName} size={size} color={color} />
+            </View>
+          );
+        },
+        tabBarActiveTintColor: Colors.selectedColor,
+        tabBarInactiveTintColor: Colors.lightDark,
+        tabBarHideOnKeyboard: true,
+      })}>
+      <Tab.Screen
+        name="Workout"
+        component={WorkoutScreen}
+        options={{
+          headerStyle: {backgroundColor: '#E26F1E'},
+          headerTitle: () => (
+            <CustomHeader
+              title="Workout Categories"
+              drawer={props.navigation}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Diet"
+        component={DietScreen}
+        options={{
+          headerStyle: {backgroundColor: '#E26F1E'},
+          headerTitle: () => (
+            <CustomHeader title="Diet Plans" drawer={props.navigation} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="Coach"
+        component={MyCoach}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Tab.Screen
+        name="Progress"
+        component={ProgressScreen}
+        options={{
+          headerTitle: () => (
+            <CustomHeader title="Progress" drawer={props.navigation} />
+          ),
+          headerStyle: {backgroundColor: Colors.primary},
+        }}
+      />
+    </Tab.Navigator>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -110,12 +130,12 @@ const styles = StyleSheet.create({
     right: -2,
     backgroundColor: '#31a24c',
     borderRadius: 16,
-    width:8,
-    height:8,
+    width: 8,
+    height: 8,
     zIndex: 2,
   },
   tabBadgeText: {
-    color: '#31a24c'
+    color: '#31a24c',
   },
 });
 

@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 const styles= StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#E8EAED",
+        backgroundColor: "#fff",
+        width: '100%'
       },
       categoriesWrapper: {
         paddingTop: 80,
@@ -13,6 +14,7 @@ const styles= StyleSheet.create({
       sectionTitle: {
         fontSize: 24,
         fontWeight: "bold",
+        color: 'black'
       },
       items: {
         marginTop: 30,
@@ -26,6 +28,7 @@ const styles= StyleSheet.create({
         fontSize: 15,
         fontWeight: "bold",
         position: "absolute",
+        color: "black"
       },
       item: {
         backgroundColor: "#fff",
@@ -58,29 +61,49 @@ const styles= StyleSheet.create({
         justifyContent: "center",
       },
       searchBar: {
-        height: 35,
-        backgroundColor: '#FFF',
+        height: 40,
         borderRadius: 60,
         borderColor: '#C0C0C0',
         borderWidth: 1,
         width: 250,
         marginStart: 80,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 10,
         paddingStart: 8,
+        color: 'black'
     
       },
       searchButton: {
+        backgroundColor: '#E26F1E',
         width: 80,
-        height: 35,
-        backgroundColor: '#FFFAE5',
-        borderRadius: 40,
+        height: 30,
+        marginTop: 5,
+        padding: 6,
+        borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#C0C0C0',
-        borderWidth: 1,
-        marginStart: 170,
-        marginTop: 5
+        marginStart: '41%'
       },
+      scheduleText: {
+        color: '#E26F1E', 
+        marginTop: 20, 
+        fontSize: 15, 
+        paddingLeft: 10, 
+        fontWeight: 'bold'
+      },
+      scheduleButton: {
+        backgroundColor: '#E26F1E',
+        width: 300,
+        height: 38,
+        marginTop: 5,
+        padding: 6,
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginStart: '14%'
+      },
+      
 });
 
 export default styles;

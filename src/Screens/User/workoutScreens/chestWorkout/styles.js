@@ -13,15 +13,15 @@ const styles= StyleSheet.create({
         flexDirection: "row",
         alignItems: "flex-start",
         marginStart: 30,
-        marginTop: 55,
+        marginTop: 10,
         alignItems: "center",
       },
       headerText: {
         fontSize: 20,
         paddingStart: 10,
-        textShadowRadius: 10,
         fontWeight: "bold",
         position: "absolute",
+        color: 'black'
       },
       headerImage: {
         height: 130,
@@ -32,21 +32,25 @@ const styles= StyleSheet.create({
       },
       exercises: {
         backgroundColor: "#f2f3f8",
-        height: 50,
+        height: 68,
         width: 350,
         borderRadius: 10,
         borderWidth: 1,
-        flexDirection: "row",
-        alignItems: "flex-start",
         marginStart: 30,
-        borderColor: "#E26F1E",
+        borderColor: '#E26F1E',
         marginTop: 20,
-        alignItems: "center",
+      },
+      insideExercises: {
+        alignItems: "flex-start",
+        borderColor: '#E26F1E',
+        flexDirection: 'row',
         justifyContent: "space-between",
+        marginTop: 5,
+        height: 20
       },
       exeText: {
         paddingStart: 10,
-        textShadowRadius: 10,
+        color: 'black'
       },
       startButton: {
         width: 70,
@@ -63,7 +67,7 @@ const styles= StyleSheet.create({
         color: "#fff",
       },
       scrollView: {
-        marginBottom: 15,
+        marginBottom: 5,
       },
       gif: {
         width: 70,

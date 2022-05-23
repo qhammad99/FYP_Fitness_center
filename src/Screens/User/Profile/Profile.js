@@ -11,7 +11,7 @@ import Modal from 'react-native-modal';
 import styles from './styles';
 import moment from 'moment';
 import {URL} from '@env';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const Profile = props =>{
     const authentication = useContext(AuthContext);
     const Parameters = useContext(ParametersContext);

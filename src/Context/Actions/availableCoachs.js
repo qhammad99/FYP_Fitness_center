@@ -7,7 +7,6 @@ const doing = (Coach, authentication) =>{
   let user = JSON.parse(authentication.state.user);
     let token = user.token;
     Coach.dispatch({type:'AVAILABLE_LOADING'});
-
     var API_URL= Urls.AvailableCoachs;
     axios.get(API_URL,{
         headers:{

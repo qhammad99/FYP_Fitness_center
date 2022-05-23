@@ -7,7 +7,7 @@ const styles= StyleSheet.create({
       },
       header: {
         backgroundColor: "#E26F1E",
-       borderRadius: 20,
+       borderRadius: 30,
         height: 60,
         width: 350,
         flexDirection: "row",
@@ -17,7 +17,7 @@ const styles= StyleSheet.create({
         alignItems: "center",
       },
       headerText: {
-        color: '#262D37',
+        color: '#fff',
         fontSize: 20,
         fontWeight: 'bold',
       },
@@ -37,6 +37,7 @@ const styles= StyleSheet.create({
       },
       viewText: {
         paddingStart: 10,
+        color: 'black'
       },
       dayPicker: {
         width: 70,
@@ -74,15 +75,15 @@ const styles= StyleSheet.create({
         alignItems: "center",
       },
       schedulButton: {
-        backgroundColor: "#E26F1E",
-        borderRadius: 25,
-        height: 40,
-        width: 150,
-        flexDirection: "row",
+        backgroundColor: '#E26F1E',
+        width: 300,
+        height: 38,
+        marginTop: 20,
+        padding: 6,
+        borderRadius: 5,
         justifyContent: 'center',
-        marginTop: 30,
-        alignItems: "center",
-        marginStart: "30%"
+        alignItems: 'center',
+        marginStart: '14%'
       }
 });
 
