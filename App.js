@@ -7,6 +7,7 @@ import AuthProvider from './src/Context/Providers/AuthProvider';
 import ParametersProvider from './src/Context/Providers/ParametersProvider';
 import GoalProvider from './src/Context/Providers/GoalProvider';
 import CoachProvider from './src/Context/Providers/CoachProvider';
+import AdminProvider from './src/Context/Providers/AdminProvider';
 import PushNotification from "react-native-push-notification";
 
 const App = () => {
@@ -35,9 +36,11 @@ const App = () => {
         <CoachProvider>
         <ParametersProvider>
           <GoalProvider>
+            <AdminProvider>
             <View style={{flex:1, backgroundColor:Colors.light}}>
               <Routes />  
             </View>
+            </AdminProvider>
           </GoalProvider>
         </ParametersProvider>
         </CoachProvider>

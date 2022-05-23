@@ -21,6 +21,8 @@ const Urls = {
     AddMyCoach: URL+'/client-coach',
     GetMessages: URL+'/get-messages/', // this is not used in context directly called at MyCoachChat screen   
     GiveRating: URL+'/client-rating', // called at my coach info to rate coach
+    IngredientsCategory: URL+'/ingredients-category', //directly called in Admin Home
+    Ingredients: URL+'/ingredients', //also in Admin Home
 };
 
 export default Urls;

@@ -100,6 +100,7 @@ const AvailableCoachs = () =>{
                 <TextInput 
                     placeholder='Search'
                     style={styles.searchBarInput}
+                    placeholderTextColor={Colors.lightDark}
                     defaultValue={search}
                     onEndEditing={searchName}
                     onChangeText={(text)=>setSearch(text)}

@@ -82,7 +82,8 @@ const Routes = (props) => {
             <Stack.Screen 
               name='AdminHome'
               component={AdminHome}
-            />
+              options={{headerShown:false}}
+                />
             :
             (parseInt(user.isParameters) != 0)
               ?
