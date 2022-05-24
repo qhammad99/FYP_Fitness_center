@@ -49,6 +49,7 @@ const UserGoal = props =>{
 
     const nextPressed = () =>{
         let numberOFDays;
+        let difficulty;
         if(time == null || time.length == 0){
                 alert("Empty time not allowed")
             }
@@ -73,18 +74,41 @@ const UserGoal = props =>{
         if (numberOFDays <3 || numberOFDays > 180)
             alert("minimum 3 days and maximum 180 days or  25 weeks or 6 months allowed");
         else if(bmiResult == 'Normal weight'){
-            addGoal(todayDate, numberOFDays, bmiResult, 0)(Parameters)(authentication);
+            addGoal(todayDate, numberOFDays, bmiResult, 0, 7)(Parameters)(authentication);
         }else if(bmiResult == 'Overweight' || bmiResult == 'Obese' || bmiResult == 'Underweight'){
                 if(weight == null || weight.length ==0){
                     alert("empty weight not allowed");
                 }
-            // change the logic here make different 'levels or grades' for different weight loose or gain per day
+            
             const weightInGrams = weight * 1000;
+
+            // logic here make different 'levels or grades' for different weight loose or gain per day
             if(weightInGrams/numberOFDays > 200){
                 alert("You can't achieve that goal in that duration, max 200g gain or loose per day");
             }
-            else
-                addGoal(todayDate, numberOFDays, bmiResult, weight)(Parameters)(authentication);
+
+            // weight gain easy, medium, hard
+            else if((weightInGrams/numberOFDays <= 70 )&&(bmiResult == 'Underweight')){
+                addGoal(todayDate, numberOFDays, bmiResult, weight, 1)(Parameters)(authentication);
+            }
+            else if((weightInGrams/numberOFDays <= 140 )&&(bmiResult == 'Underweight')){
+                addGoal(todayDate, numberOFDays, bmiResult, weight, 2)(Parameters)(authentication);
+            }
+            else if((weightInGrams/numberOFDays > 140 )&&(bmiResult == 'Underweight')){
+                addGoal(todayDate, numberOFDays, bmiResult, weight, 3)(Parameters)(authentication);
+            }
+
+
+            // weight loose easy, medium, hard
+            else if((weightInGrams/numberOFDays <= 70 )&&(bmiResult == 'Overweight' || bmiResult == 'Obese')){
+                addGoal(todayDate, numberOFDays, bmiResult, weight, 4)(Parameters)(authentication);
+            }
+            else if((weightInGrams/numberOFDays <= 140 )&&(bmiResult == 'Overweight' || bmiResult == 'Obese')){
+                addGoal(todayDate, numberOFDays, bmiResult, weight, 5)(Parameters)(authentication);
+            }
+            else if((weightInGrams/numberOFDays > 140 )&&(bmiResult == 'Overweight' || bmiResult == 'Obese')){
+                addGoal(todayDate, numberOFDays, bmiResult, weight, 6)(Parameters)(authentication);
+            }
         }else
             alert("something wrong in values");
       }

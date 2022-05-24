@@ -7,6 +7,7 @@ import AuthProvider from './src/Context/Providers/AuthProvider';
 import ParametersProvider from './src/Context/Providers/ParametersProvider';
 import GoalProvider from './src/Context/Providers/GoalProvider';
 import CoachProvider from './src/Context/Providers/CoachProvider';
+import AdminProvider from './src/Context/Providers/AdminProvider';
 import PushNotification from "react-native-push-notification";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -80,6 +81,17 @@ const App = () => {
       {/* link with context */}
       <AuthProvider>
         <CoachProvider>
+<<<<<<< HEAD
+        <ParametersProvider>
+          <GoalProvider>
+            <AdminProvider>
+            <View style={{flex:1, backgroundColor:Colors.light}}>
+              <Routes />  
+            </View>
+            </AdminProvider>
+          </GoalProvider>
+        </ParametersProvider>
+=======
           <ParametersProvider>
             <GoalProvider>
               <View style={{ flex: 1, backgroundColor: Colors.light }}>
@@ -87,6 +99,7 @@ const App = () => {
               </View>
             </GoalProvider>
           </ParametersProvider>
+>>>>>>> e4f562ec2738197f0265ca0130c42891e2847add
         </CoachProvider>
       </AuthProvider>
     </>

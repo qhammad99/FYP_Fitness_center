@@ -19,7 +19,8 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     searchBarInput:{
-        width:'100%'
+        width:'100%',
+        color:Colors.darkColor
     },
     modalContainer:{
         width:'100%',

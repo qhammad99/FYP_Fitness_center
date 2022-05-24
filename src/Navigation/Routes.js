@@ -86,6 +86,26 @@ const Routes = props => {
                 component={Signup}
                 options={{headerShown: false}}
               />
+<<<<<<< HEAD
+        </>
+        ):(
+          // user screens
+        (user.u_type ==1)
+          ?(
+            (user.email== ADMIN_MAIL)?
+            <Stack.Screen 
+              name='AdminHome'
+              component={AdminHome}
+              options={{headerShown:false}}
+                />
+            :
+            (parseInt(user.isParameters) != 0)
+              ?
+              (
+                (parseInt(user.isGoal) != 0)
+                ?
+                 <Stack.Screen
+=======
             </>
           ) : // user screens
           user.u_type == 1 ? (
@@ -94,6 +114,7 @@ const Routes = props => {
             ) : parseInt(user.isParameters) != 0 ? (
               parseInt(user.isGoal) != 0 ? (
                 <Stack.Screen
+>>>>>>> e4f562ec2738197f0265ca0130c42891e2847add
                   name="UserHome"
                   component={UserHome}
                   options={{headerShown: false}}

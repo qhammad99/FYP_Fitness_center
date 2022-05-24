@@ -24,7 +24,7 @@ const updateGoal = async(Parameters, authentication)=>{
         Parameters.setParameters({type: 'CLEAR_CONTEXT'}); //clear the height weight parameters which we used for BMI
   }
 
-export default (startDate, numberOfDays, targetType, targetValue) => (Parameters) => (authentication)=>{
+export default (startDate, numberOfDays, targetType, targetValue, difficulty) => (Parameters) => (authentication)=>{
     let user = JSON.parse(authentication.state.user);
     let token = user.token;
 
@@ -33,7 +33,8 @@ export default (startDate, numberOfDays, targetType, targetValue) => (Parameters
             start_date : startDate,
             number_of_days : numberOfDays,
             target_type: targetType,
-            target_value: targetValue
+            target_value: targetValue,
+            difficulty: difficulty
     },{
         headers:{
             'Content-Type' : 'application/json',
