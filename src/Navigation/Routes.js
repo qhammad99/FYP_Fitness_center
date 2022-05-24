@@ -19,7 +19,10 @@ import AbsWorkout from '../Screens/User/workoutScreens/absWorkout/absWorkout';
 import ArmsWorkout from '../Screens/User/workoutScreens/armsWorkout/armsWorkout';
 import ChestWorkout from '../Screens/User/workoutScreens/chestWorkout/chestWorkout';
 import LegsWorkout from '../Screens/User/workoutScreens/legsWorkout/legsWorkout';
-import Schedule from '../Screens/User/scheduleScreen/scheduleScreen';
+import TaskScreen from '../Screens/User/Schedule/TaskScreen';
+import Tasks from '../Screens/User/Schedule/Tasks';
+import AddNewTask from '../Screens/User/Schedule/AddNewTask';
+import TaskDetails from '../Screens/User/Schedule/TaskDetails';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -86,26 +89,6 @@ const Routes = props => {
                 component={Signup}
                 options={{headerShown: false}}
               />
-<<<<<<< HEAD
-        </>
-        ):(
-          // user screens
-        (user.u_type ==1)
-          ?(
-            (user.email== ADMIN_MAIL)?
-            <Stack.Screen 
-              name='AdminHome'
-              component={AdminHome}
-              options={{headerShown:false}}
-                />
-            :
-            (parseInt(user.isParameters) != 0)
-              ?
-              (
-                (parseInt(user.isGoal) != 0)
-                ?
-                 <Stack.Screen
-=======
             </>
           ) : // user screens
           user.u_type == 1 ? (
@@ -114,7 +97,6 @@ const Routes = props => {
             ) : parseInt(user.isParameters) != 0 ? (
               parseInt(user.isGoal) != 0 ? (
                 <Stack.Screen
->>>>>>> e4f562ec2738197f0265ca0130c42891e2847add
                   name="UserHome"
                   component={UserHome}
                   options={{headerShown: false}}
@@ -180,15 +162,6 @@ const Routes = props => {
             headerTintColor: '#fff',
           }}
         />
-        <Stack.Screen
-          name="Schedule"
-          component={Schedule}
-          options={{
-            headerStyle: {backgroundColor: '#E26F1E'},
-            title: 'Create Schedule',
-            headerTintColor: '#fff',
-          }}
-        />
 
         <Stack.Screen
           name="Diet Plans"
@@ -205,6 +178,42 @@ const Routes = props => {
           options={{
             headerStyle: {backgroundColor: '#E26F1E'},
             title: 'Recipe Details',
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="Tasks Screen"
+          component={TaskScreen}
+          options={{
+            headerStyle: {backgroundColor: '#E26F1E'},
+            title: 'Scheduled Tasks',
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="Tasks"
+          component={Tasks}
+          options={{
+            headerStyle: {backgroundColor: '#E26F1E'},
+            title: 'Recipe Details',
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="Add New Task"
+          component={AddNewTask}
+          options={{
+            headerStyle: {backgroundColor: '#E26F1E'},
+            title: 'Create New Task',
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="Task Details"
+          component={TaskDetails}
+          options={{
+            headerStyle: {backgroundColor: '#E26F1E'},
+            title: 'Task Details',
             headerTintColor: '#fff',
           }}
         />
