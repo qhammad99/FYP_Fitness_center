@@ -34,6 +34,7 @@ const App = () => {
       {/* link with context */}
       <AuthProvider>
         <CoachProvider>
+<<<<<<< HEAD
         <ParametersProvider>
           <GoalProvider>
             <AdminProvider>
@@ -43,6 +44,15 @@ const App = () => {
             </AdminProvider>
           </GoalProvider>
         </ParametersProvider>
+=======
+          <ParametersProvider>
+            <GoalProvider>
+              <View style={{ flex: 1, backgroundColor: Colors.light }}>
+                <Routes />
+              </View>
+            </GoalProvider>
+          </ParametersProvider>
+>>>>>>> 494663044c6dc965da2f27530d92bcd78aae63fb
         </CoachProvider>
       </AuthProvider>
     </>

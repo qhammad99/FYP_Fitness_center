@@ -58,11 +58,6 @@ import {
         />
         <Text style={styles.textStyle}>Abs Workouts</Text>
       </TouchableOpacity>
-      <Text style={styles.scheduleText}>Want to create your own Workout Schedule? </Text>
-      <TouchableOpacity style={styles.scheduleButton} onPress={()=> navigation.navigate('Schedule')}>
-        <Text style={{color: '#fff'}}>Click Here</Text>
-      </TouchableOpacity>
-      
     </View>
   );
 }

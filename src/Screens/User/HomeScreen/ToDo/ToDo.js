@@ -14,6 +14,7 @@ import currentGoal from '../../../../Context/Actions/currentGoal';
 import scheduleToday from '../../../../Context/Actions/scheduleToday';
 import scheduleByDay from '../../../../Context/Actions/scheduleByDay';
 import progressTasks from '../../../../Context/Actions/progressTasks';
+import {useNavigation} from '@react-navigation/native'
 import { useIsFocused } from '@react-navigation/native';
 import PushNotification from "react-native-push-notification";
 import moment from 'moment';
@@ -23,6 +24,7 @@ import {
     StyleSheet, 
     TouchableOpacity, 
     ActivityIndicator,
+    Alert,
     FlatList
 } from 'react-native';
 
@@ -30,6 +32,8 @@ const ToDo = props =>{
     const authentication = useContext(AuthContext);
     const Goal = useContext(GoalContext);
     const Task = useContext(TaskContext);
+
+    const navigation = useNavigation();
 
     const[isLoading, setIsLoading] =useState(true);
     const [completed, setCompleted] = useState(false); // if goal completed
@@ -298,7 +302,7 @@ const ToDo = props =>{
         
         </View>
     </View>
-    <TouchableOpacity style={styles.editButton}>
+    <TouchableOpacity style={styles.editButton} onPress={()=> navigation.navigate('Tasks Screen')}>
         <MaterialCommunityIcons name={'calendar-edit'} color={'#fff'} size={30} />
     </TouchableOpacity>
     </>
