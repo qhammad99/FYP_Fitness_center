@@ -28,11 +28,7 @@ const Urls = {
     GiveRating: URL+'/client-rating', // called at my coach info to rate coach
     IngredientsCategory: URL+'/ingredients-category', //directly called in Admin Home
     Ingredients: URL+'/ingredients', //also in Admin Home
-<<<<<<< HEAD
     IngredientsUpdate: URL+'/ingredient/update', //also in admin home
-=======
-
->>>>>>> 494663044c6dc965da2f27530d92bcd78aae63fb
 };
 
 export default Urls;
