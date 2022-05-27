@@ -125,6 +125,41 @@ const styles=StyleSheet.create({
         color:Colors.lightColor,
         fontWeight: '700'
     },
+    editButton:{
+        width:60, 
+        height:60, 
+        position:'absolute', 
+        zIndex:1, 
+        backgroundColor:Colors.minorColor, 
+        borderRadius:50, 
+        right:10, 
+        bottom:10, 
+        justifyContent:'center', 
+        alignItems:'center'
+
+    },
+    fullModalContainer:{
+        width:'100%',
+        height:'100%',
+        backgroundColor: Colors.lightColor,
+    },
+    fullModalTitle:{
+        fontSize:22,
+        fontWeight:'bold',
+        textAlign:'center',
+        marginTop:20,
+        color: Colors.darkColor
+    },
+    fullModalInput:{
+        borderRadius:2,
+        width:300,
+        alignSelf:'center',
+        marginTop:20,
+        borderColor:Colors.primary,
+        borderWidth:1,
+        backgroundColor:'#fff',
+        color:Colors.darkColor
+    },
 });
 
 export default styles;

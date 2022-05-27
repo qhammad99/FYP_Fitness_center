@@ -7,7 +7,7 @@ import { CoachContext } from '../../../Context/Providers/CoachProvider';
 import moment from 'moment';
 import { URL } from '@env';
 const { height, width } = Dimensions.get('screen')
-import messaging from '@react-native-firebase/messaging';
+
 export default Home = (props) => {
     const authentication = useContext(AuthContext);
     const Coach = useContext(CoachContext);
@@ -20,20 +20,8 @@ export default Home = (props) => {
 
 
     useEffect(() => {
-        // requestUserPermission()
         availableCoachs(Coach)(authentication)
     }, [])
-    const requestUserPermission = async () => {
-        const authStatus = await messaging().requestPermission();
-        const enabled =
-            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-        if (enabled) {
-            let token = await messaging().getToken()
-            console.log('Authorization status:', token);
-        }
-    }
     return (
 
         <SafeAreaView style={{ height: '100%' }}>

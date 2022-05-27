@@ -7,7 +7,7 @@ import { CoachContext } from '../../../Context/Providers/CoachProvider';
 import moment from 'moment';
 import { URL } from '@env';
 const { height, width } = Dimensions.get('screen')
-import messaging from '@react-native-firebase/messaging';
+
 export default Home = (props) => {
     const authentication = useContext(AuthContext);
     const Coach = useContext(CoachContext);

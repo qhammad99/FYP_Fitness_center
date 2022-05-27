@@ -12,7 +12,7 @@ import moment from 'moment';
 import { URL } from '@env';
 import Urls from '../../../config/env';
 import axios from 'axios';
-import auth, { firebase } from '@react-native-firebase/auth';
+
 const MyCoachChat = props => {
     const authentication = useContext(AuthContext);
     const Coach = useContext(CoachContext);
@@ -36,7 +36,6 @@ const MyCoachChat = props => {
     useEffect(() => {
         let token = user.token;
         var API_URL = Urls.GetMessages + user.user_id + `/${Coach.state.coach.coach_id}`;
-        getCoachStatus()
         axios.get(API_URL, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -88,16 +87,7 @@ const MyCoachChat = props => {
             setNewMessage(null);
         }
     }
-    const getCoachStatus = (coachId) => {
-        firebase
-            .firestore()
-            .collection('users')
-            .doc(Coach.state.coach.coach_id.toString())
-            .onSnapshot((da) => {
-                console.log(da.data())
-                setCoachStatus(da.data().status)
-            })
-    }
+
     return (
         <>
             <View style={styles.header}>

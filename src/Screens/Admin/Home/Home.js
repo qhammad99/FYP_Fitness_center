@@ -7,10 +7,14 @@ import {
   TextInput, 
   FlatList, 
   ActivityIndicator,
-  Image
+  Image,
+  ScrollView
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from '../../../Context/Providers/AuthProvider';
 import { AdminContext} from '../../../Context/Providers/AdminProvider';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {Picker} from '@react-native-picker/picker';
 import Modal from 'react-native-modal';
 import Colors from '../../../colors/Colors';
 import styles from './styles';
@@ -29,9 +33,47 @@ const Home = () => {
     const [categories, setCategories] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [ingredients, setIngredients] = useState(null);
+    const [showIngredients, setShowIngredients] = useState(null);
 
     const [showPriceModal, setShowPriceModal] = useState(false);
     const [updatePrice, setUpdatePrice] = useState("");
+    const [selectedItem, setSelectedItem] = useState("");
+
+    const [addIngModal, setAddIngModal] = useState(false);
+    const [photoModal, setPhotoModal] = useState(false);
+
+    const [photo, setPhoto] = useState(null);
+    const [selectedPicker, setSelectedPicker] = useState(1);//category
+    const [newName, setNewName] = useState("");
+    const [newPrice, setNewPriceForm] = useState("");
+    const [newCalories, setNewCalories] = useState("");
+    const [newWeight, setNewWeight] = useState("");
+
+    const loadIngredients = async()=>{
+      let user = JSON.parse(authentication.state.user);
+      let token = user.token;
+
+      var API_URL = Urls.Ingredients;
+      axios.get(API_URL, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then((response) => {
+          if (response.data.success) {
+            setIngredients(response.data.ingredients);
+            setShowIngredients(response.data.ingredients);
+          }
+          administration.dispatch({ type: 'LOADING_STOP' });
+        })
+        .catch((error) => {
+          if (error.response)
+            alert(" " + error.response.data.message);
+          else
+            alert(" " + error);
+        });
+    }
 
     useEffect(()=>{
         const loadCategories = async()=>{
@@ -65,36 +107,23 @@ const Home = () => {
     },[]);
 
     useEffect(()=>{
-      const loadIngredients = async()=>{
-        let user = JSON.parse(authentication.state.user);
-        let token = user.token;
-
-        var API_URL = Urls.Ingredients;
-        axios.get(API_URL, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        })
-          .then((response) => {
-            if (response.data.success) {
-              setIngredients(response.data.ingredients);
-            }
-            administration.dispatch({ type: 'LOADING_STOP' });
-          })
-          .catch((error) => {
-            if (error.response)
-              alert(" " + error.response.data.message);
-            else
-              alert(" " + error);
-          });
-      }
-
       if(categories != null){
         setSelectedCategory(categories[0]);
         loadIngredients();
       }
     },[categories]);
+
+    useEffect(()=>{
+      if(selectedCategory && ingredients){
+        let showItems;
+        selectedCategory.id == 0
+        ?
+          showItems = ingredients
+        :
+          showItems= ingredients.filter(item=>item.category == selectedCategory.name)
+      setShowIngredients(showItems);
+      }
+    },[selectedCategory, ingredients])
 
     const clearLoactStorage = async() =>{
         try{
@@ -123,9 +152,139 @@ const Home = () => {
       }
 
     const updatePriceClicked = (item)=>{
+      setSelectedItem(item);
       setUpdatePrice(item.price);
       setShowPriceModal(true);
     }
+
+    const setNewPrice = async() =>{
+        let user = JSON.parse(authentication.state.user);
+        let token = user.token;
+
+        var API_URL = Urls.IngredientsUpdate;
+        axios.post(API_URL, {
+          id:selectedItem.id,
+          price:updatePrice
+        },{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+          .then((response) => {
+            if (response.data.success) {
+              administration.dispatch({ type: 'LOADING_START' });
+              setShowPriceModal(false);
+              loadIngredients();
+            }
+          })
+          .catch((error) => {
+            if (error.response)
+              alert(" " + error.response.data.message);
+            else
+              alert(" " + error);
+          });
+    }
+
+    const cameraPicker = () =>{
+      setPhotoModal(false)
+      const options = {
+          options:{
+              mediaType: 'Photo'
+          }
+      };
+      launchCamera(options, response=>{
+          if(!response.didCancel && !response.error)
+              setPhoto(response.assets[0]);
+      })
+  }  
+
+  const galleryPicker = () =>{
+    setPhotoModal(false)
+      const options = {
+          options:{
+              mediaType: 'Photo'
+          }
+      };
+      launchImageLibrary(options, response=>{
+          if(!response.didCancel && !response.error)
+              setPhoto(response.assets[0]);
+      })
+  }
+
+  const ingredientAdd = async() =>{
+    if(!photo || !newName || !newPrice || !newCalories || !newWeight)
+      alert("can't add empty fields")
+    else{
+      let user = JSON.parse(authentication.state.user);
+      let token = user.token;
+      
+      let formData = new FormData();
+      formData.append('photo',{
+        uri: photo.uri,
+        type: photo.type,
+        name: photo.fileName
+      });
+
+      formData.append('category', selectedPicker);
+      formData.append('name', newName);
+      formData.append('price', newPrice);
+      formData.append('calories', newCalories);
+      formData.append('weight', newWeight);
+
+      var API_URL= Urls.Ingredients;
+      axios({
+        url: API_URL,
+        method: 'PATCH',
+        data: formData,
+        headers: {
+          'Authorization' : `Bearer ${token}`,
+          'Content-Type': `multipart/form-data`,
+        },
+        transformRequest: (data, error) => {
+          return formData;
+        }
+      })
+      .then((response)=>{
+        if(response.data.success){
+          console.log(response.dat)
+         setIngredients(prev=> [...prev, {
+           id: response.data.id, 
+           name: newName,
+           category: selectedPicker,
+           calories: newCalories, 
+           weight: newWeight,
+           price: newPrice,
+           image: response.data.image 
+          }]) 
+
+          setAddIngModal(false);
+          setNewName("");
+          setNewPrice("");
+          setNewCalories("");
+          setNewWeight("");
+          setSelectedPicker(1);
+          setPhoto(null);
+        }
+        else
+          alert(response.data.message);
+      })
+      .catch((error)=>{
+        if (error.response) {
+          //response status is an error code
+          console.log(error.response.status);
+        }
+        else if (error.request) {
+          //response not received though the request was sent
+          console.log(error.request);
+        }
+        else {
+          //an error occurred when setting up the request
+          console.log(error.message);
+        }
+      });
+    }
+  }
 
     return(
       !administration.state.isLoading
@@ -155,14 +314,157 @@ const Home = () => {
                   placeholderTextColor={Colors.lightDark}
                   defaultValue={updatePrice}
                   />
-              <TouchableOpacity style={styles.buttonContainer} onPress={()=>console.log("price update")}>
+              <TouchableOpacity style={styles.buttonContainer} onPress={setNewPrice}>
                   <Text style={styles.buttonText}>Update</Text>
               </TouchableOpacity>
             </View>
 
         </Modal>
 
+        {/* add ingredient modal */}
+        <Modal
+          isVisible={addIngModal}
+          style={{margin:0, justifyContent:'flex-end'}}
+          onBackButtonPress={()=>setAddIngModal(!addIngModal)}
+          onBackdropPress={()=>setAddIngModal(!addIngModal)}
+          >
 
+            <ScrollView style={styles.fullModalContainer}>
+              <Text style={styles.fullModalTitle}>Add Ingredient</Text>
+              {
+                photo != null ? 
+                <Image 
+                  source={{uri:`${photo.uri}`}} 
+                  style={{
+                    width:120, 
+                    height:120, 
+                    borderRadius:50,
+                    alignSelf:'center',
+                    marginTop:10
+                  }}/>
+
+                  :
+                  <MaterialCommunityIcons 
+                    name={'camera-outline'} 
+                    color={Colors.selectedColor} 
+                    size={35} 
+                    style={{
+                      alignSelf:'center', 
+                      marginTop:20
+                    }}/>
+              }
+
+              <TouchableOpacity style={{alignSelf:'center'}} onPress={()=>setPhotoModal(true)}>
+                <Text 
+                  style={{
+                    color:Colors.selectedColor, 
+                    fontWeight:'bold', 
+                    fontSize:18,
+                    marginTop:10
+                    }}>
+                      Add Photo
+                </Text>
+              </TouchableOpacity>
+
+              <Picker
+                    selectedValue={selectedPicker}
+                    style={{
+                      width: 300, 
+                      alignSelf:'center', 
+                      backgroundColor:'#fff', 
+                      color:Colors.selectedColor,
+                      marginTop:10
+                     }}
+                    onValueChange={(itemValue) => setSelectedPicker(itemValue)}
+                    dropdownIconColor={Colors.selectedColor}
+                >
+                    {categories.map(item=> item.id!=0 && <Picker.Item label={item.name} value={item.id} key={`item ${item.id}`}/>)}
+                </Picker>
+              <TextInput      
+                  placeholder='Name' 
+                  style={styles.fullModalInput}
+                  onChangeText={(text)=>setNewName(text)}
+                  placeholderTextColor={Colors.lightDark}
+                  defaultValue={newName}
+                  />
+
+              <TextInput      
+                  placeholder='Price' 
+                  style={styles.fullModalInput}
+                  onChangeText={(text)=>setNewPriceForm(text)}
+                  placeholderTextColor={Colors.lightDark}
+                  defaultValue={newPrice}
+                  />
+
+              <TextInput      
+                  placeholder='Calories' 
+                  style={styles.fullModalInput}
+                  onChangeText={(text)=>setNewCalories(text)}
+                  placeholderTextColor={Colors.lightDark}
+                  defaultValue={newCalories}
+                  />
+
+              <TextInput      
+                  placeholder='Weight' 
+                  style={styles.fullModalInput}
+                  onChangeText={(text)=>setNewWeight(text)}
+                  placeholderTextColor={Colors.lightDark}
+                  defaultValue={newWeight}
+                  />
+              <TouchableOpacity style={styles.buttonContainer} onPress={ingredientAdd}>
+                  <Text style={[styles.buttonText, {fontSize:17}]}>Add</Text>
+              </TouchableOpacity>
+            </ScrollView>
+
+        </Modal>
+
+
+        {/* photo option modal */}
+        <Modal
+            isVisible={photoModal}
+            animationIn={'bounceInUp'}
+            animationOut={'bounceOutDown'}
+            onBackButtonPress={()=>setPhotoModal(false)}
+            onBackdropPress={()=>setPhotoModal(false)}
+            style={{margin:0, justifyContent:'flex-end'}}>
+                <View style={{
+                    width:'100%', 
+                    height: 150, 
+                    alignItems:'center',
+                    justifyContent:'center',
+                    backgroundColor:Colors.lightColor,
+                    borderTopLeftRadius:10,
+                    borderTopRightRadius:10
+                    }}
+                >
+                    <TouchableOpacity onPress={cameraPicker}>
+                        <Text style={{
+                            color:Colors.selectedColor, 
+                            fontWeight:'bold',
+                            fontSize:16
+                        }}>
+                            Open Camera
+                        </Text>
+                    </TouchableOpacity>
+                    <View 
+                        style={{
+                            height:0.5,
+                            width:'100%',
+                            backgroundColor:Colors.lightDark,
+                            marginVertical:15
+                        }}
+                    />
+                    <TouchableOpacity onPress={galleryPicker}>
+                        <Text style={{
+                            color:Colors.selectedColor, 
+                            fontWeight:'bold',
+                            fontSize:16
+                        }}>
+                            Choose From Gallery
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+        </Modal>
 
         {/* header*/}
         <View style={styles.headerContainer}>
@@ -225,12 +527,9 @@ const Home = () => {
         <View style={{flex:1}}>
         <FlatList 
             data={
-              selectedCategory.id == 0
-              ?
-              ingredients.filter(item=>item.name.toLowerCase().includes(search.toLowerCase()))
-              :
-              ingredients.filter(item=>item.category == selectedCategory.name && item.name.toLowerCase().includes(search.toLowerCase()))
+                showIngredients.filter(item=>item.name.toLowerCase().includes(search.toLowerCase()))
             }
+            extraData={showIngredients}
             numColumns={2}
             key={2}
             keyExtractor={(item)=>`ingredient-${item.id}`}
@@ -287,6 +586,10 @@ const Home = () => {
             ListFooterComponentStyle={{height:200}}
             />
         </View>
+
+        <TouchableOpacity style={styles.editButton} onPress={()=>setAddIngModal(true)}>
+          <MaterialCommunityIcons name={'plus-thick'} color={'#fff'} size={30} />
+        </TouchableOpacity>
       </>)
       :
       <ActivityIndicator />
