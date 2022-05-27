@@ -167,15 +167,6 @@ options={{
   headerTintColor: '#fff',
 }}
 />
-<Stack.Screen
-name="Schedule"
-component={Schedule}
-options={{
-  headerStyle: {backgroundColor: '#E26F1E'},
-  title: 'Create Schedule',
-  headerTintColor: '#fff',
-}}
-/>
 
 <Stack.Screen
 name="Diet Plans"

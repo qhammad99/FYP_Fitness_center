@@ -260,7 +260,7 @@ const Home = () => {
 
           setAddIngModal(false);
           setNewName("");
-          setNewPrice("");
+          setNewPriceForm("");
           setNewCalories("");
           setNewWeight("");
           setSelectedPicker(1);

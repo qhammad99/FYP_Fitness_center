@@ -302,7 +302,7 @@ const ToDo = props =>{
         
         </View>
     </View>
-    <TouchableOpacity style={styles.editButton} onPress={()=> navigation.navigate('Tasks Screen')}>
+    <TouchableOpacity style={styles.editButton} onPress={()=> navigation.navigate('Scheduling')}>
         <MaterialCommunityIcons name={'calendar-edit'} color={'#fff'} size={30} />
     </TouchableOpacity>
     </>

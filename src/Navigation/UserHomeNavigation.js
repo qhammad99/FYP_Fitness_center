@@ -6,6 +6,7 @@ import {
   ItemDetailShow,
   ExtraItem
 } from '../Screens/User/HomeScreen';
+import ScheduleNavigations from './ScheduleNavigations';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Colors from '../colors/Colors';
@@ -52,6 +53,14 @@ const UserHomeNavigation = props =>{
               headerStyle:{backgroundColor:Colors.primary},
               headerBackVisible:false,
             }}>
+          </Stack.Screen>
+
+          <Stack.Screen 
+            name='Scheduling' 
+            component={ScheduleNavigations} 
+            options={{
+              headerShown:false
+            }}>  
           </Stack.Screen>
       </Stack.Navigator>
     );
