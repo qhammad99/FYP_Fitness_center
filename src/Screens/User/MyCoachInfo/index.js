@@ -20,7 +20,6 @@ const MyCoachInfo = () =>{
     const [isRated, setIsRated] = useState(Coach.is_rated);
 
     const rateNow = () =>{
-        console.log(newRating);
         let user = JSON.parse(authentication.state.user);
         let token = user.token;
 

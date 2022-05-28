@@ -80,7 +80,7 @@ export default function TasksComponent(props) {
             </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.cardRight} onPress={()=> Alert.alert("Delete Task", "This will delete task")}>
+        <TouchableOpacity style={styles.cardRight} onPress={()=> props.deleteSchedule(item.schedule_id)}>
             <Image style={{height: 30, width: 30}} source={require('../../images/trash.png')}/>
         </TouchableOpacity>
     </ScrollView>
@@ -96,7 +96,7 @@ const styles= StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection:'row',
-        width:'120%'
+        width:'110%'
     },
     cardLeft:{
         flexBasis:'100%',
@@ -118,11 +118,11 @@ const styles= StyleSheet.create({
         marginLeft:10
     },
     cardRight:{
-        flexBasis:'20%',
-        maxWidth:'20%',
+        flexBasis:'10%',
+        maxWidth:'10%',
         display:'flex',
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
     }
 })

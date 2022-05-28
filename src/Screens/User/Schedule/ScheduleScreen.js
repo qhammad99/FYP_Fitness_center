@@ -16,21 +16,22 @@ import Colors from '../../../colors/Colors';
 import {AuthContext} from '../../../Context/Providers/AuthProvider';
 import { TaskContext } from '../../../Context/Providers/TaskProvider';
 import scheduleByDay from '../../../Context/Actions/scheduleByDay';
-import {useNavigation} from '@react-navigation/native'
+import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import Urls from '../../../config/env';
 
 export default function ScheduleScreen() {
   const authentication = useContext(AuthContext);
   const Task = useContext(TaskContext);
-
   const navigation = useNavigation();
-    
+
   const [day, setDay] = useState(1);
   const onSelectSwitch = value => {
-      setDay(value);
+    setDay(value);
   };
 
   useEffect(()=>{
-      scheduleByDay(day)(Task)(authentication);
+    scheduleByDay(day)(Task)(authentication);
   },[day]);
 
   const getImage = imageAddress =>{
@@ -41,7 +42,29 @@ export default function ScheduleScreen() {
         case "morning":
             return require("../../../images/morningExercise.jpg");
     }
-}
+  }
+
+  const deleteSchedule = schedule_id =>{
+    let filteration = Task.tasks.tasks.filter((item)=>item.schedule_id != schedule_id)
+    Task.setTasks({type:'ADD_TASKS', payload:filteration});
+
+    let user = JSON.parse(authentication.state.user);
+    let token = user.token;
+
+    let API_URL = Urls.ScheduleDelete+`${schedule_id}`;
+    axios.delete(API_URL,{
+        headers:{
+            'Content-Type' : 'application/json',
+            'Authorization' : `Bearer ${token}`
+        }
+    }).then()
+  .catch((error)=>{
+    if(error.response)
+      alert(" " + error.response.data.message);
+    else
+      alert(" "+ error);
+    });
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,44 +82,50 @@ export default function ScheduleScreen() {
         (!Task.tasks.isLoading)
         ?
         <FlatList 
-                data={Task.tasks.tasks}
-                style={{marginTop:20}}
-                renderItem={
-                    ({item, index})=>
-                    !item.empty?
-                        <TaskComponent 
-                            item= {item}
-                            index= {index}
-                            taskImage={
-                                item.category == 'Workout' || item.category == 'extra_workout'?
-                                getImage("morning"):
-                                getImage("breakfast")
-                            }
-                            to={()=>navigation.navigate('Task Detail', {
-                              TaskName: item.category == 'Workout'?
-                                item.workoutName:
-                                item.category == 'Diet'?
-                                item.dietName:
-                                item.extraName
-                              })}
-                            />
-                  :
-                  <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyText}>No Tasks</Text>
-                  </View>
-                }
-                keyExtractor={(item, index)=>`task-${index}`}
-                ItemSeparatorComponent={()=>
-                  <View style={{
-                    height:1,
-                    backgroundColor:Colors.lightDark,
-                    width:'85%',
-                    alignSelf:'center',
-                    marginVertical:15
-                  }} />
-                }
-                ListFooterComponent={<View/>}
-                ListFooterComponentStyle={{height:200}}
+          data={Task.tasks.tasks}
+          style={{marginTop:20}}
+          keyExtractor={(item, index)=>`task-${index}`}
+            ItemSeparatorComponent={()=>
+              <View style={{
+                height:1,
+                backgroundColor:Colors.lightDark,
+                width:'85%',
+                alignSelf:'center',
+                marginVertical:15
+              }} />
+            }
+          ListFooterComponent={<View/>}
+          ListFooterComponentStyle={{height:200}}
+          renderItem={
+            ({item, index})=>
+            (!item.empty)?
+                <TaskComponent 
+                    item= {item}
+                    index= {index}
+                    taskImage={
+                      item.category == 'Workout' || item.category == 'extra_workout'?
+                      getImage("morning"):
+                      getImage("breakfast")
+                    }
+                    to={()=>navigation.navigate('Task Detail', {
+                      TaskName: item.category == 'Workout'?
+                        item.workoutName:
+                        item.category == 'Diet'?
+                        item.dietName:
+                        item.extraName
+                      })}
+                    deleteSchedule = {deleteSchedule}
+                    />
+                :
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>No Tasks</Text>
+                </View>
+              }
+              ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>No Tasks</Text>
+                </View>
+              }
             />
         :
         <ActivityIndicator />

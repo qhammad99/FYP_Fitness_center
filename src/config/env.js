@@ -3,7 +3,6 @@ const Urls = {
 
     coach_info_id: URL + '/coach-info/',
     edit_User_Details: URL + "/user-edit",
-
     LoginURL: URL+'/user-login',
     SignupURL: URL+'/user-register',
     coach_all_users:URL+"/coach-all-users",
@@ -29,6 +28,12 @@ const Urls = {
     IngredientsCategory: URL+'/ingredients-category', //directly called in Admin Home
     Ingredients: URL+'/ingredients', //also in Admin Home
     IngredientsUpdate: URL+'/ingredient/update', //also in admin home
+    ScheduleDelete: URL+'/schedule-delete/', // called in schedule screen
+    MyDietPlans: URL+'/dietPlan', // called in schedule/add new task
+    MyWorkoutPlans: URL+'/workoutPlan', //same up
+    GeneralDietPlans: URL+'/dietPlan-general', //same up
+    GeneralWorkoutPlans: URL+'/workoutPlan-general', //same up
+    ScheduleAdd: URL+'/schedule-add', //same up
 };
 
 export default Urls;

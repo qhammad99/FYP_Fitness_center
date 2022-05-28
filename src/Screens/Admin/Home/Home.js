@@ -247,7 +247,6 @@ const Home = () => {
       })
       .then((response)=>{
         if(response.data.success){
-          console.log(response.dat)
          setIngredients(prev=> [...prev, {
            id: response.data.id, 
            name: newName,

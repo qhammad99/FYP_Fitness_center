@@ -64,7 +64,6 @@ export default Home = (props) => {
         }
     }
     const updateUser = () => {
-        console.log(user.token)
         if (name === "") {
             alert("Please enter your name")
             return
@@ -83,7 +82,6 @@ export default Home = (props) => {
         })
             .then(async (res) => {
                 // let re = await res.json()
-                console.log(res)
                 let newUser = { ...user, name: name }
                 addToLocatStorage(newUser)
                 authentication.dispatch({ type: 'SIGN_IN', payload: JSON.stringify(newUser) });
