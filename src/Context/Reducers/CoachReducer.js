@@ -56,11 +56,6 @@ const CoachReducer = (state, action) => {
                 ...state,
                 coahOnline: false
             };
-        case "SUBSCRIBED_USERS":
-            return {
-                ...state,
-                subscribedUsers: action.payload
-            };
 
         case "ADD_COACH":
             return {

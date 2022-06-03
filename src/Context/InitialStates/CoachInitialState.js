@@ -5,6 +5,5 @@ export default{
     coach: null,
     availableCoachsLoading: true,
     availableCoachs: null,
-    resultAvailableCoachs: null,
-    subscribedUsers:[]
+    resultAvailableCoachs: null
 }

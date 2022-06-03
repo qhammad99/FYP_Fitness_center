@@ -1,25 +1,15 @@
-// Landing screen of User
+// Landing screen of Coach
 import React from 'react';
+import {Image} from 'react-native';
 import CoachDrawerContent from '../components/CoachDrawerContent';
 import Colors from '../colors/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CoachHomeScreen from '../Screens/Coach/HomeScreen/HomeScreen';
-import {View,Image,Text,TextInput,TouchableOpacity} from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Profile from './../Screens/Coach/Profile'
-import About from './../Screens/Coach/About'
 import ChangePassword from './../Screens/Coach/ChangePassword'
 
-
-
 const Drawer = createDrawerNavigator();
-
-
-// function Profile({navigation}) {
-//     // return (
-     
-//     // );
-//   }
   
 const CoachDrawer = () => {
     return (
@@ -52,14 +42,8 @@ const CoachDrawer = () => {
                     drawerLabel:'Profile',
                     drawerIcon:({color})=><Ionicons name="person-circle-outline" size={22} color={color}/>
                 }}/>
-                 <Drawer.Screen 
-                name="about" 
-                component={About} 
-                options={{
-                    drawerLabel:'About',
-                    drawerIcon:({color})=><Image source={require('./../Assets/about.png')} style={{height:20,width:20,tintColor:'#E26F1E'}} />
-                }}/>
-                   <Drawer.Screen 
+
+            <Drawer.Screen 
                 name="change" 
                 component={ChangePassword} 
                 options={{

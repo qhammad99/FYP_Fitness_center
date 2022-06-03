@@ -5,7 +5,6 @@ const Urls = {
     edit_User_Details: URL + "/user-edit",
     LoginURL: URL+'/user-login',
     SignupURL: URL+'/user-register',
-    coach_all_users:URL+"/coach-all-users",
     user_change_password:URL+"/user-change-password",
     UserPhoto: URL+'/user-photo',
     ParametersAdd: URL+'/parameters-add',

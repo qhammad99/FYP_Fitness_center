@@ -1,39 +1,42 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image, SafeAreaView, ScrollView, FlatList, Modal, Dimensions, TextInput } from 'react-native';
-import { AuthContext } from '../../../Context/Providers/AuthProvider';
-import availableCoachs from '../../../Context/Actions/CoachSubscribedUser';
-import { CoachContext } from '../../../Context/Providers/CoachProvider';
+import { 
+    View, 
+    Text, 
+    TouchableOpacity, 
+    Image, 
+    SafeAreaView, 
+    ScrollView, 
+    FlatList, 
+    Modal, 
+    Dimensions, 
+    TextInput 
+} from 'react-native';
+// import { AuthContext } from '../../../Context/Providers/AuthProvider';
 import moment from 'moment';
-import { URL } from '@env';
-const { height, width } = Dimensions.get('screen')
+const { height, width } = Dimensions.get('screen');
 
 export default Home = (props) => {
-    const authentication = useContext(AuthContext);
-    const Coach = useContext(CoachContext);
-    const [users, setUsers] = useState([])
+    // const authentication = useContext(AuthContext);
+    // const [users, setUsers] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [selectedUser, setSelectedUser] = useState("")
     const [userheight, setUserHeight] = useState("")
     const [userWeight, setUserWeight] = useState("")
 
-
-
     useEffect(() => {
-        availableCoachs(Coach)(authentication)
+        console.log("get clients, and set array: ");
     }, [])
+
     return (
-
         <SafeAreaView style={{ height: '100%' }}>
-
             <SafeAreaView style={{ backgroundColor: '#E26F1E' }} >
                 <ScrollView style={{ padding: 20 }}>
                     <View>
                         <View style={{ flexDirection: 'row',justifyContent:'space-between',alignItems:'center' }}>
                             <TouchableOpacity
-                            onPress={()=>{
-                                props.navigation.openDrawer()
-                            }}
+                                onPress={()=>{
+                                    props.navigation.openDrawer()
+                                }}
                             >
                                 <Image
                                 source={require('./../../../Assets/menu.png')}
@@ -95,8 +98,10 @@ export default Home = (props) => {
 
                 </ScrollView>
             </SafeAreaView>
+
+            
             <ScrollView>
-                <FlatList
+                {/* <FlatList
                     data={Coach.state.subscribedUsers}
                     renderItem={({ item }) => {
                         return (
@@ -129,7 +134,7 @@ export default Home = (props) => {
                             </TouchableOpacity>
                         )
                     }}
-                />
+                /> */}
                 <Modal
                     visible={showModal}
                     transparent
@@ -324,7 +329,6 @@ export default Home = (props) => {
                 </Modal>
             </ScrollView>
         </SafeAreaView>
-
     );
 };
 

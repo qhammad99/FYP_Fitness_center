@@ -5,6 +5,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../Screens/Coach/SubscribedUsersHome/CoachHomeScreen';
 import Users from '../Screens/Coach/Users';
 import Chat from '../Screens/Coach/Chat';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function ChatScreen() {
