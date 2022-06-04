@@ -1,9 +1,9 @@
 import React from 'react';
 import CoachBottomNavigation from '../../../Navigation/CoachBottomNavigation';
 
-const HomeScreen = () => {
+const HomeScreen = props => {
     return(
-        <CoachBottomNavigation />
+        <CoachBottomNavigation socket={props.socket} />
     );
 };
 

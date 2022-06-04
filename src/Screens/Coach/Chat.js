@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   View,
   Text,
@@ -8,9 +9,8 @@ import {
   Platform,
   Image,
 } from 'react-native';
-import React from 'react';
 
-export default function Chat() {
+export default function Chat(props) {
   return (
     <View style={styles.container}>
       <View style={{marginTop: 20}}>

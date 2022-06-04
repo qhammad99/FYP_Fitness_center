@@ -9,18 +9,24 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function ChatScreen() {
+function ChatScreen(props) {
   return (
     <Stack.Navigator initialRouteName='Users'>
-        <Stack.Screen name='Users' component={Users} />
-        <Stack.Screen name='Chat' component={Chat} options={({route})=> ({
+        <Stack.Screen name='Users' 
+        // component={Users} 
+        children={()=><Users socket={props.socket} {...props} />}
+        />
+
+        <Stack.Screen name='Chat' 
+        component={Chat} 
+        options={({route})=> ({
           title: route.params.userName
         })}/>
       </Stack.Navigator>
   );
 }
 
-const CoachBottomNavigation = () =>{
+const CoachBottomNavigation = props =>{
   return(
     <Tab.Navigator
       initialRouteName='HomeScreen'
@@ -36,7 +42,10 @@ const CoachBottomNavigation = () =>{
           <Ionicons name="home-outline" color={color} size={size} />
         )
       }}/>
-      <Tab.Screen name="ChatScreen" component={ChatScreen}  options={{
+      <Tab.Screen name="ChatScreen" 
+        children={()=><ChatScreen socket={props.socket} {...props} />}
+        // component={ChatScreen}  
+        options={{
         tabBarBadge: 9,
         tabBarBadgeStyle: {backgroundColor:'red'},
         tabBarIcon: ({color, size}) => (

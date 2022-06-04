@@ -11,7 +11,7 @@ import ChangePassword from './../Screens/Coach/ChangePassword'
 
 const Drawer = createDrawerNavigator();
   
-const CoachDrawer = () => {
+const CoachDrawer = props => {
     return (
         <Drawer.Navigator
             initialRouteName='home' 
@@ -27,8 +27,9 @@ const CoachDrawer = () => {
             }}>
 
             <Drawer.Screen 
-                name="home" 
-                component={CoachHomeScreen} 
+                name="home"
+                children={()=><CoachHomeScreen socket={props.socket} {...props}/>} 
+                // component={CoachHomeScreen} 
                 // initialParams={{screen:'CoachHome'}}
                 options={{
                     drawerLabel:'Home',

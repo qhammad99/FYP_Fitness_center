@@ -1,3 +1,4 @@
+import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Text,
@@ -5,42 +6,55 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
-import React, {useState} from 'react';
+import { AuthContext } from '../../Context/Providers/AuthProvider';
+import Colors from '../../colors/Colors';
+import Urls from '../../config/env';
+import {URL} from '@env';
+import axios from 'axios';
 
-export default function Users({navigation}) {
-  const [data, setData] = useState([
-    {
-      id: 1,
-      name: 'Mr Thomas',
-      image: require('../../images/user1.png'),
-      message: 'Most recent message will show here',
-    },
-    {
-      id: 2,
-      name: 'Mr Butch',
-      image: require('../../images/user2.jpg'),
-      message: 'Most recent message will show here',
-    },
-    {
-      id: 3,
-      name: 'Spike',
-      image: require('../../images/user3.jpg'),
-      message: 'Most recent message will show here',
-    },
-    {
-      id: 4,
-      name: 'Jane Doe',
-      image: require('../../images/user4.jpg'),
-      message: 'Most recent message will show here',
-    },
-    {
-      id: 5,
-      name: 'John Doe',
-      image: require('../../images/user5.jpg'),
-      message: 'Most recent message will show here',
-    },
-  ]);
+export default function Users({navigation, socket}) {
+  const authentication = useContext(AuthContext);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  let user = JSON.parse(authentication.state.user);
+
+  const addUsers = async() => {
+    let token = user.token;
+
+    if(!loading)
+        setLoading(true);
+  
+    var API_URL=Urls.CoachClients;
+    axios.get(API_URL,{
+        headers:{
+        'Content-Type' : 'application/json',
+        'Authorization' : `Bearer ${token}`
+        }
+    })
+    .then((response)=>{
+        if(response.data.success){
+            setData(response.data.clients);
+        }
+        setLoading(false);
+    })
+    .catch((error)=>{
+        if(error.response.status == 401)
+          setLoading(false);
+        else
+          alert(" "+ error);
+      });
+  }
+
+  useEffect(() => {  
+    addUsers();
+  }, []);
+
+  useEffect(()=>{
+
+  },[socket]);
 
   const RenderItem = ({item, index}) => {
     return (
@@ -48,16 +62,30 @@ export default function Users({navigation}) {
         <TouchableOpacity
           style={styles.parentView}
           onPress={() => navigation.navigate('Chat', {userName: item.name})}>
-          <Image
-            source={item.image}
-            resizeMode="contain"
-            style={{width: 60, height: 60, marginRight: 15, borderRadius: 10}}
-          />
+          <View>
+            <Image
+              source={{uri:URL+'/public/userImages/'+item.img_file}}
+              resizeMode="contain"
+              style={{width: 60, height: 60, marginRight: 15, borderRadius: 10}}
+            />
+
+            {/* online badge */}
+            <View style={{
+              width:15, 
+              height:15, 
+              backgroundColor:'green', 
+              position:'relative',
+              left:50,
+              bottom:10,
+              borderRadius:7
+              }}/>
+          </View>
+
           <View>
             <Text style={{color: '#262D37', fontSize: 16, fontWeight: 'bold'}}>
               {item.name}
             </Text>
-            <Text style={{color: 'grey'}}>{item.message}</Text>
+            {/* <Text style={{color: 'grey'}}>{item.message}</Text> */}
           </View>
         </TouchableOpacity>
       </View>
@@ -80,11 +108,26 @@ export default function Users({navigation}) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={RenderItem}
-        ItemSeparatorComponent={Separator}
-      />
+      {
+        loading
+        ?
+        <ActivityIndicator />
+        :
+        <FlatList
+          data={data}
+          renderItem={RenderItem}
+          ItemSeparatorComponent={Separator}
+          ListEmptyComponent = {()=> 
+            <Text style={{
+                color: Colors.darkColor, 
+                alignSelf:'center', 
+                fontSize:18
+            }}>
+                No clients
+            </Text>
+          }
+        />
+      }
     </View>
   );
 }

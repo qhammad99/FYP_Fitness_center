@@ -17,6 +17,7 @@ import moment from 'moment';
 import styles from './styles';
 import Colors from '../../../colors/Colors';
 import Urls from '../../../config/env';
+import {URL} from '@env';
 import axios from 'axios';
 
 export default Home = (props) => {
@@ -244,7 +245,7 @@ export default Home = (props) => {
                             >
                                 <View>
                                     <Image
-                                        source={require('../../../Assets/userAvatar.png')}
+                                        source={{uri:URL+'/public/userImages/'+item.img_file}}
                                         style={{
                                             height: 80, width: 80, alignContent: 'center',
                                             opacity: 100,
