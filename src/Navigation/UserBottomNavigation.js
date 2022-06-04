@@ -9,24 +9,9 @@ import ProgressScreen from '../Screens/User/Progress';
 import MyCoach from './MyCoach';
 import CustomHeader from '../components/CustomHeader';
 import {CoachContext} from '../Context/Providers/CoachProvider';
-import WorkoutCategories from '../Screens/User/workoutScreens/workoutCategories/workoutCategories';
-import DietPlans from '../Screens/User/DietModule/DietPlans';
+import WorkoutNavigation from '../Navigation/WorkoutNavigation';
+import DietNavigation from './DietNavigation';
 /* some screens later i separate*/
-const WorkoutScreen = props => {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <WorkoutCategories navigation={props.navigation} />
-    </View>
-  );
-};
-function DietScreen() {
-  return (
-    <View>
-      <DietPlans />
-    </View>
-  );
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const Tab = createBottomTabNavigator();
@@ -70,25 +55,16 @@ const UserBottomNavigation = props => {
       })}>
       <Tab.Screen
         name="Workout"
-        component={WorkoutScreen}
+        component={WorkoutNavigation}
         options={{
-          headerStyle: {backgroundColor: '#E26F1E'},
-          headerTitle: () => (
-            <CustomHeader
-              title="Workout Categories"
-              drawer={props.navigation}
-            />
-          ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
         name="Diet"
-        component={DietScreen}
+        component={DietNavigation}
         options={{
-          headerStyle: {backgroundColor: '#E26F1E'},
-          headerTitle: () => (
-            <CustomHeader title="Diet Plans" drawer={props.navigation} />
-          ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
