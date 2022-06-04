@@ -11,6 +11,7 @@ import {CoachContext} from '../Context/Providers/CoachProvider';
 import UserParameter from '../Screens/User/UserParameter/UserParameter/UserParameter';
 import UserGoal from '../Screens/User/UserGoal/UserGoal';
 import AdminHome from '../Screens/Admin/Home/Home';
+import InfoSignup from '../Screens/Coach/InfoSignup';
 import clientCoach from '../Context/Actions/clientCoach';
 import {ADMIN_MAIL, SIMPLE_URL} from '@env';
 import {io} from 'socket.io-client';
@@ -116,9 +117,17 @@ const Routes = props => {
           ) : 
             // coach screens
             user.u_type == 2 && (
+              (parseInt(user.isParameters) != 0)
+              ?
               <Stack.Screen
                 name="CoachHome"
                 component={CoachHome}
+                options={{headerShown: false}}
+              />
+              :
+              <Stack.Screen
+                name="CoachAdd"
+                component={InfoSignup}
                 options={{headerShown: false}}
               />
             )
