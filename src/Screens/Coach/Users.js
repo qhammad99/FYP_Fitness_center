@@ -73,7 +73,7 @@ export default function Users({socket}) {
       <View>
         <TouchableOpacity
           style={styles.parentView}
-          onPress={() => navigation.navigate('Chat', {userName: item.name})}>
+          onPress={() => navigation.navigate('Chat', {user: item})}>
           <View>
             <Image
               source={{uri:URL+'/public/userImages/'+item.img_file}}

@@ -18,9 +18,10 @@ function ChatScreen(props) {
         />
 
         <Stack.Screen name='Chat' 
-        component={Chat} 
+        // component={Chat} 
+        children={({route})=><Chat socket={props.socket} userInfo={route.params.user} />}
         options={({route})=> ({
-          title: route.params.userName
+          title: route.params.user.name
         })}/>
       </Stack.Navigator>
   );
@@ -46,8 +47,8 @@ const CoachBottomNavigation = props =>{
         children={()=><ChatScreen socket={props.socket} {...props} />}
         // component={ChatScreen}  
         options={{
-        tabBarBadge: 9,
-        tabBarBadgeStyle: {backgroundColor:'red'},
+        // tabBarBadge: 9,
+        // tabBarBadgeStyle: {backgroundColor:'red'},
         tabBarIcon: ({color, size}) => (
           <Material name="chat-outline" color={color} size={size} />
         )

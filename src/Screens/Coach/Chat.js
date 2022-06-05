@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
@@ -8,110 +8,102 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  FlatList
 } from 'react-native';
+import {AuthContext} from '../../Context/Providers/AuthProvider';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Message from '../../components/Message';
+import Colors from '../../colors/Colors';
+import Urls from '../../config/env';
+import moment from 'moment';
+import axios from 'axios';
 
-export default function Chat(props) {
+export default function Chat({socket, userInfo}) {
+  const authentication = useContext(AuthContext);
+  const user = JSON.parse(authentication.state.user);
+
+  const [messages, setMessages] = useState(null);
+  const [newMessage, setNewMessage] = useState(null);
+  const [arrivalMsg, setArrivalMsg] = useState(null);
+  const [sendedMsg, setSendedMsg] = useState(null);
+
+  useEffect(()=>{
+    let token = user.token;
+    var API_URL= Urls.GetMessages+user.user_id+`/${userInfo.user_id}`;
+
+    axios.get(API_URL, {
+        headers:{
+            'Authorization' : `Bearer ${token}`
+        }
+    })
+    .then((response)=>{
+        if(response.data.success){
+            setMessages(response.data.chat);
+        }
+    })
+    .catch((error)=>{
+        if(error.response)
+            alert(" " + error.response.data.message);
+        else
+            alert(" "+ error);
+    });
+},[]);
+
+useEffect(()=>{
+  socket.on("get_message", data=>setArrivalMsg(data));
+  socket.on("message_sended", data=>setSendedMsg(data))
+},[socket]);
+
+useEffect(()=>{
+  arrivalMsg && arrivalMsg.reciever_id == user.user_id &&
+    setMessages(prev=>[arrivalMsg, ...prev]);
+},[arrivalMsg]);
+
+useEffect(()=>{
+  sendedMsg && 
+      setMessages(prev=>[sendedMsg, ...prev]);
+},[sendedMsg]);
+
+const sendMessage = ()=>{
+  console.log('called');
+  console.log(newMessage);
+  if(newMessage!=null){
+      let messageObj = {
+        sender_id: user.user_id,
+        reciever_id: userInfo.user_id,
+        message: newMessage,
+        msg_time: moment().local().format("YYYY-MM-DD HH:mm:ss")
+      };
+      socket.emit("send_message", messageObj)
+      setNewMessage(null);
+  }
+}
+
   return (
     <View style={styles.container}>
-      <View style={{marginTop: 20}}>
-        <View style={styles.user1View}>
-          <View
-            style={{
-              height: 30,
-              width: 60,
-              backgroundColor: '#E26F1E',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 30,
-            }}>
-            <Text style={styles.user1}>Hello</Text>
-          </View>
-        </View>
-
-        <View style={styles.user2View}>
-          <View
-            style={{
-              height: 30,
-              width: 130,
-              backgroundColor: 'grey',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 30,
-            }}>
-            <Text style={styles.user2}>How are you doing?</Text>
-          </View>
-        </View>
-
-        <View style={styles.user1View}>
-          <View
-            style={{
-              height: 40,
-              width: 170,
-              backgroundColor: '#E26F1E',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 30,
-            }}>
-            <Text style={styles.user1}>I am doing great. What about you?</Text>
-          </View>
-        </View>
-
-        <View style={styles.user2View}>
-          <View
-            style={{
-              height: 30,
-              width: 100,
-              backgroundColor: 'grey',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderRadius: 30,
-            }}>
-            <Text style={styles.user2}>All good here</Text>
-          </View>
-        </View>
-      </View>
-
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{
-          position: 'absolute',
-          bottom: 10,
-          width: '100%',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-        <TextInput
-          placeholder="Type your message"
-          placeholderTextColor="grey"
-          style={{
-            color: 'black',
-            borderRadius: 40,
-            backgroundColor: '#fff',
-            width: 360,
-            paddingStart: 15,
-            borderWidth: 1,
-            borderColor: '#C0C0C0',
-          }}
-        />
-        <TouchableOpacity
-          style={{
-            height: 50,
-            width: 50,
-            borderColor: '#C0C0C0',
-            borderWidth: 1,
-            borderRadius: 30,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#E26F1E'
-          }}>
-          <Image
-            source={require('../../images/send.png')}
-            resizeMode="contain"
-            style={{tintColor: 'white', height: 30, width: 30, }}
+      {
+        !messages &&
+        <Text style={{color: Colors.lightDark}}>Start conservation</Text>
+      }
+      <FlatList 
+          data={messages}
+          renderItem={({item})=>
+          <Message message={item} userID={user.user_id}/>}
+          inverted
+          keyExtractor={(item, index)=>`msg-${index}`}
           />
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+
+      <View style={styles.inputContainer}>
+          <TextInput 
+              placeholder='Type message...' 
+              style={styles.messageInput}
+              onChangeText={(text)=>setNewMessage(text)}
+              defaultValue={newMessage}
+              placeholderTextColor={Colors.lightDark}/>
+          <TouchableOpacity onPress={sendMessage}>
+            <Icon name="send-circle" size = {45} color={Colors.selectedColor}/>
+          </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -121,18 +113,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  user1View: {
-    alignItems: 'flex-end',
-    paddingHorizontal: 20,
-    marginTop: 5,
+  inputContainer:{
+    flexDirection:'row',
+    alignItems:'center',
+    margin:10,
+    marginTop:-5
   },
-  user2View: {
-    paddingHorizontal: 20,
-  },
-  user1: {
-    color: 'white',
-  },
-  user2: {
-    color: 'white',
-  },
+  messageInput:{
+      flex:1,
+      marginRight:8,
+      backgroundColor:'#f2f2f2',
+      borderWidth:0.5,
+      borderColor:'#dedede',
+      borderRadius:20,
+      paddingHorizontal:10,
+      color:Colors.darkColor
+  }
 });
