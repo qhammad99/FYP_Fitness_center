@@ -4,7 +4,8 @@ const styles= StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        width: '100%'
+        width: '100%',
+        
       },
       categoriesWrapper: {
         paddingTop: 80,
@@ -35,7 +36,6 @@ const styles= StyleSheet.create({
         height: 80,
         width: 350,
         borderRadius: 10,
-        flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
         marginStart: 30,
@@ -67,8 +67,6 @@ const styles= StyleSheet.create({
         borderWidth: 1,
         width: 250,
         marginStart: 80,
-        justifyContent: 'center',
-        alignItems: 'center',
         marginTop: 10,
         paddingStart: 8,
         color: 'black'
