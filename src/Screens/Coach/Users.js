@@ -9,15 +9,19 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
+import {useNavigation} from '@react-navigation/native';
 import Colors from '../../colors/Colors';
 import Urls from '../../config/env';
 import {URL} from '@env';
 import axios from 'axios';
 
-export default function Users({navigation, socket}) {
+export default function Users({socket}) {
+  const navigation = useNavigation();
   const authentication = useContext(AuthContext);
+  
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [onlineUsers, setOnlineUsers] = useState(null);
 
   let user = JSON.parse(authentication.state.user);
 
@@ -53,10 +57,18 @@ export default function Users({navigation, socket}) {
   }, []);
 
   useEffect(()=>{
-
+    if(socket)
+      socket.on('getUsers', users => setOnlineUsers(users));
   },[socket]);
 
   const RenderItem = ({item, index}) => {
+    let onlineStatus = false;
+    let finder;
+    if(onlineUsers)
+      finder = onlineUsers.find(user=>user.userId == item.user_id);
+    if(finder)
+      onlineStatus= true;
+
     return (
       <View>
         <TouchableOpacity
@@ -73,7 +85,7 @@ export default function Users({navigation, socket}) {
             <View style={{
               width:15, 
               height:15, 
-              backgroundColor:'green', 
+              backgroundColor:finder?'green':'grey', 
               position:'relative',
               left:50,
               bottom:10,

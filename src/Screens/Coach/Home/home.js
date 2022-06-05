@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useContext} from 'react';
+import React, {useEffect, useContext, useState} from 'react';
 import CoachDrawer from '../../../Navigation/CoachDrawer';
 import { SIMPLE_URL} from '@env';
 import {io} from 'socket.io-client';
@@ -6,12 +6,11 @@ import { AuthContext } from '../../../Context/Providers/AuthProvider';
 
 const Home = () => {
     const authentication = useContext(AuthContext);
-    const socket = useRef(null);
+    const [socket, setSocket] = useState(io(SIMPLE_URL));
 
     let user = JSON.parse(authentication.state.user);
     useEffect(()=>{
-        socket.current = io(SIMPLE_URL);
-        socket.current.emit('addUser', user.user_id);
+        socket.emit('addUser', user.user_id);
     },[])
 
     return(
