@@ -7,6 +7,7 @@ import CustomHeader from '../components/CustomHeader';
 const Stack = createNativeStackNavigator();
 import Workout from '../Screens/User/workoutScreens/Workouts/Workout';
 import WorkoutCategories from '../Screens/User/workoutScreens/workoutCategories/workoutCategories';
+import CreatePlan from '../Screens/User/workoutScreens/CreatePlan';
 
 const WorkoutNavigation = props => {
   return (
@@ -30,7 +31,18 @@ const WorkoutNavigation = props => {
         component={Workout}
         options={{
           headerTitle: () => (
-            <CustomHeader title="Workouts" drawer={props.navigation} />
+            <CustomHeader title="Workout Plans" drawer={props.navigation} />
+          ),
+          headerStyle: {backgroundColor: Colors.primary},
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="Create"
+        component={CreatePlan}
+        options={{
+          headerTitle: () => (
+            <CustomHeader title="Create Plan" drawer={props.navigation} />
           ),
           headerStyle: {backgroundColor: Colors.primary},
           headerBackVisible: false,

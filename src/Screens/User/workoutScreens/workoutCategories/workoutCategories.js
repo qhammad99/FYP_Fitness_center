@@ -1,10 +1,56 @@
 import React from 'react';
 import styles from './styles';
 import {Text, View, TouchableOpacity, TextInput, Image} from 'react-native';
+import Colors from '../../../../colors/Colors';
 
 export default function workoutCategories({navigation}) {
+  const DATA = [
+    {
+      id: 1,
+      title: 'Workout 1',
+      sets: '2X',
+      repetitions: 20,
+      calories: 14,
+    },
+    {
+      id: 2,
+      title: 'Workout 2',
+      sets: '2X',
+      repetitions: 20,
+      calories: 14,
+    },
+    {
+      id: 3,
+      title: 'Workout 3',
+      sets: '2X',
+      repetitions: 20,
+      calories: 14,
+    },
+  ];
+
   return (
     <View style={styles.container}>
+      {/* floating action button to create new workout plan */}
+      <TouchableOpacity
+        style={{
+          width: 60,
+          height: 60,
+          position: 'absolute',
+          zIndex: 1,
+          backgroundColor: Colors.primary,
+          borderRadius: 50,
+          right: 10,
+          bottom: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onPress={() => navigation.navigate('Create', {data: DATA})}>
+        <Image
+          source={require('../../../../Assets/createPlan.png')}
+          resizeMode="contain"
+          style={{height: 30, width: 30, tintColor: 'white'}}
+        />
+      </TouchableOpacity>
       <View style={styles.categoriesWrapper}>
         <Text style={styles.sectionTitle}>Workout Categories</Text>
       </View>
