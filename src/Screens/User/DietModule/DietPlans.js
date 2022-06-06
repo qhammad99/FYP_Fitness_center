@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CustomSwitch from '../../../components/DietComponents/CustomSwitch';
+import Colors from '../../../colors/Colors';
 
 import Breakfast from './Breakfast';
 import Lunch from './Lunch';
 import Dinner from './Dinner';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-
-const DietPlans = () => {
+const DietPlans = ({navigation}) => {
   const [mealTab, setMealTab] = useState(1);
   const onSelectSwitch = value => {
     setMealTab(value);
@@ -28,6 +29,13 @@ const DietPlans = () => {
           option3="Dinner"
           onSelectSwitch={onSelectSwitch}
         />
+        <TouchableOpacity
+          style={{alignItems: 'center', marginTop: 3, marginBottom: 5}}
+          onPress={() => navigation.navigate('New')}>
+          <Text style={{color: Colors.minorColor, fontWeight: 'bold'}}>
+            Click to add new recipe
+          </Text>
+        </TouchableOpacity>
       </View>
       {mealTab == 1 && <Breakfast />}
       {mealTab == 2 && <Lunch />}

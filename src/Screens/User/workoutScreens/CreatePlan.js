@@ -40,12 +40,15 @@ export default function CreatePlan({route}) {
   };
   return (
     <View style={styles.container}>
+
+      {/* header title  */}
       <View style={{marginTop: 40, alignItems: 'center'}}>
         <Text style={{color: 'black', fontSize: 24, fontWeight: 'bold'}}>
           Create Your Workout Plan
         </Text>
       </View>
 
+      {/* plan name view */}
       <View style={{marginTop: 20, paddingHorizontal: 20}}>
         <Text style={{color: 'black', fontSize: 16, fontWeight: 'bold'}}>
           Plan Name
@@ -55,6 +58,8 @@ export default function CreatePlan({route}) {
           placeholderTextColor="grey"
           style={styles.input}
         />
+
+        {/* plan image comes here */}
         <Text
           style={{
             color: 'black',
@@ -76,6 +81,7 @@ export default function CreatePlan({route}) {
           </TouchableOpacity>
         </View>
 
+        {/* select workouts using flatlist */}
         <Text
           style={{
             color: 'black',
@@ -97,6 +103,7 @@ export default function CreatePlan({route}) {
           <FlatList data={data} renderItem={renderItem} />
         </View>
 
+        {/* create plan button */}
         <View style={{alignItems: 'center', marginTop: 100}}>
           <TouchableOpacity
             style={{
@@ -107,6 +114,7 @@ export default function CreatePlan({route}) {
               padding: 6,
               alignItems: 'center',
               borderRadius: 5,
+              justifyContent: 'center'
             }}>
             <Text style={{color: 'white'}}>Create Plan</Text>
           </TouchableOpacity>
