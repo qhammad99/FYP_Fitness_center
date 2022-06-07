@@ -7,7 +7,7 @@ const styles= StyleSheet.create({
       },
       header: {
         backgroundColor: "#f2f3f8",
-        height: 130,
+        height: 80,
         width: 350,
         borderRadius: 10,
         flexDirection: "row",
@@ -21,10 +21,11 @@ const styles= StyleSheet.create({
         paddingStart: 10,
         fontWeight: "bold",
         position: "absolute",
-        color: 'black'
+        color: 'black',
+        paddingStart: 125
       },
       headerImage: {
-        height: 130,
+        height: 80,
         width: 350,
         borderRadius: 10,
         flexDirection: "row",

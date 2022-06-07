@@ -192,12 +192,13 @@ export default Home = (props) => {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 40, marginTop: 30 }}>
                     <Text style={{ fontSize: 16, paddingTop: 5, color: '#E26F1E' }}>Name</Text>
                     <TextInput
-                        style={{ fontSize: 14, borderColor: '#E26F1E', borderWidth: 1, borderRadius: 10 }}
+                        style={{ fontSize: 14, borderColor: '#E26F1E', borderWidth: 1, borderRadius: 10, color: 'black' }}
                         width={200}
                         height={40}
                         placeholder='Enter Your Name'
                         color="#E26F1E"
                         value={name}
+                        placeholderTextColor= 'grey'
                         onChangeText={(text) => setName(text)}
                     />
                 </View>
@@ -207,6 +208,7 @@ export default Home = (props) => {
                         style={{ fontSize: 14, borderColor: '#E26F1E', borderWidth: 1, borderRadius: 10 }}
                         width={200}
                         height={40}
+                        placeholderTextColor= 'grey'
                         placeholder='Enter Your Email'
                         color="#E26F1E"
                         value={email}
@@ -223,6 +225,7 @@ export default Home = (props) => {
                         width={200}
                         numberOfLines={4}
                         returnKeyType='done'
+                        placeholderTextColor= 'grey'
                         color="#E26F1E"
                         value={exp}
                         onChangeText={(text) => setExp(text)}

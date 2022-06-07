@@ -58,7 +58,7 @@ export default function workoutCategories({navigation}) {
                   source={{uri:URL+'/public/workoutCategory/'+item.img_file}}
                   style={styles.imageStyle}
                 />
-                <Text style={styles.textStyle}>{item.name}</Text>
+                <Text style={styles.textStyle}>{item.name} workout</Text>
               </TouchableOpacity>
             )
           }}

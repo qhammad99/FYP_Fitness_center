@@ -14,7 +14,7 @@ export default function CreatePlan({route}) {
         <View style={styles.insideExercises}>
           {/* name of the exercises come here */}
 
-          <Text style={styles.exeText}>{item.title}</Text>
+          <Text style={styles.exeText}>{item.name}</Text>
 
           {/* add button */}
           <TouchableOpacity style={styles.startButton}>
