@@ -37,6 +37,8 @@ const Urls = {
     CoachDetailAdd: URL+'/coach-detail-add', //calling in coach/ info signup
     WorkoutCategories: URL+'/workout-category', 
     WorkoutsByCategory: URL+'/workout/category/',
+    AllWorkouts: URL+'/workout',
+    AddWorkoutPlan: URL+'/workoutPlan-add',
 };
 
 export default Urls;
