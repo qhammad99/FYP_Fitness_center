@@ -8,7 +8,7 @@ export default function TaskDetails({route}) {
     <View style={styles.container}>
       <View style={styles.imageView}>
         <Image
-          style={{width: '90%', height: 200}}
+          style={{width: '91%', height: 200}}
           resizeMode="stretch"
           source={TaskImage}
         />
