@@ -35,6 +35,8 @@ const Urls = {
     ScheduleAdd: URL+'/schedule-add', //same up
     CoachClients: URL+'/coach-clients', //calling it in subcribed user home
     CoachDetailAdd: URL+'/coach-detail-add', //calling in coach/ info signup
+    WorkoutCategories: URL+'/workout-category', 
+    WorkoutsByCategory: URL+'/workout/category/',
 };
 
 export default Urls;

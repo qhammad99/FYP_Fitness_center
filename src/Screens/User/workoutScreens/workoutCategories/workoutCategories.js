@@ -1,35 +1,81 @@
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import styles from './styles';
-import {Text, View, TouchableOpacity, TextInput, Image} from 'react-native';
+import {Text, View, TouchableOpacity, Image, FlatList} from 'react-native';
+import {AuthContext} from '../../../../Context/Providers/AuthProvider';
 import Colors from '../../../../colors/Colors';
+import Urls from '../../../../config/env';
+import {URL} from '@env';
+import axios from 'axios';
 
 export default function workoutCategories({navigation}) {
-  const DATA = [
-    {
-      id: 1,
-      title: 'Workout 1',
-      sets: '2X',
-      repetitions: 20,
-      calories: 14,
-    },
-    {
-      id: 2,
-      title: 'Workout 2',
-      sets: '2X',
-      repetitions: 20,
-      calories: 14,
-    },
-    {
-      id: 3,
-      title: 'Workout 3',
-      sets: '2X',
-      repetitions: 20,
-      calories: 14,
-    },
-  ];
+  const authentication = useContext(AuthContext);
+  const user = JSON.parse(authentication.state.user);
+
+  const [categories, setCategories] = useState(null);
+
+  const addCategories = async() => {
+    let token = user.token;
+  
+    var API_URL=Urls.WorkoutCategories;
+    axios.get(API_URL,{
+        headers:{
+        'Content-Type' : 'application/json',
+        'Authorization' : `Bearer ${token}`
+        }
+    })
+    .then((response)=>{
+        if(response.data.success){
+          setCategories(response.data.category);
+        }
+    })
+    .catch((error)=>{
+          alert(" "+ error);
+      });
+}
+  useEffect(()=>{
+    addCategories();
+  },[]);
 
   return (
     <View style={styles.container}>
+      {/* title */}
+      <View style={styles.categoriesWrapper}>
+        <Text style={styles.sectionTitle}>Workout Categories</Text>
+      </View>
+
+      {
+        categories &&
+        <FlatList
+          data={categories}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                style={styles.item}
+                onPress={() =>
+                  navigation.navigate('Workouts', item)
+                }>
+                <Image
+                  source={{uri:URL+'/public/workoutCategory/'+item.img_file}}
+                  style={styles.imageStyle}
+                />
+                <Text style={styles.textStyle}>{item.name}</Text>
+              </TouchableOpacity>
+            )
+          }}
+          ListEmptyComponent={() =>
+            <Text style={{
+              color: Colors.darkColor,
+              alignSelf: 'center',
+              fontSize: 18
+            }}>
+              No category
+            </Text>
+          }
+          ListFooterComponent={<View/>}
+          ListFooterComponentStyle={{height:100}}
+        />
+      }
+
       {/* floating action button to create new workout plan */}
       <TouchableOpacity
         style={{
@@ -44,107 +90,12 @@ export default function workoutCategories({navigation}) {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        onPress={() => navigation.navigate('Create', {data: DATA})}>
+        onPress={() => navigation.navigate('Create', {data: categories})}>
         <Image
           source={require('../../../../Assets/createPlan.png')}
           resizeMode="contain"
           style={{height: 30, width: 30, tintColor: 'white'}}
         />
-      </TouchableOpacity>
-      <View style={styles.categoriesWrapper}>
-        <Text style={styles.sectionTitle}>Workout Categories</Text>
-      </View>
-
-      {/* search bar and button */}
-      <TextInput
-        style={styles.searchBar}
-        placeholderTextColor="grey"
-        placeholder={'Search Workouts'}
-      />
-      <TouchableOpacity>
-        <View style={styles.searchButton}>
-          <Text style={{color: '#fff'}}>Search</Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Arms wokrout section. Passes data to Workout screen */}
-      <TouchableOpacity
-        style={styles.item}
-        onPress={() =>
-          navigation.navigate('Workouts', {
-            workoutName: 'Arms Workout',
-            sets: '2X',
-            repetitions: 20,
-            calories: 14,
-            headerText: 'Arms Workouts',
-            image: require('../../../../images/armWorkoutHeaderImage.png'),
-          })
-        }>
-        <Image
-          source={require('../../../../images/Arms.jpg')}
-          style={styles.imageStyle}
-        />
-        <Text style={styles.textStyle}>Arm Workouts</Text>
-      </TouchableOpacity>
-
-      {/* Chest wokrout section. Passes data to Workout screen */}
-      <TouchableOpacity
-        style={styles.itemDupl}
-        onPress={() =>
-          navigation.navigate('Workouts', {
-            workoutName: 'Chest Workout',
-            sets: '2X',
-            repetitions: 20,
-            calories: 14,
-            headerText: 'Chest Workout',
-            image: require('../../../../images/chestHeaderImage.png'),
-          })
-        }>
-        <Image
-          source={require('../../../../images/chestBody.png')}
-          style={styles.imageStyle}
-        />
-        <Text style={styles.textStyle}>Chest Workouts</Text>
-      </TouchableOpacity>
-
-      {/* Legs wokrout section. Passes data to Workout screen */}
-      <TouchableOpacity
-        style={styles.itemDupl}
-        onPress={() =>
-          navigation.navigate('Workouts', {
-            workoutName: 'Legs Workout',
-            sets: '2X',
-            repetitions: 20,
-            calories: 14,
-            headerText: 'Legs Workouts',
-            image: require('../../../../images/legsHeaderImage.png'),
-          })
-        }>
-        <Image
-          source={require('../../../../images/Legs.png')}
-          style={styles.imageStyle}
-        />
-        <Text style={styles.textStyle}>Legs Workouts</Text>
-      </TouchableOpacity>
-
-      {/* Abs wokrout section. Passes data to Workout screen */}
-      <TouchableOpacity
-        style={styles.itemDupl}
-        onPress={() =>
-          navigation.navigate('Workouts', {
-            workoutName: 'Hello',
-            sets: '2X',
-            repetitions: 20,
-            calories: 14,
-            headerText: 'Abs Workout',
-            image: require('../../../../images/absHeaderImage.png'),
-          })
-        }>
-        <Image
-          source={require('../../../../images/absbody.png')}
-          style={styles.imageStyle}
-        />
-        <Text style={styles.textStyle}>Abs Workouts</Text>
       </TouchableOpacity>
     </View>
   );
