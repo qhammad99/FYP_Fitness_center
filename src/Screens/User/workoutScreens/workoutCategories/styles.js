@@ -8,7 +8,7 @@ const styles= StyleSheet.create({
         
       },
       categoriesWrapper: {
-        paddingTop: 80,
+        paddingTop: 40,
         paddingHorizontal: 20,
         alignItems: "center",
       },

@@ -1,25 +1,95 @@
-import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
-import React from 'react';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import React, {useState, useEffect, useContext} from 'react';
+import {View, Text, StyleSheet, Image, FlatList, TextInput, TouchableOpacity} from 'react-native';
+import { AuthContext } from '../../../Context/Providers/AuthProvider';
 import Colors from '../../../colors/Colors';
+import Urls from '../../../config/env';
+import {URL} from '@env';
+import axios from 'axios';
 
-export default function CreatePlan({route}) {
-  const {data} = route.params;
+export default function CreatePlan({route, navigation}) {
+  const {data} = route.params; //categories
+  const authentication = useContext(AuthContext);
+  const user = JSON.parse(authentication.state.user);
+
+  const [workouts, setWorkouts] = useState(null);
+  const [selectedId, setSelectedId] = useState([]);
+  const [planName, setPlanName] = useState("");
+
+  const addPlan=()=>{
+    if(!planName || !selectedId)
+      alert("can't add empty fields");
+    else{
+      let output=[];
+      for(i=0; i<selectedId.length; i++){
+        let keyValue={};
+        keyValue["id"] = selectedId[i];
+        output.push(keyValue);
+      }
+
+      let token = user.token;
+  
+      var API_URL=Urls.AddWorkoutPlan;
+      axios.post(API_URL,{
+        name: planName,
+        workouts: output
+      },{
+          headers:{
+          'Content-Type' : 'application/json',
+          'Authorization' : `Bearer ${token}`
+          }
+      })
+      .then((response)=>{
+          if(response.data.success){
+            navigation.navigate('Categories');
+          }
+      })
+      .catch((error)=>{
+            alert(" "+ error);
+        });
+    }
+  }
+
+  const addWorkouts = async() => {
+    let token = user.token;
+  
+    var API_URL=Urls.AllWorkouts;
+    axios.get(API_URL,{
+        headers:{
+        'Content-Type' : 'application/json',
+        'Authorization' : `Bearer ${token}`
+        }
+    })
+    .then((response)=>{
+        if(response.data.success){
+          setWorkouts(response.data.workouts);
+        }
+    })
+    .catch((error)=>{
+          alert(" "+ error);
+      });
+  }
+
+  useEffect(()=>{
+    addWorkouts();
+  },[]);
 
   // render item function for FlatList
 
   const renderItem = ({item, index}) => {
+    const finder = selectedId.find(selected => selected == item.id);
     return (
       <View style={styles.exercises}>
         <View style={styles.insideExercises}>
           {/* name of the exercises come here */}
 
-          <Text style={styles.exeText}>{item.title}</Text>
+          <Text style={styles.exeText}>{item.name}</Text>
 
           {/* add button */}
-          <TouchableOpacity style={styles.startButton}>
-            <Text style={styles.startButtonText}> Add</Text>
-          </TouchableOpacity>
+          {!finder &&
+            <TouchableOpacity style={styles.startButton} onPress={()=>setSelectedId([...selectedId, item.id])}>
+              <Text style={styles.startButtonText}> Add</Text>
+            </TouchableOpacity>
+          }
         </View>
 
         {/* number of sets and repetitions */}
@@ -32,7 +102,7 @@ export default function CreatePlan({route}) {
         {/* calories in the workouts */}
         <View>
           <Text style={{color: 'grey', paddingStart: 10}}>
-            Calories: {item.calories}
+            Calories: {item.calorie}
           </Text>
         </View>
       </View>
@@ -48,7 +118,8 @@ export default function CreatePlan({route}) {
         </Text>
       </View>
 
-      {/* plan name view */}
+      {workouts &&
+      // plan name view 
       <View style={{marginTop: 20, paddingHorizontal: 20}}>
         <Text style={{color: 'black', fontSize: 16, fontWeight: 'bold'}}>
           Plan Name
@@ -57,31 +128,10 @@ export default function CreatePlan({route}) {
           placeholder="Enter Plan Name"
           placeholderTextColor="grey"
           style={styles.input}
+          onChangeText={(text)=>setPlanName(text)}
         />
 
-        {/* plan image comes here */}
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginTop: 10,
-          }}>
-          Plan Image
-        </Text>
-
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{color: 'grey'}}>Select image for your plan</Text>
-          <TouchableOpacity>
-            <Image
-              source={require('../../../Assets/profileImageLogo.png')}
-              resizeMode="contain"
-              style={{height: 30, width: 30}}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* select workouts using flatlist */}
+        {/* select workouts using flatlist  */}
         <Text
           style={{
             color: 'black',
@@ -100,11 +150,11 @@ export default function CreatePlan({route}) {
             borderRadius: 10,
             marginTop: 10,
           }}>
-          <FlatList data={data} renderItem={renderItem} />
+          <FlatList data={workouts} renderItem={renderItem} />
         </View>
 
         {/* create plan button */}
-        <View style={{alignItems: 'center', marginTop: 100}}>
+        <View style={{alignItems: 'center', marginTop: 50}}>
           <TouchableOpacity
             style={{
               bottom: 30,
@@ -115,11 +165,13 @@ export default function CreatePlan({route}) {
               alignItems: 'center',
               borderRadius: 5,
               justifyContent: 'center'
-            }}>
+            }}
+            onPress={addPlan}>
             <Text style={{color: 'white'}}>Create Plan</Text>
           </TouchableOpacity>
         </View>
       </View>
+    }
     </View>
   );
 }

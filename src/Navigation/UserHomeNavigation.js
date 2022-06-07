@@ -12,6 +12,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Colors from '../colors/Colors';
 import CustomHeader from '../components/CustomHeader';
 const Stack = createNativeStackNavigator();
+import TaskDetails from '../Screens/User/Schedule/TaskDetails';
 
 const UserHomeNavigation = props =>{
     return (
@@ -61,6 +62,15 @@ const UserHomeNavigation = props =>{
             options={{
               headerShown:false
             }}>  
+          </Stack.Screen>
+          <Stack.Screen 
+            name='Details' 
+            component={TaskDetails} 
+            options={{
+              headerTitle: () => <CustomHeader title="Task Details" drawer={props.navigation}/>,
+              headerStyle:{backgroundColor:Colors.primary},
+              headerBackVisible:false,
+            }}>
           </Stack.Screen>
       </Stack.Navigator>
     );
