@@ -62,14 +62,14 @@ const MyCoachChat = props =>{
     },[Coach.state.socket])
 
     useEffect(()=>{
-        arrivalMsg && focused &&
+        arrivalMsg &&
         setMessages(prev=>[arrivalMsg, ...prev]);
-    },[arrivalMsg, focused])
+    },[arrivalMsg])
 
     useEffect(()=>{
-        sendedMsg && focused &&
+        sendedMsg &&
             setMessages(prev=>[sendedMsg, ...prev]);
-    },[sendedMsg, focused])
+    },[sendedMsg])
 
     const sendMessage = ()=>{
         if(newMessage!=null){
