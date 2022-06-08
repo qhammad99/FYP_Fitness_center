@@ -39,6 +39,9 @@ const Urls = {
     WorkoutsByCategory: URL+'/workout/category/',
     AllWorkouts: URL+'/workout',
     AddWorkoutPlan: URL+'/workoutPlan-add',
+    MyRecipies: URL+'/recipies',
+    GeneralRecipies: URL+'/recipies-general',
+    RecipieIngredients: URL+'/recipies-ingredients/',
 };
 
 export default Urls;

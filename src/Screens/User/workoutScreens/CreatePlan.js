@@ -3,7 +3,6 @@ import {View, Text, StyleSheet, Image, FlatList, TextInput, TouchableOpacity} fr
 import { AuthContext } from '../../../Context/Providers/AuthProvider';
 import Colors from '../../../colors/Colors';
 import Urls from '../../../config/env';
-import {URL} from '@env';
 import axios from 'axios';
 
 export default function CreatePlan({route, navigation}) {

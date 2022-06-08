@@ -1,18 +1,49 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import React, {useState, useEffect, useContext} from 'react';
+import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import { AuthContext } from '../../../Context/Providers/AuthProvider';
+import {URL} from '@env';
+import Urls from '../../../config/env';
+import axios from 'axios';
 
 const RecipDetails = ({route}) => {
-  const {recipeName, calories, recipeImage, recipeIngredients, recipePrice, foodQuantity} =
-    route.params;
+  const item = route.params;
+  const authentication = useContext(AuthContext);
+  const user = JSON.parse(authentication.state.user);
+
+  const [ing, setIng] = useState(null);
+
+  const addIngredients = async() => {
+    let token = user.token;
+  
+    var API_URL=Urls.RecipieIngredients+item.recipie_id;
+    axios.get(API_URL,{
+        headers:{
+        'Content-Type' : 'application/json',
+        'Authorization' : `Bearer ${token}`
+        }
+    })
+    .then((response)=>{
+        if(response.data.success){
+          setIng(response.data.ingredients)
+        }
+    })
+    .catch((error)=>{
+          alert(" "+ error);
+      });
+}
+  useEffect(()=>{
+    addIngredients();
+  },[]);
+
   return (
     <View style={styles.container}>
       <View style={styles.imageView}>
-        <Image style={styles.headerImage} source={recipeImage} />
+        <Image style={styles.headerImage} source={{uri:URL+'/public/recipies/'+item.image}} />
       </View>
 
       <View style={styles.recipeNameView}>
-        <Text style={styles.recipeNameText}>{recipeName}</Text>
+        <Text style={styles.recipeNameText}>{item.name}</Text>
       </View>
 
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -23,9 +54,7 @@ const RecipDetails = ({route}) => {
       </View>
 
       <View style={styles.infoView}>
-        <Text style={styles.infoText}>{calories}</Text>
-        <Text style={styles.infoText}>{foodQuantity}</Text>
-        <Text style={styles.infoText}>{recipePrice}</Text>
+        <Text style={styles.infoText}>{`calories: ${item.calorie}`}</Text>
       </View>
 
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -39,9 +68,29 @@ const RecipDetails = ({route}) => {
         <Text style={{color: '#E26F1E', fontSize: 20, fontWeight: 'bold'}}>
           Ingredients
         </Text>
+        {ing &&
         <View style={styles.insideIngredients}>
-          <Text style={{color: 'black'}}>{recipeIngredients}</Text>
-        </View>
+            <FlatList
+              data={ing}
+              renderItem={({ item }) => {
+                  return (
+                      <Text style={{color: 'black'}}>{item.name}</Text>
+                  )
+                }}
+                ListEmptyComponent={() =>
+                  <Text style={{
+                    color: Colors.darkColor,
+                    alignSelf: 'center',
+                    fontSize: 18
+                  }}>
+                    No category
+                  </Text>
+                }
+                ListFooterComponent={<View/>}
+                ListFooterComponentStyle={{height:100}}
+              />
+              </View>
+          }
       </View>
     </View>
   );
@@ -75,8 +124,7 @@ const styles = StyleSheet.create({
   infoView: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 40
+    justifyContent: 'center'
   },
   infoText: {
     fontSize: 15,
@@ -92,7 +140,8 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     height: 350,
     padding: 5,
-    marginTop: 8
+    marginTop: 8,
+    paddingBottom:150
   },
 });
 
