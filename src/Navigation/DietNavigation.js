@@ -8,6 +8,7 @@ const Stack = createNativeStackNavigator();
 import DietPlans from '../Screens/User/DietModule/DietPlans';
 import RecipeDetails from '../Screens/User/DietModule/RecipeDetails';
 import NewRecipe from '../Screens/User/DietModule/NewRecipe';
+import NewPlan from '../Screens/User/DietModule/NewPlan';
 
 const DietNavigation = props => {
   return (
@@ -40,6 +41,18 @@ const DietNavigation = props => {
         options={{
           headerTitle: () => (
             <CustomHeader title="Add New Recipe" drawer={props.navigation} />
+          ),
+          headerStyle: {backgroundColor: Colors.primary},
+          headerBackVisible: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="plan"
+        component={NewPlan}
+        options={{
+          headerTitle: () => (
+            <CustomHeader title="Add New Diet Plan" drawer={props.navigation} />
           ),
           headerStyle: {backgroundColor: Colors.primary},
           headerBackVisible: false,
