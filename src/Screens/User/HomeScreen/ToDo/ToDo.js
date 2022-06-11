@@ -17,6 +17,7 @@ import progressTasks from '../../../../Context/Actions/progressTasks';
 import {useNavigation} from '@react-navigation/native';
 import {useIsFocused} from '@react-navigation/native';
 import PushNotification from 'react-native-push-notification';
+import {URL} from '@env';
 import moment from 'moment';
 import {
   Text,
@@ -148,7 +149,8 @@ const ToDo = props => {
     props.navigation.navigate('Details', {
       TaskImage: image,
       Category: item.category,
-      TaskName: item.category == 'Workout' ? item.workoutName : item.extraName,
+      TaskName: item.category == 'Workout' ? item.workoutName
+                : item.category == 'Diet'  ? item.dietName: item.extraName,
     });
   };
 
@@ -280,10 +282,16 @@ const ToDo = props => {
                       // when we get image from database we get url, but for now
                       // we using local image so will use this
                       taskImage={
-                        item.category == 'Workout' ||
-                        item.category == 'extra_workout'
-                          ? getImage('morning')
-                          : getImage('breakfast')
+                        item.image 
+                        ?
+                        {uri:URL+'/public/schedulePlans/'+item.image} 
+                        :
+                        (
+                          item.category == 'Workout' ||
+                          item.category == 'extra_workout'
+                            ? getImage('morning')
+                            : getImage('breakfast')
+                        )
                       }
                       to={shiftDetail}
                     />

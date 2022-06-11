@@ -15,6 +15,7 @@ const doing = async(Item, dayNumber, Goal, authentication) => {
       calories: Item.calories,
       start_time: Item.start_time,
       finish_time: Item.finish_time,
+      image: Item.image,
       goal_id: goal_id,
       day_no: dayNumber
     },{

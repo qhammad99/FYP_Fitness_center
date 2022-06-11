@@ -18,6 +18,7 @@ import {TaskContext} from '../../../Context/Providers/TaskProvider';
 import scheduleByDay from '../../../Context/Actions/scheduleByDay';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import {URL} from '@env';
 import Urls from '../../../config/env';
 
 export default function ScheduleScreen() {
@@ -103,9 +104,16 @@ export default function ScheduleScreen() {
                 item={item}
                 index={index}
                 taskImage={
-                  item.category == 'Workout' || item.category == 'extra_workout'
-                    ? getImage('morning')
-                    : getImage('breakfast')
+                  item.image 
+                  ?
+                  {uri:URL+'/public/schedulePlans/'+item.image} 
+                  :
+                  (
+                    item.category == 'Workout' ||
+                    item.category == 'extra_workout'
+                      ? getImage('morning')
+                      : getImage('breakfast')
+                  )
                 }
                 to={() =>
                   navigation.navigate('Task Detail', {
@@ -117,10 +125,16 @@ export default function ScheduleScreen() {
                         : item.extraName,
                     Category: item.category,
                     TaskImage:
-                      item.category == 'Workout' ||
-                      item.category == 'extra_workout'
-                        ? getImage('morning')
-                        : getImage('breakfast'),
+                      item.image 
+                  ?
+                  {uri:URL+'/public/schedulePlans/'+item.image} 
+                  :
+                  (
+                    item.category == 'Workout' ||
+                    item.category == 'extra_workout'
+                      ? getImage('morning')
+                      : getImage('breakfast')
+                  )
                   })
                 }
                 deleteSchedule={deleteSchedule}
