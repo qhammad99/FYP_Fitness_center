@@ -1,5 +1,5 @@
 // Custom Navigation Drawer / Sidebar with Image and Icon in Menu Options
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../Context/Providers/AuthProvider';
 import {
   SafeAreaView,
@@ -26,13 +26,17 @@ const CoachDrawerContent = (props) => {
   const authentication = useContext(AuthContext);
   const [user, setUser] = useState(JSON.parse(authentication.state.user));
   const [isOnline, setonlie] = useState(false)
+
+  useEffect(()=>{
+  },[authentication])
+  
   const clearLoactStorage = async () => {
     try {
       await AsyncStorage.removeItem('USER');
     } catch (e) {
       console.log("error in clearing local storage, ", e);
     }
-
+    props.socket.emit('removeMe');
     authentication.dispatch({ type: 'SIGN_OUT' });
   }
 

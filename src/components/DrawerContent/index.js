@@ -41,6 +41,7 @@ const DrawerContent = (props) => {
     authentication.dispatch({type:'SIGN_OUT'});
     Goal.setGoal({type:'SIGN_OUT'});
     Coach.dispatch({type:"COACH_RESET"});
+    
   }
 
   const logoutAlert = () => {
@@ -76,9 +77,9 @@ const DrawerContent = (props) => {
         <Text style={styles.nameText}>
             {user.name}
         </Text>
-        <Text style={styles.numberOfGoals}>
+        {/* <Text style={styles.numberOfGoals}>
             Goals Completed: {Goal.goal.completedGoals}
-        </Text>
+        </Text> */}
       </ImageBackground>
 
       {/* drawer screens */}
