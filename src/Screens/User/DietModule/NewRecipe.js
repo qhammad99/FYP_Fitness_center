@@ -5,11 +5,49 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  FlatList,
 } from 'react-native';
 import React from 'react';
 import Colors from '../../../colors/Colors';
 
 export default function NewRecipe() {
+  const DATA = [
+    {
+      id: 1,
+      title: 'Ingredient 1',
+    },
+    {
+      id: 2,
+      title: 'Ingredient 2',
+    },
+    {
+      id: 3,
+      title: 'Ingredient 3',
+    },
+  ];
+
+  // render ingredients function to render ingredients for FlatList
+  const renderIngredients = ({item, index}) => {
+    return (
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, alignItems: 'center',}}>
+        <Text style={{color: 'black'}}>{item.title}</Text>
+        
+        <View style={{alignItems: 'center', justifyContent: 'center',}}>
+        <TextInput
+          placeholder="quantity"
+          placeholderTextColor="grey"
+          style={{height: 35, width: 80, borderWidth: 1, borderColor: 'grey', color: 'black', marginTop: 5, borderRadius: 10}}
+        />
+        </View>
+        
+
+        <TouchableOpacity style={styles.startButton}>
+          <Text style={styles.startButtonText}> Add</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       {/* header title  */}
@@ -62,22 +100,6 @@ export default function NewRecipe() {
           style={styles.input}
         />
 
-        {/* Quantity section */}
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginTop: 10,
-          }}>
-          Quantity
-        </Text>
-        <TextInput
-          placeholder="Enter Recipe Quantity"
-          placeholderTextColor="grey"
-          style={styles.input}
-        />
-
         {/* recipe price section */}
         <Text
           style={{
@@ -102,13 +124,11 @@ export default function NewRecipe() {
             fontWeight: 'bold',
             marginTop: 10,
           }}>
-          Recipe Ingredients
+          Select Recipe Ingredients
         </Text>
-        <TextInput
-          placeholder="Enter Recipe Ingredients"
-          placeholderTextColor="grey"
-          style={styles.input}
-        />
+        <View style={[styles.input, {height: 100}]}>
+          <FlatList data={DATA} renderItem={renderIngredients} />
+        </View>
 
         {/* add recipe button */}
         <View style={{alignItems: 'center', marginTop: 60}}>
@@ -144,5 +164,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 10,
     marginTop: 5,
+  },
+  startButton: {
+    width: 70,
+    height: 30,
+    borderColor: '#fff',
+    backgroundColor: '#E26F1E',
+    borderWidth: 2,
+    borderRadius: 15,
+    marginEnd: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  startButtonText: {
+    color: '#fff',
   },
 });

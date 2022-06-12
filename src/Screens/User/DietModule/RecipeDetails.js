@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import { AuthContext } from '../../../Context/Providers/AuthProvider';
+import {AuthContext} from '../../../Context/Providers/AuthProvider';
 import {URL} from '@env';
 import Urls from '../../../config/env';
 import axios from 'axios';
@@ -13,33 +13,37 @@ const RecipDetails = ({route}) => {
 
   const [ing, setIng] = useState(null);
 
-  const addIngredients = async() => {
+  const addIngredients = async () => {
     let token = user.token;
-  
-    var API_URL=Urls.RecipieIngredients+item.recipie_id;
-    axios.get(API_URL,{
-        headers:{
-        'Content-Type' : 'application/json',
-        'Authorization' : `Bearer ${token}`
+
+    var API_URL = Urls.RecipieIngredients + item.recipie_id;
+    axios
+      .get(API_URL, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => {
+        if (response.data.success) {
+          setIng(response.data.ingredients);
         }
-    })
-    .then((response)=>{
-        if(response.data.success){
-          setIng(response.data.ingredients)
-        }
-    })
-    .catch((error)=>{
-          alert(" "+ error);
+      })
+      .catch(error => {
+        alert(' ' + error);
       });
-}
-  useEffect(()=>{
+  };
+  useEffect(() => {
     addIngredients();
-  },[]);
+  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.imageView}>
-        <Image style={styles.headerImage} source={{uri:URL+'/public/recipies/'+item.image}} />
+        <Image
+          style={styles.headerImage}
+          source={{uri: URL + '/public/recipies/' + item.image}}
+        />
       </View>
 
       <View style={styles.recipeNameView}>
@@ -68,29 +72,39 @@ const RecipDetails = ({route}) => {
         <Text style={{color: '#E26F1E', fontSize: 20, fontWeight: 'bold'}}>
           Ingredients
         </Text>
-        {ing &&
-        <View style={styles.insideIngredients}>
+        {ing && (
+          <View style={styles.insideIngredients}>
             <FlatList
               data={ing}
-              renderItem={({ item }) => {
-                  return (
-                      <Text style={{color: 'black'}}>{item.name}</Text>
-                  )
-                }}
-                ListEmptyComponent={() =>
-                  <Text style={{
+              renderItem={({item}) => {
+                return (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{color: 'black'}}>{item.name}</Text>
+
+                    {/* ingredients quantity comes here */}
+                    <Text style={{color: 'black'}}>quantity</Text>
+                  </View>
+                );
+              }}
+              ListEmptyComponent={() => (
+                <Text
+                  style={{
                     color: Colors.darkColor,
                     alignSelf: 'center',
-                    fontSize: 18
+                    fontSize: 18,
                   }}>
-                    No category
-                  </Text>
-                }
-                ListFooterComponent={<View/>}
-                ListFooterComponentStyle={{height:100}}
-              />
-              </View>
-          }
+                  No category
+                </Text>
+              )}
+              ListFooterComponent={<View />}
+              ListFooterComponentStyle={{height: 100}}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -124,7 +138,7 @@ const styles = StyleSheet.create({
   infoView: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   infoText: {
     fontSize: 15,
@@ -141,7 +155,7 @@ const styles = StyleSheet.create({
     height: 350,
     padding: 5,
     marginTop: 8,
-    paddingBottom:150
+    paddingBottom: 150,
   },
 });
 

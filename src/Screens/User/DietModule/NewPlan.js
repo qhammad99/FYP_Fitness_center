@@ -5,6 +5,7 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import React, {useState} from 'react';
 import Colors from '../../../colors/Colors';
@@ -28,7 +29,7 @@ export default function NewPlan() {
     },
   ]);
 
-  const renderPlans = (item, index) => {
+  const renderPlans = ({item, index}) => {
     return (
       <View style={styles.exercises}>
         <View style={styles.insideExercises}>
@@ -53,7 +54,7 @@ export default function NewPlan() {
     );
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={{marginTop: 40, alignItems: 'center'}}>
         <Text style={{color: 'black', fontSize: 24, fontWeight: 'bold'}}>
           Create Your Diet Plan
@@ -108,7 +109,7 @@ export default function NewPlan() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
