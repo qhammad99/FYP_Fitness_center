@@ -5,6 +5,7 @@ const styles= StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         width: '100%',
+        alignItems: 'center'
         
       },
       categoriesWrapper: {
@@ -38,7 +39,7 @@ const styles= StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         justifyContent: "center",
-        marginStart: 30,
+      
         marginTop: 30,
       },
       itemDupl: {
@@ -49,7 +50,7 @@ const styles= StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        marginStart: 30,
+       
         marginTop: 10,
       },
       imageStyle: {

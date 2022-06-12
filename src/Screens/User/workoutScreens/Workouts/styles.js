@@ -4,6 +4,7 @@ const styles= StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
+        alignItems: 'center'
       },
       header: {
         backgroundColor: "#f2f3f8",
@@ -12,7 +13,7 @@ const styles= StyleSheet.create({
         borderRadius: 10,
         flexDirection: "row",
         alignItems: "flex-start",
-        marginStart: 30,
+      
         marginTop: 10,
         alignItems: "center",
       },
@@ -40,7 +41,7 @@ const styles= StyleSheet.create({
         width: 350,
         borderRadius: 10,
         borderWidth: 1,
-        marginStart: 30,
+    
         borderColor: '#E26F1E',
         marginTop: 20,
       },
