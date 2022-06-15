@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
 import CustomSwitch from '../../../components/DietComponents/CustomSwitch';
 import Colors from '../../../colors/Colors';
 import {AuthContext} from '../../../Context/Providers/AuthProvider';
@@ -31,6 +31,9 @@ const DietPlans = ({navigation}) => {
         if (response.data.success) {
           setRec(response.data.recipies);
         }
+        else{
+          setRec(null);
+        }
         setLoading(false);
       })
       .catch(error => {
@@ -48,7 +51,7 @@ const DietPlans = ({navigation}) => {
   }, [mealTab]);
 
   return (
-    <View>
+    <View style={styles.root}>
       <View style={styles.container}>
         <Text style={{color: 'black', fontSize: 24, fontWeight: 'bold'}}>
           Diet Plans
@@ -62,68 +65,23 @@ const DietPlans = ({navigation}) => {
           onSelectSwitch={value => setMealTab(value)}
         />
 
-        <View
-          style={{
-            justifyContent: 'space-around',
-            flexDirection: 'row',
-            marginTop: 5,
-            paddingHorizontal: 40,
-          }}>
-
-            {/* button to add new recipe */}
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: 3,
-              marginBottom: 5,
-              height: 40,
-              width: 100,
-              borderRadius: 20,
-              backgroundColor: Colors.minorColor,
-            }}
-            onPress={() => navigation.navigate('New')}>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>Add Recipe</Text>
-          </TouchableOpacity>
-
-
-          {/* button to add new diet plan */}
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: 3,
-              marginBottom: 5,
-              height: 40,
-              width: 100,
-              borderRadius: 20,
-              backgroundColor: Colors.minorColor,
-            }}
-            onPress={() => navigation.navigate('plan')}>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>New Plan</Text>
-          </TouchableOpacity>
-        </View>
+        {/* button to add new recipe */}
+        <TouchableOpacity
+          style={{alignItems: 'center', marginTop: 3, marginBottom: 5}}
+          onPress={() => navigation.navigate('New')}>
+          <Text style={{color: Colors.minorColor, fontWeight: 'bold'}}>
+            Add new recipe
+          </Text>
+        </TouchableOpacity>
       </View>
-      {mealTab == 1 &&
+      {mealTab == 1 && !loading &&
         (!rec ? (
           <Text style={{color: '#000'}}>no recipie found</Text>
         ) : (
           <FlatList
             data={rec}
             renderItem={({item}) => {
-              return (
-                <Recipes
-                  image={require('../../../images/DietImages/cherrySmoothie.jpg')}
-                  text1={item.name}
-                  item={item}
-                  text2={`Calories: ${item.calorie}`}
-                  price="Price: 200$"
-                  ingredients={
-                    'Oat milk\nAlmond butter\nCocoa powder\nVanilla extract\nDark sweet cherries\nBrown sugar'
-                  }
-                  quantity="Quantity: 1 Serving"
-                />
-              );
+              return <Recipes item={item} />;
             }}
             ListEmptyComponent={() => (
               <Text
@@ -135,6 +93,7 @@ const DietPlans = ({navigation}) => {
                 No recpie
               </Text>
             )}
+            keyExtractor={(item, index) => `recipie-${index}`}
             ListFooterComponent={<View />}
             ListFooterComponentStyle={{height: 100}}
           />
@@ -155,15 +114,41 @@ const DietPlans = ({navigation}) => {
               No recpie
             </Text>
           )}
+          keyExtractor={(item, index) => `recipie-${index}`}
           ListFooterComponent={<View />}
           ListFooterComponentStyle={{height: 200}}
         />
       )}
+
+      {/* floating action button to create new workout plan */}
+      <TouchableOpacity
+        style={{
+          width: 60,
+          height: 60,
+          position: 'absolute',
+          zIndex: 1,
+          backgroundColor: Colors.primary,
+          borderRadius: 30,
+          right: 10,
+          bottom: 10,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onPress={() => navigation.navigate('plan')}>
+        <Image
+          source={require('../../../Assets/dietPlan.png')}
+          resizeMode="contain"
+          style={{height: 60, width: 60, borderRadius:30}}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  root:{
+    flex:1
+  },
   container: {
     alignItems: 'center',
     justifyContent: 'center',

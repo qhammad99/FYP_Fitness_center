@@ -50,12 +50,6 @@ export default function NewRecipe() {
 
   return (
     <View style={styles.container}>
-      {/* header title  */}
-      <View style={{marginTop: 40, alignItems: 'center'}}>
-        <Text style={{color: 'black', fontSize: 24, fontWeight: 'bold'}}>
-          Add Your New Recipe
-        </Text>
-      </View>
 
       {/* recipe name  */}
       <View style={{marginTop: 20, paddingHorizontal: 20}}>
@@ -98,22 +92,7 @@ export default function NewRecipe() {
           placeholder="Enter Recipe Calories"
           placeholderTextColor="grey"
           style={styles.input}
-        />
-
-        {/* recipe price section */}
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginTop: 10,
-          }}>
-          Recipe Price
-        </Text>
-        <TextInput
-          placeholder="Enter Recipe Price"
-          placeholderTextColor="grey"
-          style={styles.input}
+          editable={false}
         />
 
         {/* recipe ingredients section */}

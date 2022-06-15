@@ -86,7 +86,7 @@ const RecipDetails = ({route}) => {
                     <Text style={{color: 'black'}}>{item.name}</Text>
 
                     {/* ingredients quantity comes here */}
-                    <Text style={{color: 'black'}}>quantity</Text>
+                    <Text style={{color: 'black', paddingRight:10}}>{item.quantity}</Text>
                   </View>
                 );
               }}
@@ -100,6 +100,7 @@ const RecipDetails = ({route}) => {
                   No category
                 </Text>
               )}
+              keyExtractor={(item, index) => `ing-${index}`}
               ListFooterComponent={<View />}
               ListFooterComponentStyle={{height: 100}}
             />

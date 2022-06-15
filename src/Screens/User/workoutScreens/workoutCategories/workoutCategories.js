@@ -71,6 +71,7 @@ export default function workoutCategories({navigation}) {
               No category
             </Text>
           }
+          keyExtractor={(item, index) => `workoutC-${index}`}
           ListFooterComponent={<View/>}
           ListFooterComponentStyle={{height:100}}
         />
