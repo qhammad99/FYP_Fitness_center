@@ -52,14 +52,14 @@ export default function Users({socket}) {
       });
   }
 
+  useEffect(()=>{
+    socket.emit('sending');
+    socket.on('getUsers', users => setOnlineUsers(users));
+  },[]);
+
   useEffect(() => {  
     addUsers();
   }, []);
-
-  useEffect(()=>{
-    if(socket)
-      socket.on('getUsers', users => setOnlineUsers(users));
-  },[socket]);
 
   const RenderItem = ({item, index}) => {
     let onlineStatus = false;

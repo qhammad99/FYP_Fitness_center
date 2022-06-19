@@ -5,7 +5,6 @@ const CustomSwitch =({
   selectionMode,
   option1,
   option2,
-  option3,
   onSelectSwitch,
 }) => 
 {
@@ -63,25 +62,6 @@ const CustomSwitch =({
             fontWeight: 'bold'
           }}>
           {option2}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => updateSwitchData(3)}
-        style={{
-          flex: 1,
-          backgroundColor: getSelectionMode == 3 ? '#E26F1E' : '#e4e4e4',
-          borderRadius: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text
-          style={{
-            color: getSelectionMode == 3 ? 'white' : '#E26F1E',
-            fontSize: 14,
-            fontWeight: 'bold'
-          }}>
-          {option3}
         </Text>
       </TouchableOpacity>
     </View>

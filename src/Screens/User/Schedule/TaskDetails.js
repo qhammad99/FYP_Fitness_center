@@ -1,9 +1,39 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
 import React from 'react';
 import Colors from '../../../colors/Colors';
 
 export default function TaskDetails({route}) {
-  const {TaskName, TaskImage, Category, TaskDay} = route.params;
+  const data = [
+    {
+      id: 1,
+      name: 'Workout/Recipe Name',
+      calories: 123,
+    },
+    {
+      id: 2,
+      name: 'Workout/Recipe Name',
+      calories: 123,
+    },
+    {
+      id: 3,
+      name: 'Workout/Recipe Name',
+      calories: 123,
+    },
+  ];
+
+  const renderDetails = ({item, index}) => {
+    return(
+      <View>
+        <View style={{marginTop: 5}}>
+        <Text style={{color: 'black'}}>{item.name}</Text>
+        <Text style={{color: 'black'}}>Calories: {item.calories}</Text>
+        </View>
+        
+      </View>
+    )
+  }
+
+  const {TaskName, TaskImage, Category} = route.params;
   return (
     <View style={styles.container}>
       <View style={styles.imageView}>
@@ -37,6 +67,20 @@ export default function TaskDetails({route}) {
           Task Finish Time:{' '}
         </Text>
         <Text style={{color: Colors.primary}}>00:00:00</Text>
+      </View>
+
+      <View style={{marginStart: 30}}>
+        <Text
+          style={{
+            color: 'black',
+            fontWeight: 'bold',
+            marginTop: 10,
+          }}>
+          Workouts/Recipes in Task
+        </Text>
+      </View>
+      <View style={[styles.detailsView, {height: 150}]}>
+        <FlatList data={data} renderItem={renderDetails}/>
       </View>
     </View>
   );

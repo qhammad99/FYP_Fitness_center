@@ -12,10 +12,11 @@ import ChangePassword from './../Screens/Coach/ChangePassword'
 const Drawer = createDrawerNavigator();
   
 const CoachDrawer = props => {
+    const forDrawer = props.socket
     return (
         <Drawer.Navigator
             initialRouteName='home' 
-            drawerContent={props => <CoachDrawerContent {...props} />}
+            drawerContent={(props) => <CoachDrawerContent socket={forDrawer} {...props}/>}
             screenOptions={{
                 headerShown:false,
                 drawerActiveTintColor: Colors.selectedColor,

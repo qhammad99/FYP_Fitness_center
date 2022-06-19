@@ -1,10 +1,10 @@
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {URL} from '@env';
 
-const Recipes = ({image, text1, text2, ingredients, price, quantity}) => {
+const Recipes = ({item}) => {
   const navigation = useNavigation();
-
   return (
     <View
       style={{
@@ -15,7 +15,7 @@ const Recipes = ({image, text1, text2, ingredients, price, quantity}) => {
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
         <Image
-          source={image}
+          source={{uri:URL+'/public/recipies/'+item.image}}
           style={{
             height: 55,
             width: 55,
@@ -27,9 +27,9 @@ const Recipes = ({image, text1, text2, ingredients, price, quantity}) => {
         />
         <View>
           <Text style={{color: '#E26F1E', fontSize: 15, fontWeight: 'bold'}}>
-            {text1}
+            {item.name}
           </Text>
-          <Text style={{color: 'grey'}}>{text2}</Text>
+          <Text style={{color: 'grey'}}>{`Calories: ${item.calorie}`}</Text>
         </View>
       </View>
 
@@ -43,14 +43,7 @@ const Recipes = ({image, text1, text2, ingredients, price, quantity}) => {
           justifyContent: 'center',
         }}
         onPress={() =>
-          navigation.navigate('Recipe', {
-            recipeName: text1,
-            calories: text2,
-            recipeImage: image,
-            recipeIngredients: ingredients,
-            recipePrice: price,
-            foodQuantity: quantity
-          })
+          navigation.navigate('Recipe', item)
         }>
         <Text style={{color: 'white'}}>Details</Text>
       </TouchableOpacity>
