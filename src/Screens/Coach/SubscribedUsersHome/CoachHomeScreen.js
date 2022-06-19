@@ -63,7 +63,7 @@ export default Home = (props) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* client detail modal */}
+            {/* client detail modal */}    
             <Modal visible={showModal} transparent>
                 <View style={styles.modalContainer}>
                     <ScrollView style={styles.modalSubContainer}>

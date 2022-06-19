@@ -25,7 +25,12 @@ import Urls from '../../config/env';
 const CoachDrawerContent = (props) => {
   const authentication = useContext(AuthContext);
   const [user, setUser] = useState(JSON.parse(authentication.state.user));
-  const [isOnline, setonlie] = useState(false)
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => 
+  {
+    setIsEnabled(previousState => !previousState)
+  };
+  
   const clearLoactStorage = async () => {
     try {
       await AsyncStorage.removeItem('USER');
@@ -52,9 +57,20 @@ const CoachDrawerContent = (props) => {
       ]);
   }
   const UpdateCoachStatus = () => {
-    fetch("https://f780-39-46-240-174.in.ngrok.io/api/v1/coach-status-update", {
-      method: "POST"
-    })
+    let user=  JSON.parse(authentication.state.user);
+     fetch (URL+"/coach-status-update",{
+       method: "PATCH",
+       header:{
+        'Authorization': `Bearer ${user.token}`,
+        'Content-Type': `application/json`,
+       },
+       body:JSON.stringify({
+         user_id:user.user_id
+       })
+       })
+       .then((res)=>{alert(JSON.stringify(res))})
+       // fetch("https://f780-39-46-240-174.in.ngrok.io/api/v1/coach-status-update", {
+     // method: "POST"
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -98,17 +114,16 @@ const CoachDrawerContent = (props) => {
             color: Colors.selectedColor,
             fontWeight: 'bold'
           }}
-        >Online Status:</Text>
-        <Switch
-          trackColor={{ false: "#767577", true: 'grey' }}
-          thumbColor={isOnline ? Colors.selectedColor : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => {
-            setonlie(!isOnline)
-
-          }}
-          value={isOnline}
-        />
+        >Availability:</Text>
+        
+      <Switch
+        trackColor={{ false: "#767577", true: "grey" }}
+        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      />
+      
       </View>
       {/* bottom */}
       <DrawerItem
